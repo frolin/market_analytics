@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  data: 
+  sku: MyString
+  barcode: MyString
+  offer_id: 
+
+two:
+  name: MyString
+  data: 
+  sku: MyString
+  barcode: MyString
+  offer_id: 

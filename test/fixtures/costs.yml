@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  orderd: one
+  data: 
+  date: 2022-05-29 11:58:30
+  import: one
+
+two:
+  orderd: two
+  data: 
+  date: 2022-05-29 11:58:30
+  import: two

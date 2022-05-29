@@ -1,0 +1,36 @@
+@import 'modern_admin/vendors';
+
+
+// PAGE STYLE
+@import 'modern_admin/bootstrap';
+@import 'modern_admin/bootstrap-extended';
+@import 'modern_admin/colors';
+@import 'modern_admin/components';
+
+@import 'modern_admin/core/menu/menu-types/vertical-content-menu';
+@import 'modern_admin/core/colors/palette-gradient';
+@import "modern_admin/pages/dashboard-ecommerce";
+@import "modern_admin/pages/timeline";
+
+
+// ICONS
+@import "../fonts/simple-line-icons/style";
+@import "modern_admin/vendors/weather-icons/climacons.min";
+@import "../fonts/meteocons/style";
+
+
+//@import 'modern_admin/material-vendors.min';
+//@import 'modern_admin/material';
+
+//@import 'modern_admin/material-extended';
+
+//@import 'modern_admin/material-colors';
+//@import 'modern_admin/pages/login-register';
+
+//@import 'modern_admin/pages/timeline.css';
+//@import 'modern_admin/pages/dashboard-ecommerce.css';
+//@import 'modern_admin/menu/menu-types/vertical-menu.css';
+//@import 'modern_admin/vendors/charts/jquery-jvectormap-2.0.3';
+//@import 'modern_admin/vendors/charts/morris';
+//@import 'modern_admin/vendors/pickers/daterange/daterangepicker';
+

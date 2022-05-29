@@ -1,0 +1,67 @@
+<% content_for(:title, 'Площадки') %>
+
+<%= content_for :header_button do %>
+  <%#= link_to 'Добавить площадку', new_market_path, class: "btn btn-primary" %>
+
+  <button class="btn btn-info dropdown-toggle mb-1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Добавить площадку
+  </button>
+
+  <div class="dropdown-menu arrow">
+    <% Market.names.keys.each do |market| %>
+      <!--        <i class="fa fa-calendar-check mr-1"></i>-->
+      <%= button_to market.upcase, markets_path(market: { slug: market }), method: :post, class: "dropdown-item" %>
+
+    <% end %>
+    <!--    <div class="dropdown-divider"></div>-->
+    <!--    <a class="dropdown-item" href="#"><i class="fa fa-cog mr-1"></i> Settings</a>-->
+  </div>
+
+<% end %>
+
+<div class="row">
+  <% @markets.each do |market| %>
+    <div class="col-xl-3 col-lg-6 col-12">
+      <div class="card">
+
+        <div class="card-header flex">
+          <h5 class="card-title text-center"> <%= market.slug.upcase %> </h5>
+        </div>
+
+
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="media-body text-left">
+                <ul class="list-group list-group-flush">
+                  <% market.campaigns.each do |campaign| %>
+                    <li class="list-group-item">
+                      <%= link_to "#{campaign.name}-#{campaign.number}", edit_market_campaign_path(market, campaign.number) %>
+
+                      <%= link_to '<i class="la la-refresh" aria-hidden="true"></i>'.html_safe, market_campaign_api_update_path(market, campaign.number) %>
+                    </li>
+
+                    Товароа: <%= campaign.products.count %>
+                    Заказов: <%= campaign.orders.count %>
+                    <br>
+                    Обновлений: <%= campaign.imports.count %> Последнее: <%= campaign.imports.last.created_at %>
+                    <%= link_to 'подробнее', market_campaign_imports_path(market, campaign.number) %>
+                  <% end %>
+                </ul>
+              </div>
+
+              <%= link_to '<i class="bi bi-trash"></i>'.html_safe, market, method: :delete, data: { 'turbo-method': :delete, confirm: 'Are you sure?' } %>
+
+
+            </div>
+          </div>
+        </div>
+
+
+        <%= link_to 'Добавить магазин', new_market_campaign_path(market), class: "btn btn-primary" %>
+
+      </div>
+    </div>
+  <% end %>
+
+</div>

@@ -1,0 +1,16 @@
+<h1>Products</h1>
+
+<dl>
+  <dt>Name:</dt>
+  <dd><%= @product.name %></dd>
+  <dt>Data:</dt>
+  <dd><%= @product.data %></dd>
+  <dt>Sku:</dt>
+  <dd><%= @product.sku %></dd>
+  <dt>Barcode:</dt>
+  <dd><%= @product.barcode %></dd>
+  <dt>Offer:</dt>
+  <dd><%= @product.offer_id %></dd>
+</dl>
+<%= link_to 'Edit', edit_product_path(@product) %> |
+<%= link_to 'Back', products_path %>

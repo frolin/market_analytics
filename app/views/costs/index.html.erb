@@ -1,0 +1,30 @@
+<h1>Costs</h1>
+
+<table class="table table-striped table-hover table-sm">
+  <thead>
+    <tr>
+      <th scope="col">Orderd</th>
+      <th scope="col">Data</th>
+      <th scope="col">Date</th>
+      <th scope="col">Import</th>
+      <th colspan="3" scope="col"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @costs.each do |cost| %>
+      <tr>
+        <td><%= cost.orderd_id %></td>
+        <td><%= cost.data %></td>
+        <td><%= cost.date %></td>
+        <td><%= cost.import_id %></td>
+        <td><%= link_to 'Show', cost %></td>
+        <td><%= link_to 'Edit', edit_cost_path(cost) %></td>
+        <td><%= link_to 'Destroy', cost, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= link_to 'New Cost', new_cost_path %>

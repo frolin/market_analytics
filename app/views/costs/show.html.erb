@@ -1,0 +1,14 @@
+<h1>Costs</h1>
+
+<dl>
+  <dt>Orderd:</dt>
+  <dd><%= @cost.orderd %></dd>
+  <dt>Data:</dt>
+  <dd><%= @cost.data %></dd>
+  <dt>Date:</dt>
+  <dd><%= @cost.date %></dd>
+  <dt>Import:</dt>
+  <dd><%= @cost.import %></dd>
+</dl>
+<%= link_to 'Edit', edit_cost_path(@cost) %> |
+<%= link_to 'Back', costs_path %>

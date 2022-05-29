@@ -1,0 +1,14 @@
+<h1>Campaigns</h1>
+
+<dl>
+  <dt>Name:</dt>
+  <dd><%= @campaign.name %></dd>
+  <dt>Market:</dt>
+  <dd><%= @campaign.market.slug %></dd>
+  <dt>Token:</dt>
+  <dd><%= @campaign.token %></dd>
+  <dt>Номер:</dt>
+  <dd><%= @campaign.number %></dd>
+</dl>
+<%= link_to 'Edit', edit_market_campaign_path(@market, @campaign) %> |
+<%= link_to 'Back', market_campaigns_path %>

@@ -1,0 +1,43 @@
+<div class="card">
+  <!--  <div class="card-header">-->
+  <!--    <h4 class="card-title" id="basic-layout-form">Project Info</h4>-->
+  <!--    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>-->
+
+  <!--  </div>-->
+  <div class="card-content collapse show">
+    <div class="card-body">
+      <div class="card-text">
+        <p></p>
+      </div>
+
+
+
+      <%= simple_form_for(@market, html: { class: 'form' }) do |f| %>
+        <%= f.error_notification %>
+        <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+        <div class="form-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.select :name, Market.names.keys.map { |w| [w.humanize, w] }, {}, { class: 'form-control' } %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="form-actions">
+          <%= button_to markets_path, class: 'btn btn-warning mr-1' do %>
+            <span>Назад</span>
+            <i class="ft-x"></i>
+          <% end %>
+
+          <%= f.button :submit, class: 'btn-primary' %>
+        </div>
+
+      <% end %>
+
+    </div>
+  </div>
+</div>

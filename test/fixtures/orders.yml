@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  api_data: 
+  excel_data: 
+  date: 2022-05-29 11:56:41
+  import: one
+
+two:
+  api_data: 
+  excel_data: 
+  date: 2022-05-29 11:56:41
+  import: two

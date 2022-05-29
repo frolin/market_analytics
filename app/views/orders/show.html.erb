@@ -1,0 +1,14 @@
+<h1>Orders</h1>
+
+<dl>
+  <dt>Api data:</dt>
+  <dd><%= @order.api_data %></dd>
+  <dt>Excel data:</dt>
+  <dd><%= @order.excel_data %></dd>
+  <dt>Date:</dt>
+  <dd><%= @order.date %></dd>
+  <dt>Import:</dt>
+  <dd><%= @order.import %></dd>
+</dl>
+<%= link_to 'Edit', edit_order_path(@order) %> |
+<%= link_to 'Back', orders_path %>

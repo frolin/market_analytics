@@ -1,0 +1,28 @@
+<h1>Campaigns</h1>
+
+<table class="table table-striped table-hover table-sm">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Market</th>
+      <th scope="col">Data</th>
+      <th colspan="3" scope="col"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @campaigns.each do |campaign| %>
+      <tr>
+        <td><%= campaign.name %></td>
+        <td><%= campaign.market.slug %></td>
+        <td><%= campaign.data %></td>
+        <td><%= link_to 'Show', market_campaign_path(@market, campaign) %></td>
+        <td><%= link_to 'Edit', edit_market_campaign_path(@market, campaign) %></td>
+        <td><%= button_to 'Destroy', market_campaign_path(@market, campaign), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= link_to 'New Campaign', new_market_campaign_path(@market) %>
