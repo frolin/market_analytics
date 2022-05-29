@@ -1,9 +1,10 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[ show edit update destroy ]
+  before_action :set_campaign, only: %i[ index ]
 
   # GET /products or /products.json
   def index
-    @products = Product.all
+    @products = @campaign.products
   end
 
   # GET /products/1 or /products/1.json
@@ -58,13 +59,18 @@ class ProductsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_product
-      @product = Product.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def product_params
-      params.require(:product).permit(:name, :data, :sku, :barcode, :offer_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_product
+    @product = Product.find(params[:id])
+  end
+
+  def set_campaign
+    @campaign = Campaign.find_by(number: params[:id] || params[:campaign_id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def product_params
+    params.require(:product).permit(:name, :data, :sku, :barcode, :offer_id)
+  end
 end

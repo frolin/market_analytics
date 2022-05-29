@@ -41,7 +41,7 @@
                       <%= link_to '<i class="la la-refresh" aria-hidden="true"></i>'.html_safe, market_campaign_api_update_path(market, campaign.number) %>
                     </li>
 
-                    Товароа: <%= campaign.products.count %>
+                    Товароа: <%= link_to campaign.products.count, market_campaign_products_path(market, campaign.number) %>
                     Заказов: <%= campaign.orders.count %>
                     <br>
                     Обновлений: <%= campaign.imports.count %> Последнее: <%= campaign.imports.last.created_at %>

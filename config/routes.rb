@@ -3,20 +3,19 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   mount Sidekiq::Web => "/sidekiq" # mount Sidekiq::Web in your Rails app
 
+  devise_for :users
 
-  resources :costs
-  resources :orders
-  resources :products
-	devise_for :users
+  get "dashboard/index"
+  root to: "dashboard#index"
 
-	get "dashboard/index"
-	root to: "dashboard#index"
+  resources :markets do
+    resources :campaigns do
+      get 'api_update', to: 'campaigns#api_update'
 
-
-	resources :markets do
-		resources :campaigns do
       resources :imports
-    	get 'api_update', to: 'campaigns#api_update'
+      resources :costs
+      resources :orders
+      resources :products
     end
-	end
+  end
 end
