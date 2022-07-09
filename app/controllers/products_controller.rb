@@ -4,7 +4,7 @@ class ProductsController < ApplicationController
 
   # GET /products or /products.json
   def index
-    @products = @campaign.products
+    @products = Product.all
   end
 
   # GET /products/1 or /products/1.json
@@ -13,7 +13,8 @@ class ProductsController < ApplicationController
 
   # GET /products/new
   def new
-    @product = Product.new
+    @product = current_user.products.new
+    @photos = @product.photos.new
   end
 
   # GET /products/1/edit
@@ -22,7 +23,18 @@ class ProductsController < ApplicationController
 
   # POST /products or /products.json
   def create
-    @product = Product.new(product_params)
+
+    # transform the list of uploaded files into a photos attributes hash
+    new_photos_attributes = params[:files].inject({}) do |hash, file|
+      hash.merge!(SecureRandom.hex => { image: file })
+    end
+
+    # merge new photos attributes with existing (`album_params` is whitelisted `params[:album]`)
+    photos_attributes = product_params[:photos_attributes].to_h.merge(new_photos_attributes)
+    product_attributes = product_params.merge(photos_attributes: photos_attributes)
+
+    binding.pry
+    @product = current_user.products.new(product_attributes)
 
     respond_to do |format|
       if @product.save
@@ -71,6 +83,6 @@ class ProductsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def product_params
-    params.require(:product).permit(:name, :data, :sku, :barcode, :offer_id)
+    params.require(:product).permit(:name, :data, :sku, :barcode, :offer_id, :campaign_id, :import_id, :content, properties: {}, photos_attributes: {})
   end
 end

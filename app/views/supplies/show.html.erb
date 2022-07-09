@@ -1,0 +1,18 @@
+<h1>Supplies</h1>
+
+<dl>
+  <dt>Name:</dt>
+  <dd><%= @supply.name %></dd>
+  <dt>Campaign:</dt>
+  <dd><%= @supply.campaign %></dd>
+</dl>
+
+<p>Продукты</p>
+<% @supply.products.each do |product|  %>
+<p>
+  <%= link_to product.name, product_path(product) %>
+  </p>
+<% end %>
+
+<%= link_to 'Edit', edit_supply_path(@supply) %> |
+<%= link_to 'Back', supplies_path %>

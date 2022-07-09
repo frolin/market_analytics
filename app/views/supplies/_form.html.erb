@@ -1,0 +1,27 @@
+<%= simple_form_for(@supply) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+
+  <div class="form-group row">
+    <label class="col-md-3 label-control" for="name">Номер</label>
+    <div class="col-md-9 mx-auto">
+      <%= f.input :name, label: false %>
+    </div>
+  </div>
+
+<!--  <div class="form-inputs">-->
+    <%#= f.association :campaign, input_html: { class: 'select2' } %>
+<!--  </div>-->
+
+  <div class="form-inputs">
+    <%= f.fields_for :supply_products do |ff| %>
+      <%= ff.input :product, collection: current_user.products.map {|p| ["#{p.name} | #{p.barcode}", p.id, {'data-image' => p.photos.first&.image_url }] }, input_html: { multiple: true, class: 'select2', 'data-image': 'lksdgls' }, include_blank: false, include_hidden: false %>
+    <% end %>
+  </div>
+
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_29_223502) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_09_003336) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -110,18 +110,62 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_29_223502) do
     t.index ["import_id"], name: "index_orders_on_import_id"
   end
 
+  create_table "photos", force: :cascade do |t|
+    t.jsonb "image_data"
+    t.bigint "product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_photos_on_product_id"
+  end
+
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.jsonb "data"
     t.string "sku"
     t.string "barcode"
     t.bigint "offer_id"
-    t.bigint "campaign_id", null: false
-    t.bigint "import_id", null: false
+    t.jsonb "content", default: {}
+    t.jsonb "properties", default: {}
+    t.jsonb "parameters", default: {}
+    t.jsonb "image_data"
+    t.jsonb "jsonb"
+    t.bigint "campaign_id"
+    t.bigint "import_id"
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["campaign_id"], name: "index_products_on_campaign_id"
     t.index ["import_id"], name: "index_products_on_import_id"
+    t.index ["user_id"], name: "index_products_on_user_id"
+  end
+
+  create_table "suply_products", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "supply_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_suply_products_on_product_id"
+    t.index ["supply_id"], name: "index_suply_products_on_supply_id"
+  end
+
+  create_table "supplies", force: :cascade do |t|
+    t.string "name"
+    t.bigint "campaign_id"
+    t.bigint "market_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_id"], name: "index_supplies_on_campaign_id"
+    t.index ["market_id"], name: "index_supplies_on_market_id"
+  end
+
+  create_table "supply_products", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "supply_id", null: false
+    t.integer "count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_supply_products_on_product_id"
+    t.index ["supply_id"], name: "index_supply_products_on_supply_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -140,12 +184,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_29_223502) do
   add_foreign_key "costs", "campaigns"
   add_foreign_key "costs", "imports"
   add_foreign_key "costs", "orders"
-  add_foreign_key "imports", "campaigns"
   add_foreign_key "markets", "users"
   add_foreign_key "order_products", "orders"
   add_foreign_key "order_products", "products"
   add_foreign_key "orders", "campaigns"
   add_foreign_key "orders", "imports"
-  add_foreign_key "products", "campaigns"
-  add_foreign_key "products", "imports"
+  add_foreign_key "photos", "products"
+  add_foreign_key "products", "users"
+  add_foreign_key "supply_products", "products"
+  add_foreign_key "supply_products", "supplies"
 end

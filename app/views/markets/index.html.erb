@@ -11,12 +11,10 @@
     <% Market.names.keys.each do |market| %>
       <!--        <i class="fa fa-calendar-check mr-1"></i>-->
       <%= button_to market.upcase, markets_path(market: { slug: market }), method: :post, class: "dropdown-item" %>
-
     <% end %>
     <!--    <div class="dropdown-divider"></div>-->
     <!--    <a class="dropdown-item" href="#"><i class="fa fa-cog mr-1"></i> Settings</a>-->
   </div>
-
 <% end %>
 
 <div class="row">
@@ -27,8 +25,7 @@
         <div class="card-header flex">
           <h5 class="card-title text-center"> <%= market.slug.upcase %> </h5>
         </div>
-
-
+        
         <div class="card-content">
           <div class="card-body">
             <div class="media d-flex">
@@ -44,7 +41,7 @@
                     Товароа: <%= link_to campaign.products.count, market_campaign_products_path(market, campaign.number) %>
                     Заказов: <%= campaign.orders.count %>
                     <br>
-                    Обновлений: <%= campaign.imports.count %> Последнее: <%= campaign.imports.last.created_at %>
+                    Обновлений: <%= campaign.imports.count %> Последнее: <%= campaign.imports.last&.created_at %>
                     <%= link_to 'подробнее', market_campaign_imports_path(market, campaign.number) %>
                   <% end %>
                 </ul>

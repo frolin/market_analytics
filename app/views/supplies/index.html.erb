@@ -1,0 +1,35 @@
+<% content_for(:title, 'Поставки') %>
+
+<%= content_for :header_button do %>
+  <div class="btn-group float-md-right show">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Создать поставку</button>
+    <div class="dropdown-menu arrow show" x-placement="bottom-start" style="position: absolute; transform: translate3d(-23px, 41px, 0px); top: 0px; left: 0px; will-change: transform;">
+      <a class="dropdown-item" href="<%= new_supply_path %>"><i class="fa fa-calendar-check mr-1"></i>Ozon</a>
+      <a class="dropdown-item" href="<%= new_supply_path %>"><i class="fa fa-cart-plus mr-1"></i>Wildberries</a>
+      <a class="dropdown-item" href="<%= new_supply_path %>"><i class="fa fa-life-ring mr-1"></i>Yandex</a>
+    </div>
+  </div>
+
+<% end %>
+
+<table class="table table-striped table-hover table-sm">
+  <thead>
+  <tr>
+    <th scope="col">Name</th>
+    <th scope="col">Campaign</th>
+    <th colspan="3" scope="col"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @supplies.each do |supply| %>
+    <tr>
+      <td><%= supply.name %></td>
+      <td><%= supply.campaign_id %></td>
+      <td><%= link_to 'Show', supply %></td>
+      <td><%= link_to 'Edit', edit_supply_path(supply) %></td>
+      <td><%= link_to 'Destroy', supply, method: :delete, data: { 'turbo-method': :delete, confirm: 'Are you sure?' } %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

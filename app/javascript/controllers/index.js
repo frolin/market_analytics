@@ -11,3 +11,4 @@ import controller from '../controllers/application_controller'
 application.register("hello", HelloController)
 StimulusReflex.initialize(application, { consumer, controller, isolate: true })
 StimulusReflex.debug = process.env.RAILS_ENV === 'development'
+

@@ -7,15 +7,12 @@ module Campaigns
 
       case campaign.market.slug.to_sym
       when :yandex
-        ApiUpdateJob.perform_async(import.id)
+        YandexApiUpdateJob.perform_async(import.id)
       when :ozone
         # Campaign::Ozone.run(campaign: campaign)
       when :wildberries
         # Campaign::Wildberries.run(campaign: campaign)
       end
     end
-
-    private
-
   end
 end

@@ -102,3 +102,4 @@ gem "stimulus_reflex", "~> 3.4"
 gem "audited", "~> 5.0"
 
 gem "sidekiq", "~> 6.4"
+gem 'ffaker'

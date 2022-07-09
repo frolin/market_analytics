@@ -1,17 +1,121 @@
+<!--  <div class="form-inputs">-->
+<%#= f.input :data %>
+<%#= f.input :sku %>
+<%#= f.input :barcode %>
+<%#= f.input :offer_id %>
+<!--  </div>-->
 
-<%= simple_form_for(@product) do |f| %>
-  <%= f.error_notification %>
-  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 
-  <div class="form-inputs">
-    <%= f.input :name %>
-    <%= f.input :data %>
-    <%= f.input :sku %>
-    <%= f.input :barcode %>
-    <%= f.input :offer_id %>
+
+<div class="card">
+
+  <div class="card-content collpase show">
+    <div class="card-body">
+
+      <%= simple_form_for @product, html: { enctype: "multipart/form-data" } do |f| %>
+
+
+        <%= f.error_notification %>
+        <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+        <%= f.hidden_field :import_id, value: 1 %>
+        <%= f.hidden_field :campaign_id, value: 1 %>
+
+        <% if @product.errors.any? %>
+          <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+            <h2><%= pluralize(@product.errors.count, "error") %> prohibited this @product from being saved:</h2>
+
+            <ul>
+              <% @product.errors.each do |error| %>
+                <li><%= error.full_message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+
+        <div class="form-body">
+          <h4 class="form-section"><i class="ft-user"></i>Основные данные</h4>
+          <div class="form-group row">
+            <label class="col-md-3 label-control" for="projectinput1">Наименование товара</label>
+            <div class="col-md-9 mx-auto">
+              <%= f.input :name, label: false %>
+            </div>
+          </div>
+
+
+
+          <%= f.fields_for :photos do |p| %>
+            <%= p.hidden_field :image, value: p.object.cached_image_data %>
+            <%= p.check_box :_destroy unless p.object.new_record? %>
+          <% end %>
+          <%= file_field_tag "files[]", multiple: true %>
+
+
+          <!--          <div class="form-group row">-->
+          <!--            <label class="col-md-3 label-control" for="projectinput2">Категория</label>-->
+          <!--            <div class="col-md-9 mx-auto">-->
+          <%#= f.input :category, label: false %>
+          <!--            </div>-->
+          <!--          </div>-->
+
+
+          <div class="form-group row">
+            <div class="col-md-6">
+              <div class="form-group row">
+
+                <label class="col-md-3 label-control" for="projectinput4">Артикул</label>
+                <div class="col-md-9 mx-auto">
+                  <%= f.input :sku, label: false %>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+
+                <label class="col-md-3 label-control" for="projectinput3">Штрих-код</label>
+                <div class="col-md-9 mx-auto">
+                  <%= f.input :barcode, label: false %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h4 class="form-section"><i class="ft-clipboard"></i> Размеры </h4>
+          <%= f.fields_for :properties do |p| %>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="projectinput5">Тара (тип)</label>
+
+                  <%= p.select 'тара', ['Железная банка', 'Пластиковая бутылка'], {}, { class: 'select2' } %>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="projectinput6">Объем</label>
+                  <%= p.select 'объем', ['0.5Л', '0.75Л', '1Л', '1.5Л', '2Л', '2.5Л', '3Л'], {}, { class: 'select2-tags' } %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-warning mr-1">
+            <i class="ft-x"></i> Назад
+          </button>
+
+          <%= f.button :submit, class: "btn btn-primary" do %>
+            <i class="la la-check-square-o"></i>
+          <% end %>
+      <% end %>
+
+      </div>
+    </div>
   </div>
+</div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
-<% end %>
+

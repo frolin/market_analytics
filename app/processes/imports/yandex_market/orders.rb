@@ -1,8 +1,8 @@
 module Imports
   module YandexMarket
     class Orders < ActiveInteraction::Base
-
-      record :campaign
+      record :import
+      string :format, default: 'json'
 
       def execute
         @not_found_product = []
@@ -10,11 +10,13 @@ module Imports
         orders_data = Api::YandexMarket.get(params: orders_stat_data, token: campaign.token)
 
         orders_data.each do |order_data|
+
           next if Order.find_by(order_id: order_data['id'])
 
-          @import = create_import
+          @import = import
 
           Order.transaction do
+            binding.pry
             @order = create_order(order_data)
 
             order_data.dig('items').each { |offer|
@@ -35,10 +37,6 @@ module Imports
 
       private
 
-      def create_import
-        Import.create!(campaign_id: campaign.id, market_id: campaign.market.id, user: user)
-      end
-
       def create_order(order_data)
         Order.create!(date: DateTime.parse(order_data['creationDate']),
                       order_id: order_data['id'],
@@ -54,6 +52,14 @@ module Imports
           # data: { dateFrom: "2022-01-01", dateTo: '2022-04-01'},
           params: { limit: '200' }
         }
+      end
+
+      def campaign
+        @campaign ||= import.campaign
+      end
+
+      def campaign_id
+        campaign.number
       end
     end
   end
