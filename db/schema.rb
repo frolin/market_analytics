@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_09_003336) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_11_113451) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -48,19 +48,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_09_003336) do
     t.index ["market_id"], name: "index_campaigns_on_market_id"
   end
 
-  create_table "costs", force: :cascade do |t|
-    t.jsonb "data"
-    t.datetime "date"
-    t.bigint "order_id", null: false
-    t.bigint "import_id", null: false
-    t.bigint "campaign_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["campaign_id"], name: "index_costs_on_campaign_id"
-    t.index ["import_id"], name: "index_costs_on_import_id"
-    t.index ["order_id"], name: "index_costs_on_order_id"
-  end
-
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string "slug", null: false
     t.integer "sluggable_id", null: false
@@ -87,6 +74,19 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_09_003336) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_markets_on_user_id"
+  end
+
+  create_table "order_costs", force: :cascade do |t|
+    t.jsonb "data"
+    t.datetime "date"
+    t.bigint "order_id", null: false
+    t.bigint "import_id", null: false
+    t.bigint "campaign_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_id"], name: "index_order_costs_on_campaign_id"
+    t.index ["import_id"], name: "index_order_costs_on_import_id"
+    t.index ["order_id"], name: "index_order_costs_on_order_id"
   end
 
   create_table "order_products", force: :cascade do |t|
@@ -134,6 +134,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_09_003336) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "cost", default: {}
+    t.decimal "price", precision: 8, scale: 2
+    t.decimal "purchase_price", precision: 8, scale: 2
     t.index ["campaign_id"], name: "index_products_on_campaign_id"
     t.index ["import_id"], name: "index_products_on_import_id"
     t.index ["user_id"], name: "index_products_on_user_id"
@@ -152,10 +155,24 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_09_003336) do
     t.string "name"
     t.bigint "campaign_id"
     t.bigint "market_id"
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["campaign_id"], name: "index_supplies_on_campaign_id"
     t.index ["market_id"], name: "index_supplies_on_market_id"
+    t.index ["user_id"], name: "index_supplies_on_user_id"
+  end
+
+  create_table "supply_costs", force: :cascade do |t|
+    t.string "name"
+    t.string "value"
+    t.string "operation_type"
+    t.jsonb "data"
+    t.bigint "supply_product_id", null: false
+    t.string "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["supply_product_id"], name: "index_supply_costs_on_supply_product_id"
   end
 
   create_table "supply_products", force: :cascade do |t|
@@ -164,8 +181,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_09_003336) do
     t.integer "count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "price", precision: 8, scale: 2
+    t.decimal "purchase_price", precision: 8, scale: 2
     t.index ["product_id"], name: "index_supply_products_on_product_id"
     t.index ["supply_id"], name: "index_supply_products_on_supply_id"
+  end
+
+  create_table "user_settings", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_settings_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -181,16 +208,19 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_09_003336) do
   end
 
   add_foreign_key "campaigns", "markets"
-  add_foreign_key "costs", "campaigns"
-  add_foreign_key "costs", "imports"
-  add_foreign_key "costs", "orders"
   add_foreign_key "markets", "users"
+  add_foreign_key "order_costs", "campaigns"
+  add_foreign_key "order_costs", "imports"
+  add_foreign_key "order_costs", "orders"
   add_foreign_key "order_products", "orders"
   add_foreign_key "order_products", "products"
   add_foreign_key "orders", "campaigns"
   add_foreign_key "orders", "imports"
   add_foreign_key "photos", "products"
   add_foreign_key "products", "users"
+  add_foreign_key "supplies", "users"
+  add_foreign_key "supply_costs", "supply_products"
   add_foreign_key "supply_products", "products"
   add_foreign_key "supply_products", "supplies"
+  add_foreign_key "user_settings", "users"
 end

@@ -1,0 +1,34 @@
+<h1>Supply Costs</h1>
+
+<table class="table table-striped table-hover table-sm">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Value</th>
+      <th scope="col">Operation type</th>
+      <th scope="col">Data</th>
+      <th scope="col">Supply</th>
+      <th scope="col">Type</th>
+      <th colspan="3" scope="col"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @supply_costs.each do |supply_cost| %>
+      <tr>
+        <td><%= supply_cost.name %></td>
+        <td><%= supply_cost.value %></td>
+        <td><%= supply_cost.operation_type %></td>
+        <td><%= supply_cost.data %></td>
+        <td><%= supply_cost.supply_id %></td>
+        <td><%= supply_cost.type %></td>
+        <td><%= link_to 'Show', supply_cost %></td>
+        <td><%= link_to 'Edit', edit_supply_cost_path(supply_cost) %></td>
+        <td><%= link_to 'Destroy', supply_cost, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= link_to 'New Supply Cost', new_supply_cost_path %>

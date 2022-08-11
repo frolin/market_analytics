@@ -6,7 +6,7 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-User.create!(email: 'dev@dev.ru', password: 'qazwsx123')
+# User.create!(email: 'dev@dev.ru', password: 'qazwsx123')
 
 PRODUCTS = [
   ['Сития 02 Николаос', '5200119080657'],
@@ -17,4 +17,12 @@ PRODUCTS = [
   ['Agrilife', '8857121775285']
 ]
 
-PRODUCTS.each { |product|Product.create!(name: product.first, barcode: product.second, user_id: User.first.id) }
+PRODUCTS.each do |product|
+  product = Product.new(name: product.first,
+                  barcode: product.second,
+                  user_id: User.first.id)
+
+  product.photos.new(image: FFaker::Image.file)
+
+  product.save!
+end

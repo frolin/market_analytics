@@ -3,12 +3,16 @@
 // ./bin/rails generate stimulus controllerName
 
 import { application } from "./application"
+// import consumer from '../channels/consumer'
 
-import HelloController from "./hello_controller"
-import StimulusReflex from 'stimulus_reflex'
-import consumer from '../channels/consumer'
-import controller from '../controllers/application_controller'
-application.register("hello", HelloController)
-StimulusReflex.initialize(application, { consumer, controller, isolate: true })
-StimulusReflex.debug = process.env.RAILS_ENV === 'development'
+// import HelloController from "./hello_controller"
+// application.register("hello", HelloController)
+
+
+
+
+
+// import StimulusReflex from 'stimulus_reflex'
+// StimulusReflex.initialize(application, { consumer, controller, isolate: true })
+// StimulusReflex.debug = process.env.RAILS_ENV === 'development'
 

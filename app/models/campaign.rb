@@ -6,6 +6,6 @@ class Campaign < ApplicationRecord
   has_many :imports
   has_many :products
   has_many :orders
-  has_many :costs
+  has_many :costs, class_name: 'OrderCost'
   has_many :supplies
 end

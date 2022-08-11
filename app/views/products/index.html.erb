@@ -3,34 +3,37 @@
 <%= content_for :header_button do %>
   <%= link_to 'Новый товар ', new_product_path, class: "btn btn-primary" %>
 <% end %>
-
-<table class="table table-striped table-hover table-sm">
-  <thead>
-  <tr>
-    <th scope="col">Name</th>
-    <th scope="col">Data</th>
-    <th scope="col">Sku</th>
-    <th scope="col">Barcode</th>
-    <th scope="col">Offer</th>
-    <th colspan="3" scope="col"></th>
-  </tr>
-  </thead>
-
-  <tbody>
-  <% @products.each do |product| %>
+<div class="card">
+  <table class="table table-striped table-hover table-sm">
+    <thead>
     <tr>
-      <td><%= product.name %></td>
-      <td><%= product.data %></td>
-      <td><%= product.sku %></td>
-      <td><%= product.barcode %></td>
-      <td><%= product.offer_id %></td>
-      <!--        <td><%#= link_to 'Show', market_campaign_product_path(product.campaign.market, product.campaign.number, product) %></td>-->
-      <!--        <td><%#= link_to 'Edit', edit_market_campaign_product_path(product.campaign.market, product.campaign.number, product) %></td>-->
-      <!--        <td><%#= link_to 'Destroy', market_campaign_product_path(product.campaign.market, product.campaign.number, product), method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
+      <th scope="col">Фото</th>
+      <th scope="col">Название</th>
+      <th scope="col">Штрих-код</th>
+      <th scope="col">SKU</th>
+      <th colspan="3" scope="col"></th>
     </tr>
-  <% end %>
-  </tbody>
-</table>
+    </thead>
 
-<br>
+    <tbody>
+    <% @products.each do |product| %>
+      <tr>
+        <td class="">
+          <%= image_tag product.photos.first.image_url if product.photos.any?%>
+        </td>
+        <td>
+          <b><%= link_to "#{product.name} #{product.properties.dig('объем')}", edit_product_path(product) %> </b> <br>
+        </td>
+        <td><%= product.barcode %></td>
+        <td><%= money product.price %></td>
+
+
+        <!--      <td><%#= link_to 'Show', market_campaign_product_path(product.campaign.market, product.campaign.number, product) %></td>-->
+        <!--      <td><%#= link_to 'Edit', edit_market_campaign_product_path(product.campaign.market, product.campaign.number, product) %></td>-->
+        <!--      <td><%#= link_to 'Destroy', market_campaign_product_path(product.campaign.market, product.campaign.number, product), method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
 

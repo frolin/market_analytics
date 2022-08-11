@@ -89,6 +89,8 @@ gem 'down'
 gem 'roo'
 gem 'nokogiri'
 gem 'faraday'
+gem 'faraday-multipart'
+
 
 gem 'shrine'
 
@@ -96,10 +98,12 @@ gem 'russian', '~> 0.6.0'
 gem 'rails-i18n'
 
 gem 'active_interaction', '~> 4.1'
-gem 'faraday'
 
 gem "stimulus_reflex", "~> 3.4"
 gem "audited", "~> 5.0"
 
 gem "sidekiq", "~> 6.4"
 gem 'ffaker'
+gem 'draper'
+
+gem 'google_drive', require: false

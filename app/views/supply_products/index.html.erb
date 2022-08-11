@@ -1,0 +1,28 @@
+<h1>Supply Products</h1>
+
+<table class="table table-striped table-hover table-sm">
+  <thead>
+    <tr>
+      <th scope="col">Product</th>
+      <th scope="col">Supply</th>
+      <th scope="col">Count</th>
+      <th colspan="3" scope="col"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @supply_products.each do |supply_product| %>
+      <tr>
+        <td><%= supply_product.product_id %></td>
+        <td><%= supply_product.supply_id %></td>
+        <td><%= supply_product.count %></td>
+        <td><%= link_to 'Show', supply_product %></td>
+        <td><%= link_to 'Edit', edit_supply_product_path(supply_product) %></td>
+        <td><%= link_to 'Destroy', supply_product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= link_to 'New Supply Product', new_supply_product_path %>

@@ -4,6 +4,7 @@ class CreateSupplies < ActiveRecord::Migration[7.0]
       t.string :name
       t.references :campaign
       t.references :market
+      t.references :user, null: false, foreign_key: true
 
       t.timestamps
     end

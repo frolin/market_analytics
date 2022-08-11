@@ -1,0 +1,2 @@
+module SupplyCostsHelper
+end

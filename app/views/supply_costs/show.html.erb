@@ -1,0 +1,18 @@
+<h1>Supply Costs</h1>
+
+<dl>
+  <dt>Name:</dt>
+  <dd><%= @supply_cost.name %></dd>
+  <dt>Value:</dt>
+  <dd><%= @supply_cost.value %></dd>
+  <dt>Operation type:</dt>
+  <dd><%= @supply_cost.operation_type %></dd>
+  <dt>Data:</dt>
+  <dd><%= @supply_cost.data %></dd>
+  <dt>Supply:</dt>
+  <dd><%= @supply_cost.supply %></dd>
+  <dt>Type:</dt>
+  <dd><%= @supply_cost.type %></dd>
+</dl>
+<%= link_to 'Edit', edit_supply_cost_path(@supply_cost) %> |
+<%= link_to 'Back', supply_costs_path %>

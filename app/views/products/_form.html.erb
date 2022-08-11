@@ -6,101 +6,316 @@
 <!--  </div>-->
 
 
+<div class="card-content collpase show">
+  <div class="card-body">
 
-<div class="card">
+    <ul class="nav nav-tabs nav-underline no-hover-bg nav-justified nav-tabs-material">
+      <li class="nav-item">
+        <a class="nav-link waves-effect waves-dark active" id="active-tab" data-toggle="tab" href="#active" aria-controls="active" aria-expanded="true">Основное</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link waves-effect waves-dark" id="linkOpt-tab" data-toggle="tab" href="#linkOpt" aria-controls="linkOpt">Расходы</a>
+      </li>
+    </ul>
 
-  <div class="card-content collpase show">
-    <div class="card-body">
-
-      <%= simple_form_for @product, html: { enctype: "multipart/form-data" } do |f| %>
 
 
-        <%= f.error_notification %>
-        <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+    <%= simple_form_for @product, html: { enctype: "multipart/form-data", class: 'form-horizontal' } do |f| %>
 
-        <%= f.hidden_field :import_id, value: 1 %>
-        <%= f.hidden_field :campaign_id, value: 1 %>
 
-        <% if @product.errors.any? %>
-          <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
-            <h2><%= pluralize(@product.errors.count, "error") %> prohibited this @product from being saved:</h2>
+      <%= f.error_notification %>
+      <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 
-            <ul>
-              <% @product.errors.each do |error| %>
-                <li><%= error.full_message %></li>
+      <%= f.hidden_field :import_id, value: 1 %>
+      <%= f.hidden_field :campaign_id, value: 1 %>
+
+      <% if @product.errors.any? %>
+        <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+          <h2><%= pluralize(@product.errors.count, "error") %> prohibited this @product from being saved:</h2>
+
+          <ul>
+            <% @product.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <div class="tab-content active px-1 pt-1">
+
+        <div class="tab-pane show active" role="tabpanel" id="active" aria-labelledby="active-tab" aria-expanded="true">
+
+          <div class="form-body">
+            <h4 class="form-section"><i class="ft-user"></i>Основные данные</h4>
+            <div class="form-group">
+              <%= image_tag @product.photos.last.image_url, width: '100px' if @product.photos.any? %>
+
+
+              <%= f.fields_for :photos do |p| %>
+                <%= p.hidden_field :image, value: p.object.cached_image_data %>
+                <%= p.file_field :image %>
+                <%= p.check_box :_destroy unless p.object.new_record? %>
               <% end %>
-            </ul>
-          </div>
-        <% end %>
+              <%#= file_field_tag "files[]", multiple: true %>
+            </div>
 
 
-        <div class="form-body">
-          <h4 class="form-section"><i class="ft-user"></i>Основные данные</h4>
-          <div class="form-group row">
-            <label class="col-md-3 label-control" for="projectinput1">Наименование товара</label>
-            <div class="col-md-9 mx-auto">
+            <div class="form-group">
+              <label>Наименование товара</label>
               <%= f.input :name, label: false %>
             </div>
-          </div>
 
 
-
-          <%= f.fields_for :photos do |p| %>
-            <%= p.hidden_field :image, value: p.object.cached_image_data %>
-            <%= p.check_box :_destroy unless p.object.new_record? %>
-          <% end %>
-          <%= file_field_tag "files[]", multiple: true %>
-
-
-          <!--          <div class="form-group row">-->
-          <!--            <label class="col-md-3 label-control" for="projectinput2">Категория</label>-->
-          <!--            <div class="col-md-9 mx-auto">-->
-          <%#= f.input :category, label: false %>
-          <!--            </div>-->
-          <!--          </div>-->
-
-
-          <div class="form-group row">
-            <div class="col-md-6">
-              <div class="form-group row">
-
-                <label class="col-md-3 label-control" for="projectinput4">Артикул</label>
-                <div class="col-md-9 mx-auto">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="label-control" for="projectinput4">Артикул</label>
                   <%= f.input :sku, label: false %>
                 </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
 
-                <label class="col-md-3 label-control" for="projectinput3">Штрих-код</label>
-                <div class="col-md-9 mx-auto">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="label-control" for="projectinput3">Штрих-код</label>
                   <%= f.input :barcode, label: false %>
                 </div>
               </div>
             </div>
-          </div>
-
-          <h4 class="form-section"><i class="ft-clipboard"></i> Размеры </h4>
-          <%= f.fields_for :properties do |p| %>
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="projectinput5">Тара (тип)</label>
+                  <label class="label-control" for="projectinput3">Цена</label>
 
-                  <%= p.select 'тара', ['Железная банка', 'Пластиковая бутылка'], {}, { class: 'select2' } %>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">₽</span>
+                    </div>
+                    <%= f.number_field :price, label: false, class: 'form-control string optional' %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="label-control" for="projectinput3">Закупочная цена</label>
+
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">₽</span>
+                    </div>
+                    <%= f.number_field :purchase_price, label: false, class: 'form-control string optional' %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br>
+
+            <br>
+            <!--          <div class="form-group row">-->
+            <!--            <label class="col-md-3 label-control" for="projectinput2">Категория</label>-->
+            <!--            <div class="col-md-9 mx-auto">-->
+            <%#= f.input :category, label: false %>
+            <!--            </div>-->
+            <!--          </div>-->
+
+
+            <h4 class="form-section"><i class="ft-clipboard"></i> Размеры </h4>
+            <%= f.fields_for :properties do |p| %>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="projectinput5">Тара (тип)</label>
+
+                    <%= p.select 'тара', ['Железная банка', 'Пластиковая бутылка', 'Упаковка'], {}, { class: 'select2' } %>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="projectinput6">Объем</label>
+                    <%= p.select 'объем', ['500', '750', '1000', '1500', '2000', '2500', '3000', '5000'], {}, { class: 'select2-tags' } %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+
+            <!--            <h4 class="form-section"><i class="ft-clipboard"></i> Цены </h4>-->
+
+            <%= f.fields_for :properties do |p| %>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="projectinput6">Высота</label>
+                    <%= p.number_field 'высота', type: :number, label: false, class: 'form-control string optional', value: @product.properties.dig('высота') %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="projectinput6">Ширина</label>
+                    <%= p.number_field 'ширина', label: false, class: 'form-control string optional', value: @product.properties.dig('ширина') %>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="projectinput6">Длина</label>
+                    <%= p.number_field 'длина', label: false, class: 'form-control string optional', value: @product.properties.dig('длина') %>
+                  </div>
+                </div>
+              </div>
+              </div>
+            <% end %>
+
+
+            <h4 class="form-section"><i class="ft-clipboard"></i> Упаковка </h4>
+
+
+            <h4 class="form-section"><i class="ft-clipboard"></i> Характеристики БЖУ на 100г.</h4>
+            <%= f.fields_for :parameters do |p| %>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="projectinput6">Белки</label>
+                    <%= p.number_field 'белки', type: :number, label: false, class: 'form-control string optional', value: @product.parameters.dig('белки') %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="projectinput6">Жиры</label>
+                    <%= p.number_field 'жиры', label: false, class: 'form-control string optional', value: @product.parameters.dig('жиры') %>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="projectinput6">Углеводы</label>
+                    <%= p.number_field 'углеводы', label: false, class: 'form-control string optional', value: @product.parameters.dig('углеводы') %>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="projectinput6">Энергетическая ценность (ккал)
+                      калории (на 100 гр.) </label>
+                    <%= p.number_field 'энергетическая ценность', label: false, class: 'form-control string optional', value: @product.parameters.dig('энергетическая ценность') %>
+                  </div>
+                </div>
+
+              </div>
+
+            <% end %>
+
+
+            </div>
+
+        <div class="tab-pane" id="linkOpt" role="tabpanel" aria-labelledby="linkOpt-tab" aria-expanded="false">
+          <!--        <div class="form-body">-->
+          <!--          <h4 class="form-section"><i class="ft-user"></i>Описание</h4>-->
+          <!--        </div>-->
+          <h4 class="form-section">
+            <i class="la la-cube"></i>
+            Расходы
+          </h4>
+
+          <h5 class="form-section mx-auto mb-6"><i class="ft-clipboard"></i> Фуллфилмент </h5>
+
+          <%= f.fields_for 'cost[fulfillment]' do |p| %>
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="projectinput6">Материал для упаковки</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">₽</span>
+                    </div>
+                    <%= p.number_field 'материал', type: :number, label: false, class: 'form-control string optional', value: @product.cost.dig('fulfillment', 'материал') %>
+                  </div>
                 </div>
               </div>
 
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <div class="form-group">
-                  <label for="projectinput6">Объем</label>
-                  <%= p.select 'объем', ['0.5Л', '0.75Л', '1Л', '1.5Л', '2Л', '2.5Л', '3Л'], {}, { class: 'select2-tags' } %>
+                  <label for="projectinput6">Упаковка работа</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">₽</span>
+                    </div>
+                    <%= p.number_field 'работа', type: :number, label: false, class: 'form-control string optional', value: @product.cost.dig('fulfillment', 'работа') %>
+                  </div>
                 </div>
               </div>
             </div>
           <% end %>
 
+          <%= f.fields_for 'cost[marketplace][wildberries]' do |p| %>
+
+            <h5 class="form-section">
+              <%= image_tag 'wb-logo', width: '100px' %>
+              <!--              <i class="ft-clipboard"></i> -->
+              Комиссия Wildberries
+              <div><a target="_blank" href="https://seller.wildberries.ru/dynamic-product-categories">Калькулятор
+                стоимости</a></div>
+            </h5>
+
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="projectinput6">Комиссия</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">%</span>
+                    </div>
+                    <%= p.number_field 'комиссия', type: :number, label: false, class: 'form-control string optional', value: @product.cost.dig('marketplace', 'wb', 'комиссия') %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="projectinput6">Логистика</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">₽</span>
+                    </div>
+                    <%= p.number_field 'логистика', type: :number, label: false, class: 'form-control string optional', value: @product.cost.dig('marketplace', 'wb', 'логистика') %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+
+          <%= f.fields_for 'cost[marketplace][ozon]' do |p| %>
+            <h5 class="form-section">
+              <%= image_tag 'ozon', width: '100px' %>
+              Комиссия Ozon
+
+              <div><a target="_blank" href="https://calculator.ozon.ru/">Калькулятор стоимости</a></div>
+            </h5>
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="projectinput6">Комиссия</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">₽</span>
+                    </div>
+                    <%= p.number_field 'комиссия', type: :number, label: false, class: 'form-control string optional', value: @product.cost.dig('marketplace', 'ozon', 'комиссия') %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="projectinput6">Логистика</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">₽</span>
+                    </div>
+                    <%= p.number_field 'логистика', type: :number, label: false, class: 'form-control string optional', value: @product.cost.dig('marketplace', 'ozon', 'логистика') %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
         </div>
 
         <div class="form-actions">
@@ -111,11 +326,10 @@
           <%= f.button :submit, class: "btn btn-primary" do %>
             <i class="la la-check-square-o"></i>
           <% end %>
-      <% end %>
-
+        </div>
       </div>
-    </div>
+
+    <% end %>
+
   </div>
 </div>
-
-

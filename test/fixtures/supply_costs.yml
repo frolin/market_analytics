@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  value: MyString
+  operation_type: MyString
+  data: 
+  supply: one
+  type: 
+
+two:
+  name: MyString
+  value: MyString
+  operation_type: MyString
+  data: 
+  supply: two
+  type: 

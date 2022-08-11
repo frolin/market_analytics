@@ -6,4 +6,6 @@ class User < ApplicationRecord
 
   has_many :markets
   has_many :products
+  has_many :supplies
+  has_one :settings, class_name: "UserSetting", dependent: :destroy
 end

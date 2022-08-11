@@ -35,4 +35,22 @@ module ApplicationHelper
       end)
     end
   end
+
+
+  def icon(name)
+    content_tag(:i, '', class: "la la-#{name}")
+  end
+
+  def money(int)
+    number_to_currency(int, unit: "₽", separator: ",", delimiter: "", format: "%n %u")
+  end
+
+  def market_prefix(name)
+    case name
+    when 'wildberries' then 'WB-'
+    when 'ozon' then 'OZ-'
+    when 'yandex' then 'YA-'
+    end
+  end
+
 end

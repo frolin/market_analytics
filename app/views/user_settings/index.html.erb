@@ -1,0 +1,26 @@
+<h1>User Settings</h1>
+
+<table class="table table-striped table-hover table-sm">
+  <thead>
+    <tr>
+      <th scope="col">User</th>
+      <th scope="col">Data</th>
+      <th colspan="3" scope="col"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @user_settings.each do |user_setting| %>
+      <tr>
+        <td><%= user_setting.user_id %></td>
+        <td><%= user_setting.data %></td>
+        <td><%= link_to 'Show', user_setting %></td>
+        <td><%= link_to 'Edit', edit_user_setting_path(user_setting) %></td>
+        <td><%= link_to 'Destroy', user_setting, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= link_to 'New User Setting', new_user_setting_path %>

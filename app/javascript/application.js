@@ -4,15 +4,16 @@ import {Turbo} from "@hotwired/turbo-rails"
 
 Turbo.session.drive = false
 
-// import "./controllers"
-// import * as bootstrap from "bootstrap"
-//
+import "./controllers"
+import * as bootstrap from "bootstrap"
 import "./src/jquery"
+import './utils/jquery.bootstrap-touchspin'
+
 
 window.addEventListener('DOMContentLoaded', () => {
     $('.select2').select2({
         theme: 'bootstrap4',
-            templateResult: addUserPic,
+        templateResult: addUserPic,
         templateSelection: addUserPic
     })
 })
@@ -27,7 +28,6 @@ $(document).ready(function () {
 });
 
 function addUserPic(opt) {
-
     if (!opt.id) {
         return opt.text;
     }
@@ -36,17 +36,19 @@ function addUserPic(opt) {
         return opt.text;
     } else {
         var $opt = $(
-            '<span class="userName"><img width="64px" src="' + optimage + '" class="userPic" /> ' + $(opt.element).text() + '</span>'
+            '<span class="userName"><img width="32px" src="' + optimage + '" class="userPic" /> ' + $(opt.element).text() + '</span>'
         );
         return $opt;
     }
 };
 
 //
-// let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-// let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-//   return new bootstrap.Popover(popoverTriggerEl)
-// })
+let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+    return new bootstrap.Popover(popoverTriggerEl)
+})
+
+
 // $('.dropdown-toggle').dropdown()
 
 // import "./vendor/vendor"

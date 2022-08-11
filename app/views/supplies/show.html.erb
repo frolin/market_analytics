@@ -1,18 +1,185 @@
-<h1>Supplies</h1>
+v<section class="card">
+  <div class="card-body p-4">
+    <div id="invoice-company-details" class="row">
 
-<dl>
-  <dt>Name:</dt>
-  <dd><%= @supply.name %></dd>
-  <dt>Campaign:</dt>
-  <dd><%= @supply.campaign %></dd>
-</dl>
+      <div class="col-sm-6 col-12">
+        <h2>Поставка #<%= @supply.name %></h2>
+        <ul class="px-0 list-unstyled">
+          <!--          <li>Сумма</li>-->
+          <!--          <li class="lead text-bold-800"></li>-->
+        </ul>
+      </div>
 
-<p>Продукты</p>
-<% @supply.products.each do |product|  %>
-<p>
-  <%= link_to product.name, product_path(product) %>
-  </p>
-<% end %>
+      <div class="col-sm-6 col-12 text-center text-sm-right">
+        <%= link_to 'Edit', edit_supply_path(@supply) %> |
+        <%= link_to 'Back', supplies_path %> |
+        <%= link_to 'Export', supply_google_export_path(@supply) %>
+      </div>
+    </div>
 
-<%= link_to 'Edit', edit_supply_path(@supply) %> |
-<%= link_to 'Back', supplies_path %>
+
+    <ul class="nav nav-tabs nav-underline no-hover-bg nav-justified nav-tabs-material">
+      <li class="nav-item">
+        <a class="nav-link waves-effect waves-dark active" id="active-tab" data-toggle="tab" href="#active" aria-controls="active" aria-expanded="true">Основное</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link waves-effect waves-dark" id="linkOpt-tab" data-toggle="tab" href="#linkOpt" aria-controls="linkOpt">Расходы</a>
+      </li>
+    </ul>
+
+    <div class="tab-content active px-1 pt-1">
+      <div role="tabpanel" class="tab-pane show active" id="active" aria-labelledby="active-tab" aria-expanded="true">
+        <div id="invoice-items-details" class="pt-2">
+          <div class="row">
+            <div class="table-responsive col-12">
+              <table class="table">
+                <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Товар</th>
+                  <th class="text-right">Штрих-Код</th>
+                  <th class="text-right">Количество</th>
+                  <th class="text-right">Доход</th>
+                </tr>
+                </thead>
+                <tbody>
+                <%= form_tag supply_update_count_path(@supply) do %>
+                  <% @supply_products.each_with_index do |sp, i| %>
+                    <tr>
+                      <th scope="row"><%= i + 1 %></th>
+                      <td>
+                         <%= image_tag sp.product.photos.first.image_url, width: '100px'%>
+                          <%= link_to sp.product.name, product_path(sp.product) %>
+                      </td>
+                      <td class="text-right"><%= sp.product.barcode %></td>
+                      <td class="text-right">
+                        <%= fields_for "supply[product[#{sp.id}]]", sp do |pf| %>
+                          <%= pf.hidden_field :id %>
+                          <%= pf.number_field :count, class: 'form-control string optional' %>
+                        <% end %>
+                      </td>
+
+
+                      <!--                  <td class="text-right"><%#= sp.product.cost %></td>-->
+                    </tr>
+
+                  <% end %>
+                  <%= submit_tag %>
+                <% end %>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-sm-5 col-12 text-center">
+          <button type="button" class="btn btn-info btn-print btn-lg my-1"><i class="la la-paper-plane-o mr-50"></i>
+            Распечатать
+          </button>
+        </div>
+
+
+      </div>
+
+      <div class="tab-pane" id="linkOpt" role="tabpanel" aria-labelledby="linkOpt-tab" aria-expanded="false">
+        <div class="row">
+          <div class="table-responsive col-12">
+            <table class="table">
+              <thead>
+              <tr>
+                <th colspan="4" class="text-right">Расходы</th>
+                <th class="text-right"></th>
+                <th class="text-right"></th>
+                <th class="text-right"></th>
+                <th class="text-right"></th>
+                <th class="text-right">Комиссии</th>
+              </tr>
+              <tr>
+                <th>#</th>
+                <th>Товар</th>
+                <th class="text-right">Упаковка</th>
+                <th class="text-right">Доставка</th>
+                <th class="text-right">Комиссия</th>
+                <th class="text-right">Логистика</th>
+                <th class="text-right">Цена</th>
+                <th class="text-right">Сумма</th>
+              </tr>
+              </thead>
+              <tbody>
+              <%= form_tag supply_update_count_path(@supply) do %>
+                <% @supply_products.each_with_index do |sp, i| %>
+                  <tr>
+                    <th scope="row"><%= i + 1 %></th>
+                    <td><%= link_to sp.product.name, product_path(sp.product) %> x <%= sp.count %> </td>
+                    <td class="text-right"><%= money sp.upakovka %></td>
+                    <td class="text-right"><%= money sp.korobka %></td>
+                    <td class="text-right"><%= money sp.mp_commission %></td>
+                    <td class="text-right"><%= money sp.mp_logistic %></td>
+                    <td class="text-right"><%= money sp.cost_summ %></td>
+                    <td class="text-right"><%= money sp.price %></td>
+                    <td class="text-right"><%= money (sp.price.to_i * sp.count) %></td>
+                  </tr>
+
+                <% end %>
+                <%#= submit_tag %>
+              <% end %>
+
+
+              </tbody>
+            </table>
+
+            <br>
+
+<!--            <table class="table">-->
+<!--              <thead>-->
+<!--              <tr>-->
+<!--                <th>Товар</th>-->
+<!--                <th>Логистика</th>-->
+<!--                <th>Фуллфилмент</th>-->
+<!--              </tr>-->
+<!--              </thead>-->
+<!--              <tbody>-->
+              <%#= form_tag supply_update_costs_path(@supply), id: 'costs_form' do |f| %>
+                <%# @supply_products.each_with_index do |sp, i| %>
+<!--                  <tr>-->
+<!--                    <td><%#= sp.product.name %></td>-->
+
+
+<!--                    <td width="30px">-->
+                      <%#= fields_for "supply_costs", sp.logistic_cost do |pf| %>
+                        <%#= pf.number_field :value, name: "logistic[#{sp.logistic_cost.id}]", class: 'form-control string optional' %>
+                      <%# end %>
+<!--                    </td>-->
+
+<!--                    <td width="30px">-->
+                      <%#= fields_for "supply_costs", sp.fulfillment_cost do |pf| %>
+                        <%#= pf.number_field :value, name: "fulfillment[#{sp.fulfillment_cost.id}]", class: 'form-control string optional' %>
+                      <%# end %>
+<!--                    </td>-->
+<!--                  </tr>-->
+
+                <%# end %>
+<!--                <tr>-->
+<!--                  <td>-->
+                    <%#= text_field_tag :delivery %>
+<!--                  </td>-->
+<!--                </tr>-->
+              <%# end %>
+
+<!--              </tbody>-->
+<!--            </table>-->
+
+<!--            <input type="submit" class="btn btn-info btn-print btn-lg my-1" value="Сохранить" form="costs_form">-->
+
+            <%#= render partial: 'supplies/logistics_costs' %>
+            <%#= render partial: 'supplies/fulfillment_costs' %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</section>

@@ -1,35 +1,48 @@
 <% content_for(:title, 'Поставки') %>
 
 <%= content_for :header_button do %>
-  <div class="btn-group float-md-right show">
-    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Создать поставку</button>
-    <div class="dropdown-menu arrow show" x-placement="bottom-start" style="position: absolute; transform: translate3d(-23px, 41px, 0px); top: 0px; left: 0px; will-change: transform;">
-      <a class="dropdown-item" href="<%= new_supply_path %>"><i class="fa fa-calendar-check mr-1"></i>Ozon</a>
-      <a class="dropdown-item" href="<%= new_supply_path %>"><i class="fa fa-cart-plus mr-1"></i>Wildberries</a>
-      <a class="dropdown-item" href="<%= new_supply_path %>"><i class="fa fa-life-ring mr-1"></i>Yandex</a>
+  <div class="btn-group float-md-right">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Создать
+      поставку
+    </button>
+    <div class="dropdown-menu arrow" x-placement="bottom-start" style="position: absolute; transform: translate3d(-23px, 41px, 0px); top: 0px; left: 0px; will-change: transform;">
+      <% current_user.markets.each do |market| %>
+        <!--        <i class="fa fa-calendar-check mr-1"></i>-->
+        <%= link_to market.slug.upcase, new_supply_path(market_id: market.slug), class: "dropdown-item" %>
+      <% end %>
+
     </div>
   </div>
 
 <% end %>
 
-<table class="table table-striped table-hover table-sm">
-  <thead>
-  <tr>
-    <th scope="col">Name</th>
-    <th scope="col">Campaign</th>
-    <th colspan="3" scope="col"></th>
-  </tr>
-  </thead>
-
-  <tbody>
-  <% @supplies.each do |supply| %>
+<div class="card">
+  <table class="table table-striped table-hover table-sm">
+    <thead>
     <tr>
-      <td><%= supply.name %></td>
-      <td><%= supply.campaign_id %></td>
-      <td><%= link_to 'Show', supply %></td>
-      <td><%= link_to 'Edit', edit_supply_path(supply) %></td>
-      <td><%= link_to 'Destroy', supply, method: :delete, data: { 'turbo-method': :delete, confirm: 'Are you sure?' } %></td>
+      <th scope="col">Номер</th>
+      <th scope="col">Товары</th>
+      <th>Общее количество</th>
+
     </tr>
-  <% end %>
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+    <% @supplies.each do |supply| %>
+      <tr>
+        <td><%= link_to supply.name, supply_path(supply) %></td>
+        <td>
+          <%= supply.products_list %>
+        </td>
+        <%#= link_to icon('edit'), edit_supply_path(supply) %>
+        <%#= link_to icon('eye'), supply %>
+        <td><%= supply.all_product_count %></td>
+
+        <td><%= link_to icon('trash'), supply, method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Уверены?' } %></td>
+
+      </tr>
+
+    <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,7 +1,8 @@
 module Imports
   module Wildberries
-    class Supplies < Api::BaseClient
+    class Supplies < Api::WildberriesClient
       record :user
+      symbol :status, default: :active
 
       def execute
         response
@@ -19,6 +20,7 @@ module Imports
 
       def params
         {}
+        # { status: status }
       end
 
       def system_name
