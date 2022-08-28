@@ -31,7 +31,9 @@ gem "cssbundling-rails"
 gem "jbuilder"
 
 # Use Redis adapter to run Action Cable in production
-# gem "redis", "~> 4.0"
+gem "redis", "~> 4.0"
+gem 'redis-store'
+gem 'redis-rails'
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
@@ -70,7 +72,6 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
-  gem "selenium-webdriver"
   gem "webdrivers"
 end
 
@@ -107,3 +108,10 @@ gem 'ffaker'
 gem 'draper'
 
 gem 'google_drive', require: false
+gem 'selenium-webdriver', require: false
+
+gem 'sidekiq-cron'
+gem 'telegram-bot'
+gem "noticed", "~> 1.5"
+gem 'proxy_fetcher', '~> 0.16'
+gem 'awesome_print'

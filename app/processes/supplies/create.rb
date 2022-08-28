@@ -1,11 +1,12 @@
 module Supplies
   class Create < ActiveInteraction::Base
+    include ApplicationHelper
     record :user
     hash :supply_params, default: {}, strip: false
 
     def execute
       Supply.transaction do
-        supply = Supply.create!(name: supply_params[:name], user: user, market: market)
+        supply = Supply.create!(name: name, user: user, market: market)
 
         products.each do |product|
           supply.supply_products.create!(product: product, price: product.price, purchase_price: product.purchase_price)
@@ -31,7 +32,9 @@ module Supplies
     end
 
     def name
-      market_prefix(params[:market_id])
+      prefix = market_prefix(supply_params['market_id'])
+
+      "#{prefix}-#{supply_params[:name]}"
     end
 
     def supply_costs

@@ -37,8 +37,10 @@ class SuppliesController < ApplicationController
 
   # PATCH/PUT /supplies/1 or /supplies/1.json
   def update
+    supply_update = Supplies::Update.run(supply: @supply, supply_params: supply_params)
+
     respond_to do |format|
-      if @supply.update(supply_params)
+      if supply_update.valid?
         format.html { redirect_to supply_url(@supply), notice: "Supply was successfully updated." }
         format.json { render :show, status: :ok, location: @supply }
       else
@@ -69,6 +71,8 @@ class SuppliesController < ApplicationController
 
   # DELETE /supplies/1 or /supplies/1.json
   def destroy
+
+    @supply.products.destroy_all
     @supply.destroy
 
     respond_to do |format|

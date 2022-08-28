@@ -21,7 +21,8 @@ module MarketAnalytics
 		# config.eager_load_paths << Rails.root.join("extras")
 		#
 
-		config.time_zone = "Central Time (US & Canada)"
+		config.time_zone = "Moscow"
+		config.active_record.default_timezone = :local
 		# config.eager_load_paths << Rails.root.join("extras")
 		#
 		# config.i18n.default_locale = :ru

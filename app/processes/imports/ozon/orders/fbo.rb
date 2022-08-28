@@ -5,7 +5,7 @@ module Imports
         record :user
         symbol :status, default: :delivered
         integer :days, default: 7
-        integer :linit, default: 1000
+        integer :limit, default: 1000
 
         def execute
           response
@@ -29,7 +29,7 @@ module Imports
               "status": status,
               "to": range[:to]
             },
-            "limit": linit,
+            "limit": limit,
             "offset": 0,
             "translit": true,
             "with": {
@@ -47,7 +47,6 @@ module Imports
         end
 
         def api_type
-
         end
 
       end

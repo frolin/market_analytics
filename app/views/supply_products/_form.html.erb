@@ -1,15 +1,12 @@
+<%= turbo_frame_tag @supply_product do %>
+  <%= simple_form_for(@supply_product) do |f| %>
+    <%= f.error_notification %>
+    <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 
-<%= simple_form_for(@supply_product) do |f| %>
-  <%= f.error_notification %>
-  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+    <%= f.number_field :count, class: 'form-control string optional' %>
 
-  <div class="form-inputs">
-    <%= f.association :product %>
-    <%= f.association :supply %>
-    <%= f.input :count %>
-  </div>
-
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
+    <div class="form-actions">
+      <%= f.button :submit, class: 'btn btn-primary', data: { turbo: 'true' } %>
+    </div>
+  <% end %>
 <% end %>

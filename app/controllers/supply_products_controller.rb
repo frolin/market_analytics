@@ -17,6 +17,7 @@ class SupplyProductsController < ApplicationController
 
   # GET /supply_products/1/edit
   def edit
+
   end
 
   # POST /supply_products or /supply_products.json
@@ -36,15 +37,21 @@ class SupplyProductsController < ApplicationController
 
   # PATCH/PUT /supply_products/1 or /supply_products/1.json
   def update
-    respond_to do |format|
       if @supply_product.update(supply_product_params)
-        format.html { redirect_to supply_product_url(@supply_product), notice: "Supply product was successfully updated." }
-        format.json { render :show, status: :ok, location: @supply_product }
+        redirect_to @supply_product.supply
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @supply_product.errors, status: :unprocessable_entity }
+        render :edit
       end
-    end
+
+    # respond_to do |format|
+    #   if @supply_product.update(supply_product_params)
+        # format.html { redirect_to supply_product_url(@supply_product), notice: "Supply product was successfully updated." }
+        # format.json { render :show, status: :ok, location: @supply_product }
+      # else
+      #   format.html { render :edit, status: :unprocessable_entity }
+      #   format.json { render json: @supply_product.errors, status: :unprocessable_entity }
+      # end
+    # end
   end
 
   # DELETE /supply_products/1 or /supply_products/1.json

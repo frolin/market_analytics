@@ -1,4 +1,5 @@
-v<section class="card">
+v
+<section class="card">
   <div class="card-body p-4">
     <div id="invoice-company-details" class="row">
 
@@ -13,7 +14,6 @@ v<section class="card">
       <div class="col-sm-6 col-12 text-center text-sm-right">
         <%= link_to 'Edit', edit_supply_path(@supply) %> |
         <%= link_to 'Back', supplies_path %> |
-        <%= link_to 'Export', supply_google_export_path(@supply) %>
       </div>
     </div>
 
@@ -32,6 +32,11 @@ v<section class="card">
         <div id="invoice-items-details" class="pt-2">
           <div class="row">
             <div class="table-responsive col-12">
+
+              <%= turbo_frame_tag SupplyProduct.new do %>
+                <%= link_to 'add new', new_supply_product_path %>
+              <% end %>
+
               <table class="table">
                 <thead>
                 <tr>
@@ -43,28 +48,24 @@ v<section class="card">
                 </tr>
                 </thead>
                 <tbody>
-                <%= form_tag supply_update_count_path(@supply) do %>
-                  <% @supply_products.each_with_index do |sp, i| %>
-                    <tr>
-                      <th scope="row"><%= i + 1 %></th>
-                      <td>
-                         <%= image_tag sp.product.photos.first.image_url, width: '100px'%>
-                          <%= link_to sp.product.name, product_path(sp.product) %>
-                      </td>
-                      <td class="text-right"><%= sp.product.barcode %></td>
-                      <td class="text-right">
-                        <%= fields_for "supply[product[#{sp.id}]]", sp do |pf| %>
-                          <%= pf.hidden_field :id %>
-                          <%= pf.number_field :count, class: 'form-control string optional' %>
-                        <% end %>
-                      </td>
+                <% @supply_products.order(:id).each_with_index do |sp, i| %>
+                  <tr>
+                    <th scope="row"><%= i + 1 %></th>
+                    <td>
+                      <%= image_tag sp.product.photos.first.image_url, width: '100px' %>
+                      <%= link_to sp.product.name, product_path(sp.product) %>
+                    </td>
+                    <td class="text-right"><%= sp.product.barcode %></td>
+                    <td class="text-right">
+                      <%= turbo_frame_tag sp do %>
+                        <%= sp.count %>
+                        <%= link_to icon('edit'), edit_supply_product_path(sp), class: '', data: { turbo: 'true' } %>
+                      <% end %>
+                    </td>
 
-
-                      <!--                  <td class="text-right"><%#= sp.product.cost %></td>-->
-                    </tr>
-
-                  <% end %>
-                  <%= submit_tag %>
+                    <td>
+                    </td>
+                  </tr>
                 <% end %>
 
                 </tbody>
@@ -74,13 +75,11 @@ v<section class="card">
         </div>
 
 
-        <div class="col-sm-5 col-12 text-center">
-          <button type="button" class="btn btn-info btn-print btn-lg my-1"><i class="la la-paper-plane-o mr-50"></i>
-            Распечатать
-          </button>
-        </div>
-
-
+<!--        <div class="row">-->
+<!--          <div class="col-sm-5 col-3">-->
+<!--            <input type="submit" class="btn btn-info btn-print btn-lg my-1" value="Сохранить" form="supply_update_count">-->
+<!--          </div>-->
+<!--        </div>-->
       </div>
 
       <div class="tab-pane" id="linkOpt" role="tabpanel" aria-labelledby="linkOpt-tab" aria-expanded="false">
@@ -119,7 +118,7 @@ v<section class="card">
                     <td class="text-right"><%= money sp.mp_logistic %></td>
                     <td class="text-right"><%= money sp.cost_summ %></td>
                     <td class="text-right"><%= money sp.price %></td>
-                    <td class="text-right"><%= money (sp.price.to_i * sp.count) %></td>
+                    <td class="text-right"><%= money sp.product_summ %></td>
                   </tr>
 
                 <% end %>
@@ -130,48 +129,54 @@ v<section class="card">
               </tbody>
             </table>
 
+            <div class="col-sm-5 col-3">
+              <%= link_to supply_google_export_path(@supply), class: "btn btn-info btn-print btn-lg my-1" do %>
+                <i class="la la-paper-plane-o mr-50"> Экспорт</i>
+              <% end %>
+            </div>
+
             <br>
 
-<!--            <table class="table">-->
-<!--              <thead>-->
-<!--              <tr>-->
-<!--                <th>Товар</th>-->
-<!--                <th>Логистика</th>-->
-<!--                <th>Фуллфилмент</th>-->
-<!--              </tr>-->
-<!--              </thead>-->
-<!--              <tbody>-->
-              <%#= form_tag supply_update_costs_path(@supply), id: 'costs_form' do |f| %>
-                <%# @supply_products.each_with_index do |sp, i| %>
-<!--                  <tr>-->
-<!--                    <td><%#= sp.product.name %></td>-->
+            <!--            <table class="table">-->
+            <!--              <thead>-->
+            <!--              <tr>-->
+            <!--                <th>Товар</th>-->
+            <!--                <th>Логистика</th>-->
+            <!--                <th>Фуллфилмент</th>-->
+            <!--              </tr>-->
+            <!--              </thead>-->
+            <!--              <tbody>-->
+            <%#= form_tag supply_update_costs_path(@supply), id: 'costs_form' do |f| %>
+            <%# @supply_products.each_with_index do |sp, i| %>
+            <!--                  <tr>-->
+            <!--                    <td><%#= sp.product.name %></td>-->
 
 
-<!--                    <td width="30px">-->
-                      <%#= fields_for "supply_costs", sp.logistic_cost do |pf| %>
-                        <%#= pf.number_field :value, name: "logistic[#{sp.logistic_cost.id}]", class: 'form-control string optional' %>
-                      <%# end %>
-<!--                    </td>-->
+            <!--                    <td width="30px">-->
+            <%#= fields_for "supply_costs", sp.logistic_cost do |pf| %>
+            <%#= pf.number_field :value, name: "logistic[#{sp.logistic_cost.id}]", class: 'form-control string optional' %>
+            <%# end %>
+            <!--                    </td>-->
 
-<!--                    <td width="30px">-->
-                      <%#= fields_for "supply_costs", sp.fulfillment_cost do |pf| %>
-                        <%#= pf.number_field :value, name: "fulfillment[#{sp.fulfillment_cost.id}]", class: 'form-control string optional' %>
-                      <%# end %>
-<!--                    </td>-->
-<!--                  </tr>-->
+            <!--                    <td width="30px">-->
+            <%#= fields_for "supply_costs", sp.fulfillment_cost do |pf| %>
+            <%#= pf.number_field :value, name: "fulfillment[#{sp.fulfillment_cost.id}]", class: 'form-control string optional' %>
+            <%# end %>
+            <!--                    </td>-->
+            <!--                  </tr>-->
 
-                <%# end %>
-<!--                <tr>-->
-<!--                  <td>-->
-                    <%#= text_field_tag :delivery %>
-<!--                  </td>-->
-<!--                </tr>-->
-              <%# end %>
+            <%# end %>
+            <!--                <tr>-->
+            <!--                  <td>-->
+            <%#= text_field_tag :delivery %>
+            <!--                  </td>-->
+            <!--                </tr>-->
+            <%# end %>
 
-<!--              </tbody>-->
-<!--            </table>-->
+            <!--              </tbody>-->
+            <!--            </table>-->
 
-<!--            <input type="submit" class="btn btn-info btn-print btn-lg my-1" value="Сохранить" form="costs_form">-->
+            <!--            <input type="submit" class="btn btn-info btn-print btn-lg my-1" value="Сохранить" form="costs_form">-->
 
             <%#= render partial: 'supplies/logistics_costs' %>
             <%#= render partial: 'supplies/fulfillment_costs' %>

@@ -47,9 +47,9 @@ module ApplicationHelper
 
   def market_prefix(name)
     case name
-    when 'wildberries' then 'WB-'
-    when 'ozon' then 'OZ-'
-    when 'yandex' then 'YA-'
+    when 'wildberries' then 'WB'
+    when 'ozon' then 'OZ'
+    when 'yandex' then 'YA'
     end
   end
 

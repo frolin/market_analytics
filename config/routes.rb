@@ -1,6 +1,11 @@
-require 'sidekiq/web'
+
 
 Rails.application.routes.draw do
+  require 'sidekiq/web'
+  require 'sidekiq/cron/web'
+
+  telegram_webhook TelegramWebhooksController
+
   mount Sidekiq::Web => "/sidekiq" # mount Sidekiq::Web in your Rails app
 
   resources :supply_products

@@ -34,3 +34,7 @@
 !/app/assets/builds/.keep
 
 /node_modules
+
+/config/credentials/development.key
+
+/config/chrome_profile/MP Bot/

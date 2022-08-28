@@ -19,7 +19,6 @@
     </ul>
 
 
-
     <%= simple_form_for @product, html: { enctype: "multipart/form-data", class: 'form-horizontal' } do |f| %>
 
 
@@ -47,15 +46,16 @@
           <div class="form-body">
             <h4 class="form-section"><i class="ft-user"></i>Основные данные</h4>
             <div class="form-group">
-              <%= image_tag @product.photos.last.image_url, width: '100px' if @product.photos.any? %>
+              <%= image_tag @product.photos.last.image_url, width: '100px' if @product.photos.ids.any? %>
 
 
               <%= f.fields_for :photos do |p| %>
                 <%= p.hidden_field :image, value: p.object.cached_image_data %>
-                <%= p.file_field :image %>
+                <%#= p.file_field :image %>
                 <%= p.check_box :_destroy unless p.object.new_record? %>
               <% end %>
-              <%#= file_field_tag "files[]", multiple: true %>
+
+              <%= file_field_tag "files[]", multiple: true %>
             </div>
 
 
@@ -80,6 +80,31 @@
                 </div>
               </div>
             </div>
+
+            <h4 class="form-section">
+              <i class="ft-clipboard"></i>
+              <%= image_tag 'wb-logo', width: '100px' %>
+            </h4>
+
+            <%= f.fields_for :data do |d| %>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="projectinput5">SKU</label>
+                    <%= d.number_field 'wb[sku]', label: false, class: 'form-control string optional', value: @product.data&.dig('wb', 'sku') %>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="projectinput6">Штрих-код</label>
+                    <%= d.number_field 'wb[barcode]', label: false, class: 'form-control string optional', value: @product.data&.dig('wb', 'barcode') %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+
+
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -245,7 +270,7 @@
             </div>
           <% end %>
 
-          <%= f.fields_for 'cost[marketplace][wildberries]' do |p| %>
+          <%= f.fields_for 'cost[marketplace][wb]' do |p| %>
 
             <h5 class="form-section">
               <%= image_tag 'wb-logo', width: '100px' %>
@@ -328,7 +353,6 @@
           <% end %>
         </div>
       </div>
-
     <% end %>
 
   </div>

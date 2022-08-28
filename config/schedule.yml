@@ -1,0 +1,26 @@
+#https://crontab.guru/
+
+check_orders:
+  cron: "*/20 * * * *" # execute at every 30 minute
+  class: "Wb::OrderCheckWorker"
+  queue: 'default'
+
+check_sales:
+  cron: "*/30 * * * *" # execute at every 30 minute
+  class: "Wb::SalesCheckWorker"
+  queue: 'default'
+
+check_ads:
+  cron: "*/30 * * * *" # execute at every 30 minute
+  class: "Wb::AdCheckWorker"
+  queue: 'default'
+
+check_stock:
+  cron: "0 9,19 * * *" # execute at every 30 minute
+  class: "Wb::StocksCheckWorker"
+  queue: 'default'
+
+check_position:
+  cron: "0 7,18 * * *" # execute at every 30 minute
+  class: "Wb::PositionCheckWorker"
+  queue: 'default'

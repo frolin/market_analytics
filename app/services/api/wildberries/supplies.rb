@@ -1,4 +1,4 @@
-module Imports
+module Api
   module Wildberries
     class Supplies < Api::WildberriesClient
       record :user
@@ -11,7 +11,11 @@ module Imports
       private
 
       def api_method
-        'supplies'
+        '/api/v2/supplies'
+      end
+
+      def base_url
+        'https://suppliers-api.wildberries.ru'
       end
 
       def type
@@ -19,8 +23,7 @@ module Imports
       end
 
       def params
-        {}
-        # { status: status }
+        { status: status }
       end
 
       def system_name

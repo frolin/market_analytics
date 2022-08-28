@@ -1,6 +1,6 @@
 // Entry point for the build script in your package.json
 import "@hotwired/turbo-rails"
-import {Turbo} from "@hotwired/turbo-rails"
+import { Turbo } from "@hotwired/turbo-rails"
 
 Turbo.session.drive = false
 
@@ -19,7 +19,7 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 $(document).ready(function () {
     $(".select2-tags").select2({
-        tags: true,
+        // tags: true,
         theme: 'bootstrap4'
         // tokenSeperators: [','],
         // theme: 'bootstrap',
@@ -42,7 +42,7 @@ function addUserPic(opt) {
     }
 };
 
-//
+
 let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
 let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
     return new bootstrap.Popover(popoverTriggerEl)

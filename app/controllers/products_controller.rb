@@ -4,7 +4,7 @@ class ProductsController < ApplicationController
 
   # GET /products or /products.json
   def index
-    @products = Product.all
+    @products = Product.all.decorate
   end
 
   # GET /products/1 or /products/1.json
@@ -23,16 +23,18 @@ class ProductsController < ApplicationController
 
   # POST /products or /products.json
   def create
-    # transform the list of uploaded files into a photos attributes hash
-    new_photos_attributes = params[:files].inject({}) do |hash, file|
-      hash.merge!(SecureRandom.hex => { image: file })
+    if params[:files].present?
+      # transform the list of uploaded files into a photos attributes hash
+      new_photos_attributes = params[:files].inject({}) do |hash, file|
+        hash.merge!(SecureRandom.hex => { image: file })
+      end
+
+      # merge new photos attributes with existing (`album_params` is whitelisted `params[:album]`)
+      photos_attributes = product_params[:photos_attributes].to_h.merge(new_photos_attributes)
+      product_attributes = product_params.merge(photos_attributes: photos_attributes)
+
+      @product = current_user.products.new(product_attributes)
     end
-
-    # merge new photos attributes with existing (`album_params` is whitelisted `params[:album]`)
-    photos_attributes = product_params[:photos_attributes].to_h.merge(new_photos_attributes)
-    product_attributes = product_params.merge(photos_attributes: photos_attributes)
-
-    @product = current_user.products.new(product_attributes)
 
     respond_to do |format|
       if @product.save
@@ -47,6 +49,19 @@ class ProductsController < ApplicationController
 
   # PATCH/PUT /products/1 or /products/1.json
   def update
+    # transform the list of uploaded files into a photos attributes hash
+    if params[:files].present?
+      new_photos_attributes = params[:files].inject({}) do |hash, file|
+        hash.merge!(SecureRandom.hex => { image: file })
+      end
+
+      # merge new photos attributes with existing (`album_params` is whitelisted `params[:album]`)
+      photos_attributes = product_params[:photos_attributes].to_h.merge(new_photos_attributes)
+      product_attributes = product_params.merge(photos_attributes: photos_attributes)
+
+      @product = current_user.products.new(product_attributes)
+    end
+
     respond_to do |format|
       if @product.update(product_params)
         format.html { redirect_to product_url(@product), notice: "Product was successfully updated." }
@@ -81,7 +96,7 @@ class ProductsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def product_params
-    params.require(:product).permit(:name, :data, :sku, :barcode, :offer_id, :campaign_id, :import_id, :content, :price,
-                                    properties: {}, parameters:{}, photos_attributes: {}, cost: {})
+    params.require(:product).permit(:name, :sku, :barcode, :offer_id, :campaign_id, :import_id, :content, :price, :purchase_price,
+                                    data: {}, properties: {}, parameters: {}, photos_attributes: {}, cost: {})
   end
 end

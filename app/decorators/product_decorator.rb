@@ -15,6 +15,10 @@ class ProductDecorator < ApplicationDecorator
     object.barcode
   end
 
+  def full_name
+    "#{product.name} #{product.properties.dig('объем')} мл"
+  end
+
   def supply_format
     h.link_to "#{name} | #{barcode} ", h.product_path(self)
   end

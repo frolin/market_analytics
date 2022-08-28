@@ -9,8 +9,6 @@ module Export
     record :supply
 
     def execute
-      binding.pry
-
       if worksheet(supply.name).present?
         worksheet = worksheet(supply.name)
       else

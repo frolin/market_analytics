@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "red-price-342600",
+  "private_key_id": "f0c9a983810f3e1351b618eabb01928097bef474",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCtZxhq94taVTgW\ncXwNPRcakVNaU41Lf5gVVBYXxcd30wrwi2D4+CuoZrnjd/IfDzgqo+UgnYmYc9ms\ndhssgePBZjOqKjT+hee61OPd+uL4T457Q6JTcgV+tgvGMoBlfZrgLad5cnTFBqgF\nW7uOPzWgUFFzsXRnA/QHfiITBJvzYlP4wulLHisTgKlSE7UnChYC5+nlnUAGXd5e\nMSA1BOVGxvnoU4Zge1ZDgNLdnDFVdI7j6Y5JZb2WRE7mlNKfziWUHb3htzQCj2Qp\nEslXJWJXGwMDLWE9BPEU0W8ttF2Vmst62dIHzYXhPrlqsQI9+f3pmWPnGcaSj0UF\n3oOGdwLJAgMBAAECggEAEy2PD4uLy8SXlLHd8rfiNYPDqH6LpsE4oIlBfUUYS8oZ\nUGPV6ItIBtK/teb27hT4lQy1427RAD214iNY24oNFr93MNeEr26/Y5Q2lH8yOZzQ\n6RSgoCKA9ZPsRvIgbbkf1zHtbxrny7+x9w+/dVrL00x2ybkjYt5Wz7pVSe2tUtRL\nQxYZmOonAohjQuGKGPWoxshSvMG9JvkPLuZSLzgO9kTB6mV6a6mhuOYz/Sv3rv66\nPnBQCJ6YJ+RTpinlX2FZ3LO5HiyfDebBGBMeGa3WSTBPY28QttHmgqBGCoE1YWee\nfvxxc+LtMURakoR33FKA37y+lFLaTNtgO1u6B6ZjRQKBgQDd0hljU3POfdsxSGQC\nEsh8PObsIU+I9RURKtSmBukEG3+5F/Ux3m5mg+W4UqID8O3VTgFeoiLwpffk8OWt\nApDH0qvufd8hOzfhPPwBpnVBsJSmdsV4x41Qrl04nw1EcywEnK4R7cBBsEun7lWc\n50SP3H9+PzoKBEIDPOEel+awPQKBgQDIHxvcliHmqnz0465yS6dWUQPy0u9s/xHt\nnbBEsDKHvSw+0mKpw0YYaIDbXKGw5R3YkCyrn/+WfH0Qb39S6ydxO2ySVg1qGE7r\nlj9xi7qgl5lnjO2w0Wp57Z46U5c8OETEvri6UwaCRCBBccuU663/RhxHXO4Cg+Bi\nJ8mBhuEZfQKBgCbDubYW9m0Gp5CkQv3txGWZyw1HAPxBQE5AuurM2FnkaFyzaCEv\n6wE1WabtoeyoZRfayvh7wzlk975lru2ePij9kxhZnO3UyH4vRycOrP0u27t/lCD4\nVqTb4+SqPwpQSkgADZeKgge4xG/zgbiq3dt6QDmS2RS5C8Q/FmRfTWxNAoGAaBu2\n9OStskBTTVr9L7yny0HOWg7eO8feXc1BHBrFztPdJrlwVnyeBKipEHV6MHqhMj6e\n3pIX9wPAVEKM7GglVsThUKevxtfqhqjdTIayikUTq0knhmsLh27Ud+dwsAVd0TSf\nCV+T7UTfuuwmSszo8fpZT87Ki0hr/ORR8i5nAEkCgYEAxatelYNihKNAZ9CD6M/u\n4aIodyDovmk5p66wWL89CpZ4X4oCqJsTnmh8oUti/muO9dcFcjwfsYa4uXNii9oY\nQGNrSEQq125vzvzkinsv0fcKvIg/q5NFwbkOtnAXNy33It3NghBQCjm3sxBjCvl0\nyF/xtl4MreiMF3YFEzfLcZw=\n-----END PRIVATE KEY-----\n",
+  "client_email": "market-analytics@red-price-342600.iam.gserviceaccount.com",
+  "client_id": "116223059441311317681",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/market-analytics%40red-price-342600.iam.gserviceaccount.com"
+}

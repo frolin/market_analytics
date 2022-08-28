@@ -7,5 +7,6 @@ class Market < ApplicationRecord
 	has_many :campaigns, dependent: :destroy
 	accepts_nested_attributes_for :campaigns
 
+
 	enum name: [:ozon, :yandex, :wildberries]
 end

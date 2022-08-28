@@ -16,15 +16,11 @@ class SupplyProductDecorator < ApplicationDecorator
   end
 
   def upakovka
-    return 0 if fulfillment_cost.data.nil?
-
-    fulfillment_cost.data.dig('работа').to_i
+    fulfillment_cost&.data&.dig('работа').to_i
   end
 
   def korobka
-    return 0 if fulfillment_cost.data.nil?
-
-    fulfillment_cost.data.dig('материал').to_i
+    fulfillment_cost&.data&.dig('материал').to_i
   end
 
   def mp_commission
@@ -41,6 +37,8 @@ class SupplyProductDecorator < ApplicationDecorator
   end
 
   def marketplace_name
+    return '' if supply.market.blank?
+
     case supply.market.slug
     when 'wildberries' then 'wb'
     when 'ozon' then 'ozon'
@@ -49,6 +47,12 @@ class SupplyProductDecorator < ApplicationDecorator
 
   def cost_summ
     upakovka + korobka + mp_commission + mp_logistic
+  end
+
+  def product_summ
+    return 0 if count.nil?
+
+    price.to_i * count
   end
 
 end
