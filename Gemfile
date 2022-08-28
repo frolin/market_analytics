@@ -61,7 +61,7 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
-
+  gem 'bootstrap_views_generator'
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
 
@@ -75,8 +75,6 @@ group :test do
   gem "webdrivers"
 end
 
-
-gem 'bootstrap_views_generator', group: :development
 gem 'simple_form'
 gem 'meta-tags'
 gem 'devise'
@@ -91,7 +89,6 @@ gem 'roo'
 gem 'nokogiri'
 gem 'faraday'
 gem 'faraday-multipart'
-
 
 gem 'shrine'
 
@@ -115,3 +112,9 @@ gem 'telegram-bot'
 gem "noticed", "~> 1.5"
 gem 'proxy_fetcher', '~> 0.16'
 gem 'awesome_print'
+
+group :production do
+  gem "sentry-ruby"
+  gem "sentry-rails"
+  gem "sentry-sidekiq"
+end
