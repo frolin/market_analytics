@@ -3,7 +3,7 @@ module Imports
     class Orders < ActiveInteraction::Base
       record :user
       record :campaign
-      date :date_from, default: DateTime.current.advance(years: -1)
+      date :date_from, default: DateTime.current
 
       def execute
         not_fond_barcodes = []
@@ -14,6 +14,7 @@ module Imports
 
         new_orders.each do |order|
           product = Product.wb_find(barcode: order['barcode'])
+
 
           if product.blank?
             not_fond_barcodes << order['barcode']

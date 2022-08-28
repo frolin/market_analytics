@@ -22,4 +22,16 @@ class Order < ApplicationRecord
 
     Order.where(date: start_first..start_last).count
   end
+
+  def self.count_size(day)
+    case day
+    when :today
+      start_first = DateTime.now.beginning_of_day
+      start_last = DateTime.now.end_of_day
+    when :before_day
+      start_first = DateTime.now.advance(days: -1).beginning_of_day
+      start_last = DateTime.now.advance(days: -1).end_of_day
+    end
+      Order.where(date: start_first..start_last).count
+  end
 end

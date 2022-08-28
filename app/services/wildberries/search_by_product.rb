@@ -20,7 +20,7 @@ module Wildberries
 
             if element_is_displayed?(type: :css, name: "#c#{product.wb_sku}")
               found_product = @page.find_element(css: "#c#{product.wb_sku}")
-              binding.pry
+
               if ads?(found_product)
                 puts "Found ads at page #{current_page_number}"
                 keyword.keyword_results.create!(data: data(found_product))

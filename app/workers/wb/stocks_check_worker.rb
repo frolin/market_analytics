@@ -1,5 +1,5 @@
 module Wb
-  class StockCheckWorker
+  class StocksCheckWorker
     include Sidekiq::Worker
 
     def perform
