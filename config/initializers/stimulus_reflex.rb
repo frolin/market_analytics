@@ -5,7 +5,7 @@ StimulusReflex.configure do |config|
   # `:exit` or `:warn` or `:ignore`
 
   # config.on_failed_sanity_checks = :exit
-
+  config.on_failed_sanity_checks = :warn
   # Override the parent class that the StimulusReflex ActionCable channel inherits from
 
   # config.parent_channel = "ApplicationCable::Channel"
