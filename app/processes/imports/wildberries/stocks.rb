@@ -8,9 +8,9 @@ module Imports
       def execute
         not_fond_barcodes = []
         created_stock = []
-
         # import = campaign.imports.create!(type: Stock)
-        stocks.each do |stock|
+
+        stocks_data.each do |stock|
           product = Product.wb_find(barcode: stock['barcode'])
 
           if product.blank?
@@ -36,12 +36,22 @@ module Imports
 
       private
 
-      def stocks
-        @stocks ||= Api::Wildberries::Stats::Stocks.run!(user: user, date_from: format_date)
+      def stocks(date)
+        Api::Wildberries::Stats::Stocks.run!(user: user, date_from: format_date(date))
       end
 
-      def format_date
-        date_from.strftime("%Y-%m-%d")
+      def stocks_data
+        stock_data = stocks(date_from)
+
+        if stock_data.blank?
+          stock_data = stocks(DateTime.current.advance(days: -1))
+        end
+
+        stock_data
+      end
+
+      def format_date(date)
+        date.strftime("%Y-%m-%d")
       end
     end
   end
