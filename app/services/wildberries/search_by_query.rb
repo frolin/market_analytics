@@ -8,6 +8,8 @@ module Wildberries
     string :sku
 
     def execute
+      ads = {}
+      data_all = {}
       @wait = Selenium::WebDriver::Wait.new(timeout: 60)
 
       search
@@ -23,16 +25,16 @@ module Wildberries
 
               if ads?(found_product)
                 puts "Found ads at page #{current_page_number}"
-                ap data(found_product)
+                ads = data(found_product)
 
                 goto_next_page
                 next
               end
 
               puts "Found product at page #{current_page_number}"
-              ap data(found_product)
+              data_all = data(found_product)
 
-              return
+              return data_all.merge!(ads)
             else
               puts "goto next page num from: #{current_page_number} to: #{next_page_number} "
 
@@ -48,6 +50,7 @@ module Wildberries
       ensure
         @page.quit
       end
+
 
     end
 
@@ -105,12 +108,12 @@ module Wildberries
                ads: false
       }
 
-      if ads?(product)
-        adv = JSON.parse(@page.local_storage['advertCatalog'])
-
-        data.merge!({ ads: true,
-                      **adv['advData'] })
-      end
+      # if ads?(product)
+      #   adv = JSON.parse(@page.local_storage['advertCatalog'])
+      #
+      #   data.merge!({ ads: true,
+      #                 **adv['advData'] })
+      # end
 
       data
     end
