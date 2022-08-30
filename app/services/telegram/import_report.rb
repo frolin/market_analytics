@@ -37,8 +37,10 @@ module Telegram
     private
 
     def sales_message
-      @data.map.with_index do |d, i|
-        "#{i + 1}. #{d[:product].name} - #{money(d[:product].price)}"
+      @data.map.with_index do |data, i|
+
+        "#{i + 1}. #{data[:product].name} - #{money(data[:product].price)}"
+
       end.join("\n")
     end
 
