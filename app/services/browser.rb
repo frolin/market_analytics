@@ -48,7 +48,7 @@ class Browser
 
     options.add_argument('allow-profiles-outside-user-dir')
     options.add_argument("user-data-dir=/home/seluser/chrome_profile")
-    options.add_argument("profile-directory=MP Bot")
+    options.add_argument("profile-directory=MP_BOT")
     options.add_argument("profiling-flush=10")
     options.add_argument("enable-aggressive-domstorage-flushing")
     # options.add_argument("headless")
