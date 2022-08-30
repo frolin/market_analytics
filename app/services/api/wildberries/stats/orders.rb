@@ -4,6 +4,7 @@ module Api
       class Orders < Api::WildberriesClient
         record :user
         string :date_from
+        integer :flag, default: 0
 
 
         def execute
@@ -30,6 +31,7 @@ module Api
 
         def params
           { dateFrom: date_from,
+            flag: flag,
             key: key}
         end
       end
