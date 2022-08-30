@@ -30,6 +30,9 @@ services:
       - BOOTSNAP=true
     volumes:
       - .:/app
+      - rails_cache:/app/tmp/cache:delegated
+      - bundle:/vendor/bundle:delegated
+
     env_file:
     - .env.dev
     ports:
@@ -78,3 +81,6 @@ services:
 
 volumes:
   postgres:
+  bundle:
+  rails_cache:
+  irbrc_history:

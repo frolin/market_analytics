@@ -25,9 +25,8 @@ class Browser
 
   def chrome
     # window-size=1280,960
-
-    proxy = Selenium::WebDriver::Proxy.new(http: take_proxy)
-    cap = Selenium::WebDriver::Remote::Capabilities.chrome(proxy: proxy)
+    # proxy = Selenium::WebDriver::Proxy.new(http: take_proxy)
+    # cap = Selenium::WebDriver::Remote::Capabilities.chrome(proxy: proxy)
 
     options = %w[no-sandbox enable-javascript start-maximized ]
     options = Selenium::WebDriver::Chrome::Options.new(args: options)
@@ -48,11 +47,12 @@ class Browser
 
     options.add_argument('allow-profiles-outside-user-dir')
     options.add_argument("user-data-dir=/home/seluser/chrome_profile")
-    options.add_argument("profile-directory=MP_BOT")
+    options.add_argument("profile-directory=MP Bot")
     options.add_argument("profiling-flush=10")
+    options.add_argument("binary=/usr/bin/google-chrom")
     options.add_argument("enable-aggressive-domstorage-flushing")
     # options.add_argument("headless")
-
+    # Selenium::WebDriver::Chrome.path = '/usr/bin/google-chrome'
     @chrome ||= Selenium::WebDriver.for(:remote, :url => ENV['CHROME_ADDRESS'], capabilities: [options])
   end
 

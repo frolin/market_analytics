@@ -15,17 +15,18 @@ module Checks
           result = []
 
           @page = Browser.new('https://seller.wildberries.ru/').run
-          @page.get('https://cmp.wildberries.ru/campaigns/list/active')
+
 
           # if !page.manage.all_cookies.pluck(:name).include?('WBToken')
-          #   page.manage.add_cookie(
-          #     name: "WBToken",
-          #     value: user.settings.wb_auth_token
-          #   )
-          #
+          # @page.manage.add_cookie(name: "WBToken", value: user.settings.wb_auth_token)
+          # @page.manage.add_cookie(name: "x-supplier-id-external", value: user.settings.supplier_token)
+          # @page.manage.add_cookie(name: "locale", value: 'ru')
+
           #   page.execute_script("location.reload()")
           #   sleep 5
           # end
+
+          @page.get('https://cmp.wildberries.ru/campaigns/list/active')
 
           wait.until { element_is_displayed?(type: :xpath, name: PRODUCT_XPATH) }
           products = @page.find_elements(xpath: PRODUCT_XPATH).map { |p| p.text }.compact_blank
