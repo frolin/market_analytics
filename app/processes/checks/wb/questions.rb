@@ -28,7 +28,7 @@ module Checks
           qa = @page.find_element(xpath: XPATH_CLASS).find_elements(css: 'li').map { |p| p.text }.compact_blank
 
           if qa.any?
-            Telegram.bot.send_message(chat_id: user.settings.tg_chat_id, text: qa)
+            Telegram::Qa.call(user, qa)
           end
 
         ensure
