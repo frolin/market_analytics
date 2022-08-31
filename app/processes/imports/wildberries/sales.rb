@@ -3,7 +3,7 @@ module Imports
     class Sales < ActiveInteraction::Base
       record :user
       record :campaign
-      date :date_from, default: DateTime.current.advance(years: -1)
+      date :date_from, default: Date.current.beginning_of_week
 
       def execute
         new_sell_log = []
