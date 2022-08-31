@@ -29,6 +29,8 @@ module Checks
 
           if qa.any?
             Telegram::Checkers::Qa.call(user, qa)
+          else
+            Rails.looger.info('No questions found')
           end
 
         ensure
