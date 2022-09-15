@@ -1,4 +1,5 @@
 class TelegramWebhooksController < Telegram::Bot::UpdatesController
+  include Telegram::Bot::UpdatesController::MessageContext
 
   ### AUTH
   class AuthorizationError < StandardError; end
@@ -13,12 +14,29 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
   def start!(*)
     respond_with :message, text: Telegram::Greeting.call(from), parse_mode: 'HTML'
-    # inline_keyboard!
+    inline_keyboard!
+  end
+
+  def add_store!(*)
+
+    inline_keyboard!
+
+    # user = User.find_by(username: from['username'])
+    # campaign = user.wb.campaigns.find_by(token: token)
+    #
+    # if campaign.blank?
+    #   binding.pry
+    #   user.wb.campaigns.create!(token: token)
+    #
+    #   respond_with :message, text: 'Магазин успешно добавлен.'
+    #   inline_keyboard!
+    # else
+    #   inline_keyboard!
+    # end
   end
 
   def search!(sku = nil, *)
     if sku.present?
-      binding.pry
       Wildberries::SearchByQuery.run(q: 'разделочная доска', sku: sku)
     else
       respond_with :message, text: 'Отправь артикул', reply_markup: {
@@ -95,8 +113,19 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     respond_with :message, text: t('.prompt'), reply_markup: {
       inline_keyboard: [
         [
-          { text: 'Добавить товар', callback_data: 'add_url' },
-          { text: 'Список товаров', callback_data: 'products_list' },
+          { text: 'Добавить магазин', callback_data: 'add_campaign' },
+          { text: 'Список магазинов', callback_data: 'campaign_list' },
+        ],
+        [{ text: t('.repo'), url: 'https://github.com/telegram-bot-rb/telegram-bot' }],
+      ],
+    }
+  end
+
+  def start_keyboard!(*)
+    respond_with :message, text: 'Меню', reply_markup: {
+      inline_keyboard: [
+        [
+          { text: 'Назад', callback_data: 'back' },
         ],
       # [{ text: t('.repo'), url: 'https://github.com/telegram-bot-rb/telegram-bot' }],
       ],
@@ -104,10 +133,10 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   end
 
   def callback_query(data)
-    binding.pry
     case data
-    when 'add_url'
-      add_url!
+    when 'add_campaign'
+      save_context :add_campaign!
+      respond_with :message, text: 'Введите api ключ из ЛК'
     when 'check_price'
       answer_callback_query 'проверяю цены'
       answer_inline_query price_check
@@ -195,7 +224,11 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   private
 
   def user
-    User.find_by(email: 'dev@dev.ru')
+    from['username'].in?(valid_users)
+  end
+
+  def valid_users
+    ['fralunia']
   end
 
   def authorize!

@@ -1,0 +1,20 @@
+[279:301:0902/101249.741421:ERROR:bus.cc(398)] Failed to connect to the bus: Failed to connect to socket /var/run/dbus/system_bus_socket: No such file or directory
+[279:301:0902/101249.741507:ERROR:bus.cc(398)] Failed to connect to the bus: Failed to connect to socket /var/run/dbus/system_bus_socket: No such file or directory
+[279:300:0902/101249.742963:ERROR:bus.cc(398)] Failed to connect to the bus: Address does not contain a colon
+[279:300:0902/101249.742993:ERROR:bus.cc(398)] Failed to connect to the bus: Address does not contain a colon
+[279:300:0902/101249.750329:ERROR:bus.cc(398)] Failed to connect to the bus: Address does not contain a colon
+[279:300:0902/101249.750357:ERROR:bus.cc(398)] Failed to connect to the bus: Address does not contain a colon
+[307:307:0902/101249.756098:WARNING:sandbox_linux.cc(376)] InitializeSandbox() called with multiple threads in process gpu-process.
+[279:300:0902/101249.797038:ERROR:bus.cc(398)] Failed to connect to the bus: Address does not contain a colon
+[279:300:0902/101249.797062:ERROR:bus.cc(398)] Failed to connect to the bus: Address does not contain a colon
+[307:307:0902/101249.808004:ERROR:gpu_memory_buffer_support_x11.cc(44)] dri3 extension not supported.
+[279:279:0902/101249.812297:WARNING:bluez_dbus_manager.cc(247)] Floss manager not present, cannot set Floss enable/disable.
+[279:375:0902/101249.831711:ERROR:bus.cc(398)] Failed to connect to the bus: Failed to connect to socket /var/run/dbus/system_bus_socket: No such file or directory
+[279:375:0902/101249.831741:ERROR:bus.cc(398)] Failed to connect to the bus: Failed to connect to socket /var/run/dbus/system_bus_socket: No such file or directory
+[279:375:0902/101249.831769:ERROR:bus.cc(398)] Failed to connect to the bus: Failed to connect to socket /var/run/dbus/system_bus_socket: No such file or directory
+[279:375:0902/101249.831775:WARNING:property.cc(144)] DaemonVersion: GetAndBlock: failed.
+[279:375:0902/101249.831796:ERROR:bus.cc(398)] Failed to connect to the bus: Failed to connect to socket /var/run/dbus/system_bus_socket: No such file or directory
+[279:375:0902/101249.831814:ERROR:bus.cc(398)] Failed to connect to the bus: Failed to connect to socket /var/run/dbus/system_bus_socket: No such file or directory
+[308:340:0902/101255.958635:WARNING:sqlite_persistent_store_backend_base.cc(163)] Failed to post task from FlushAndNotifyInBackground@net/extras/sqlite/sqlite_persistent_store_backend_base.cc:211 to client_task_runner_.
+[308:340:0902/101255.958716:WARNING:sqlite_persistent_store_backend_base.cc(163)] Failed to post task from FlushAndNotifyInBackground@net/extras/sqlite/sqlite_persistent_store_backend_base.cc:211 to client_task_runner_.
+[279:279:0902/101255.974337:WARNING:pref_notifier_impl.cc(41)] Pref observer for media_router.cast_allow_all_ips found at shutdown.

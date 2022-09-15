@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_27_210410) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_04_204942) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -142,6 +142,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_27_210410) do
     t.bigint "campaign_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "notified", default: false
+    t.string "srid"
+    t.string "odid"
     t.index ["campaign_id"], name: "index_orders_on_campaign_id"
     t.index ["import_id"], name: "index_orders_on_import_id"
   end
@@ -198,14 +201,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_27_210410) do
     t.index ["user_id"], name: "index_products_on_user_id"
   end
 
-  create_table "sells", force: :cascade do |t|
-    t.bigint "order_id", null: false
+  create_table "sales", force: :cascade do |t|
+    t.bigint "order_id"
     t.date "date"
     t.jsonb "api_data", default: {}
     t.jsonb "excel_data", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["order_id"], name: "index_sells_on_order_id"
+    t.string "state"
+    t.boolean "notified", default: false
+    t.bigint "campaign_id"
+    t.index ["campaign_id"], name: "index_sales_on_campaign_id"
+    t.index ["order_id"], name: "index_sales_on_order_id"
   end
 
   create_table "stocks", force: :cascade do |t|
@@ -278,6 +285,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_27_210410) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "username"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -299,7 +307,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_27_210410) do
   add_foreign_key "product_keywords", "keywords"
   add_foreign_key "product_keywords", "products"
   add_foreign_key "products", "users"
-  add_foreign_key "sells", "orders"
+  add_foreign_key "sales", "campaigns"
   add_foreign_key "stocks", "products"
   add_foreign_key "supplies", "users"
   add_foreign_key "supply_costs", "supply_products"

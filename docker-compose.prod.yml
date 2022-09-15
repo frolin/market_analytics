@@ -19,22 +19,21 @@ services:
   app:
     depends_on:
       - db
-#      - worker
-#      - chrome
+      - worker
+      - chrome
     build: .
-    # command: /bin/sh -c "bundle"
-#    stdin_open: true
+    command: /bin/sh -c "bundle && rails s -b 0.0.0.0 -p 3333"
+    stdin_open: true
     tty: true
     environment:
-      - RAILS_ENV=development
+      - RAILS_ENV=production
       - BOOTSNAP=true
     volumes:
       - .:/app
       - rails_cache:/app/tmp/cache:delegated
       - bundle:/vendor/bundle:delegated
-
     env_file:
-    - .env.dev
+    - .env.prod
     ports:
       - "3333:3333"
 
@@ -42,16 +41,16 @@ services:
     depends_on:
       - redis
     build: .
-    command: sh -c "bundle && bundle exec sidekiq"
+    command: sh -c "bundle install && bundle exec sidekiq"
     stdin_open: true
     tty: true
     environment:
-      - RAILS_ENV=development
+      - RAILS_ENV=production
       - BOOTSNAP=true
     volumes:
       - .:/app
     env_file:
-      - .env.dev
+      - .env.prod
     networks:
       - default
 
@@ -61,6 +60,7 @@ services:
     environment:
       - NODE_MAX_INSTANCES=5
       - NODE_MAX_SESSION=5
+      - RAILS_LOG_TO_STDOUT=true
     shm_size: 2g
     privileged: true
     volumes:
@@ -75,12 +75,20 @@ services:
       # Disable noisy logs.
 
   redis:
-    image: redis
+    build:
+      context: .
+      dockerfile: Dockerfile-Redis
+    command: redis-server --include /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/data:/data:rw
+      - /opt/redis/etc/redis.conf:/usr/local/etc/redis/redis.conf
+      - /opt/redis/data:/data
     ports:
-      - "6379:6379"
+      - '6379:6379'
+    restart: always
 
 volumes:
   postgres:
   bundle:
   rails_cache:
-  irbrc_history:

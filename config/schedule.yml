@@ -24,3 +24,13 @@ check_position:
   cron: "0 7,18 * * *" # execute at every 30 minute
   class: "Wb::PositionCheckWorker"
   queue: 'default'
+
+order_notifications_tg:
+  cron: "*/1 * * * *" # execute at every 30 minute
+  class: "Wb::OrderNotificationsWorker"
+  queue: 'default'
+
+sales_notifications_tg:
+  cron: "*/1 * * * *" # execute at every 30 minute
+  class: "Wb::SalesNotificationsWorker"
+  queue: 'default'

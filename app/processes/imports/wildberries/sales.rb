@@ -11,23 +11,29 @@ module Imports
 
         # import = campaign.imports.create!
 
-        new_sales = sales.reject { |sale| Sell.wb_find(odid: sale['odid']) }
+        new_sales = sales.reject { |sale| Sale.wb_find(odid: sale['odid']) }
 
         Rails.logger.info("Found sales count: #{new_sales.count}")
 
         new_sales.each do |sell|
-          order = Order.wb_find(odid: sell['odid']) || Order.wb_find(srid: sell['srid'])
+          order = Order.wb_find(odid: sell['odid']) || Order.wb_find(gNumber: sell['gNumber']) || Order.wb_find(srid: sell['srid'])
 
           if order.blank?
+            sale = Sale.new(api_data: sell, date: sell['date'])
+            sale.state = :without_order
+            sale.campaign = campaign
+
+            sale.save!
+
             not_fond_orders << sell['odid']
             next
           end
 
-          Import.transaction do
-            sell = order.create_sell(api_data: sell, date: sell['date'])
+          sell = order.sales.new(api_data: sell, date: sell['date'])
+          sell.state = :with_order
+          sell.save!
 
-            new_sell_log << sell
-          end
+          new_sell_log << sell
         end
 
         Rails.logger.info("Sales create: #{new_sell_log.size}")

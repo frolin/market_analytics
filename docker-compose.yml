@@ -32,7 +32,6 @@ services:
       - .:/app
       - rails_cache:/app/tmp/cache:delegated
       - bundle:/vendor/bundle:delegated
-
     env_file:
     - .env.dev
     ports:
@@ -75,6 +74,7 @@ services:
       # Disable noisy logs.
 
   redis:
+    image: afnia/redis-alpine
     image: redis
     ports:
       - "6379:6379"

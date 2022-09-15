@@ -4,6 +4,8 @@ module Telegram
     include ActionView::Helpers::NumberHelper
 
     def self.send_message(user, data)
+      return if user.settings.tg_chat_id.blank?
+
       message = new(user, data).message
 
       Telegram.bot.send_message(chat_id: user.settings.tg_chat_id, text: message) if data.present?
@@ -38,11 +40,12 @@ module Telegram
 
     def sales_message
       @data.map.with_index do |data, i|
-
-        "#{i + 1}. #{data[:product].name} - #{money(data[:product].price)}"
+        "#{i + 1}. #{data.brand} - #{money(data.price)}"
 
       end.join("\n")
     end
+
+
 
   end
 end

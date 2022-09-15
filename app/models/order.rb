@@ -6,7 +6,11 @@ class Order < ApplicationRecord
   has_many :products, through: :order_products
 
   has_many :costs, class_name: 'OrderCost'
-  has_one :sell, dependent: :destroy
+  has_many :sales, dependent: :destroy
+
+  store_accessor :api_data, :category, :subject, :warehouseName, :oblast, :brand, :price
+
+  scope :recent, -> { where("created_at > #{30.minutes.ago}") }
 
   def sell?
     sell.present?
