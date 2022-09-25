@@ -14,25 +14,95 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
   def start!(*)
     respond_with :message, text: Telegram::Greeting.call(from), parse_mode: 'HTML'
+
     inline_keyboard!
   end
 
+  def my!(*)
+    user = User.find_by(username: from['username'])
+    user.markets
+
+    sub_menu(user.markets)
+  end
+
   def add_store!(*)
-
     inline_keyboard!
+  end
 
-    # user = User.find_by(username: from['username'])
-    # campaign = user.wb.campaigns.find_by(token: token)
-    #
-    # if campaign.blank?
-    #   binding.pry
-    #   user.wb.campaigns.create!(token: token)
-    #
-    #   respond_with :message, text: 'Магазин успешно добавлен.'
-    #   inline_keyboard!
-    # else
-    #   inline_keyboard!
-    # end
+  def callback_query(data)
+    # bot.delete_message(chat_id: from["id"], message_id: payload["message"]["message_id"])
+    case data
+    when 'add_campaign_wb'
+      save_context :add_store_wb!
+      respond_with :message, text: 'Введите api ключ из ЛК'
+    when 'add_campaign_ozon'
+      save_context :add_store_ozon!
+      respond_with :message, text: 'Введите api ключ из ЛК'
+    when 'check_price'
+      answer_callback_query 'проверяю цены'
+      answer_inline_query price_check
+    when 'products_list'
+      products
+    else
+      answer_callback_query t('.no_alert')
+    end
+  end
+
+  def add_store_wb!(token = nil, *)
+    if token.present?
+      result = Telegram::AddNewStore.run(username: from['username'], token: token,  type: :wb)
+
+      if result.valid?
+        respond_with :message, text: Telegram::Greeting.new(from).success_add, parse_mode: 'HTML'
+      else
+        message = result.errors.messages.values.flatten.join(' ,')
+        respond_with :message, text: message, parse_mode: 'HTML'
+
+        inline_keyboard!
+      end
+
+    else
+      inline_keyboard!
+    end
+  end
+
+  def add_store_ozon!(token = nil, *)
+    if token.present?
+      result = Telegram::AddNewStore.run(username: from['username'], token: token, type: :ozon)
+
+      if result.valid?
+        respond_with :message, text: Telegram::Greeting.new(from).success_add, parse_mode: 'HTML'
+      else
+        message = result.errors.messages.values.flatten.join(' ,')
+        respond_with :message, text: message, parse_mode: 'HTML'
+
+        inline_keyboard!
+      end
+
+    else
+      inline_keyboard!
+    end
+  end
+
+
+
+  def sub_menu(list = nil)
+    data = list.map { |l| { text: l.slug, callback_data: l.slug } }
+
+    respond_with :message, text: t('.prompt'), reply_markup: {
+      inline_keyboard: [data],
+    }
+  end
+
+  def inline_keyboard!(*)
+    respond_with :message, text: Telegram::Greeting.new(from).add_store, reply_markup: {
+      inline_keyboard: [
+        [
+          { text: 'Добавить Wildberries', callback_data: 'add_campaign_wb' },
+          { text: 'Добавить Ozon', callback_data: 'add_campaign_ozon' },
+        ],
+      ],
+    }
   end
 
   def search!(sku = nil, *)
@@ -109,18 +179,6 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     end
   end
 
-  def inline_keyboard!(*)
-    respond_with :message, text: t('.prompt'), reply_markup: {
-      inline_keyboard: [
-        [
-          { text: 'Добавить магазин', callback_data: 'add_campaign' },
-          { text: 'Список магазинов', callback_data: 'campaign_list' },
-        ],
-        [{ text: t('.repo'), url: 'https://github.com/telegram-bot-rb/telegram-bot' }],
-      ],
-    }
-  end
-
   def start_keyboard!(*)
     respond_with :message, text: 'Меню', reply_markup: {
       inline_keyboard: [
@@ -130,22 +188,6 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
       # [{ text: t('.repo'), url: 'https://github.com/telegram-bot-rb/telegram-bot' }],
       ],
     }
-  end
-
-  def callback_query(data)
-    case data
-    when 'add_campaign'
-      save_context :add_campaign!
-      respond_with :message, text: 'Введите api ключ из ЛК'
-    when 'check_price'
-      answer_callback_query 'проверяю цены'
-      answer_inline_query price_check
-    when 'products_list'
-      binding.pry
-      products
-    else
-      answer_callback_query t('.no_alert')
-    end
   end
 
   def products_list(product)

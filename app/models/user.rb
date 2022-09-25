@@ -13,4 +13,5 @@ class User < ApplicationRecord
 
   has_one :wb, -> { where(slug: 'wildberries') }, class_name: 'Market'
   has_one :ya, -> { where(slug: 'yandex') }, class_name: 'Market'
+  has_one :ozon, -> { where(slug: 'ozon') }, class_name: 'Market'
 end
