@@ -13,7 +13,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   use_session!
 
   def start!(*)
-    respond_with :message, text: Telegram::Greeting.call(from), parse_mode: 'HTML'
+    respond_with :message, text: Telegram::Greeting.new(from).greet, parse_mode: 'HTML'
 
     inline_keyboard!
   end
@@ -27,6 +27,10 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
   def add_store!(*)
     inline_keyboard!
+  end
+
+  def campaign_list!(*)
+    respond_with :message, text: Telegram::Greeting.new(from).campaign_list, parse_mode: 'HTML'
   end
 
   def callback_query(data)
@@ -50,7 +54,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
   def add_store_wb!(token = nil, *)
     if token.present?
-      result = Telegram::AddNewStore.run(username: from['username'], token: token,  type: :wb)
+      result = Telegram::AddNewStore.run(username: from['username'], token: token, type: :wb)
 
       if result.valid?
         respond_with :message, text: Telegram::Greeting.new(from).success_add, parse_mode: 'HTML'
@@ -83,8 +87,6 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
       inline_keyboard!
     end
   end
-
-
 
   def sub_menu(list = nil)
     data = list.map { |l| { text: l.slug, callback_data: l.slug } }
@@ -243,7 +245,6 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   end
 
   def message(message)
-    binding.pry
     if message['reply_to_message'].present?
       case message.dig('reply_to_message', 'text')
 

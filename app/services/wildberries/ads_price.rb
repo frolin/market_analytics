@@ -8,7 +8,6 @@ module Wildberries
       @wait = Selenium::WebDriver::Wait.new(timeout: 60)
       search
 
-      binding.pry
       JSON.parse(@page.local_storage['advertCatalog'])
 
     ensure

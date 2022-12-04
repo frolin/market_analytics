@@ -15,8 +15,9 @@ class Product < ApplicationRecord
   accepts_nested_attributes_for :photos, allow_destroy: true
 
   has_many :stocks
+  accepts_nested_attributes_for :stocks, allow_destroy: true
 
-  validates :name, :barcode, presence: true
+  validates :barcode, presence: true
 
   store_accessor :data
   store_accessor :properties

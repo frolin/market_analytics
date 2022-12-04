@@ -24,13 +24,21 @@ module Telegram
         market.campaigns.new(token: token)
         market.save!
       when :wb
-        market = user.markets.new(name: 'wildberries', slug: 'wildberries')
-        market.campaigns.new(token: token)
+        if user.wb.present?
+          market = user.wb
+        else
+          market = user.markets.new(name: 'wildberries', slug: 'wildberries')
+        end
+
+        campaign = market.campaigns.new(token: token)
         market.save!
+
+        Wb::FirstTimeWorker.perform_async(user.id, campaign.id)
       end
     end
 
     private
+
 
     def user
       @user ||= User.find_by(username: username)

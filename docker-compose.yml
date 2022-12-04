@@ -19,8 +19,8 @@ services:
   app:
     depends_on:
       - db
-#      - worker
-#      - chrome
+      - worker
+      - chrome
     build: .
     # command: /bin/sh -c "bundle"
 #    stdin_open: true
@@ -55,11 +55,12 @@ services:
       - default
 
   chrome:
-    image: selenium/standalone-chrome-debug:latest
+    image: selenium/standalone-chrome
     # Debug version enables VNC ability
     environment:
       - NODE_MAX_INSTANCES=5
       - NODE_MAX_SESSION=5
+      - JAVA_OPTS=-Dwebdriver.chrome.whitelistedIps=
     shm_size: 2g
     privileged: true
     volumes:

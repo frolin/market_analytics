@@ -44,15 +44,17 @@ class Browser
     options.add_argument('disable-web-security')
     options.add_argument('disable-infobars')
     options.add_argument('disable-translate')
-
-    options.add_argument('allow-profiles-outside-user-dir')
-    options.add_argument("user-data-dir=/home/seluser/chrome_profile")
-    options.add_argument("profile-directory=MP Bot")
-    options.add_argument("profiling-flush=10")
-    options.add_argument("binary=/usr/bin/google-chrom")
     options.add_argument("enable-aggressive-domstorage-flushing")
+    options.add_argument("profiling-flush=10")
     # options.add_argument("headless")
+
+    # options.add_argument('allow-profiles-outside-user-dir')
+    # options.add_argument("user-data-dir=/home/seluser/chrome_profile")
+    # options.add_argument("profile-directory=Person 1")
+
+    # options.add_argument("binary=/usr/bin/google-chrome")
     # Selenium::WebDriver::Chrome.path = '/usr/bin/google-chrome'
+
     @chrome ||= Selenium::WebDriver.for(:remote, :url => ENV['CHROME_ADDRESS'], capabilities: [options])
   end
 

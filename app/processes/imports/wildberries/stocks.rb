@@ -10,7 +10,9 @@ module Imports
         created_stock = []
         # import = campaign.imports.create!(type: Stock)
 
-        stocks_data.each do |stock|
+        raise 'Empty stock data' unless stocks_data.valid?
+
+        stocks_data.result.each do |stock|
           product = Product.wb_find(barcode: stock['barcode'])
 
           if product.blank?
@@ -37,17 +39,20 @@ module Imports
       private
 
       def stocks(date)
-        Api::Wildberries::Stats::Stocks.run!(user: user, date_from: format_date(date))
+        Api::Wildberries::Stats::Stocks.run(user: user, date_from: format_date(date))
       end
 
       def stocks_data
-        stock_data = stocks(date_from)
+        @stocks_data ||=
+          begin
+            stock_data = stocks(date_from)
 
-        if stock_data.blank?
-          stock_data = stocks(DateTime.current.advance(days: -1))
-        end
+            unless stock_data.valid?
+              stock_data = stocks(DateTime.current.advance(days: -1))
+            end
 
-        stock_data
+            stock_data
+          end
       end
 
       def format_date(date)

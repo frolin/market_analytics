@@ -3,6 +3,7 @@ module Api
     module Stats
       class Stocks < Api::WildberriesClient
         record :user
+        record :campaign
         string :date_from, default: DateTime.now.strftime("%Y-%m-%d")
 
         def execute
@@ -20,7 +21,7 @@ module Api
         end
 
         def key
-          user.wb.campaigns.last.token
+          campaign.token
         end
 
         def type
