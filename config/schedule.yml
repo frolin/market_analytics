@@ -34,3 +34,8 @@ sales_notifications_tg:
   cron: "*/1 * * * *" # execute at every 30 minute
   class: "Wb::SalesNotificationsWorker"
   queue: 'default'
+
+parse_product_pages:
+  cron: "*/30 * * * *" # execute at every 30 minute
+  class: "Wb::ProductParserWorker"
+  queue: 'default'

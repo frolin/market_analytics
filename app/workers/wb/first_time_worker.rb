@@ -6,8 +6,8 @@ module Wb
       60 * (count + 1)
     end
 
-    def perform(user_id, campaign_id)
-      Imports::FirstTime.run!(user_id: user_id, campaign_id: campaign_id)
+    def perform(store_id)
+      Imports::Wb::FromStock.run!(store_id: store_id)
     end
   end
 end

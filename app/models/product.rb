@@ -1,6 +1,8 @@
 class Product < ApplicationRecord
-  belongs_to :campaign, required: false
-  belongs_to :import, required: false
+  include AASM
+
+  belongs_to :store, optional: true
+  belongs_to :import, optional: true
 
   has_many :order_products
   has_many :orders, through: :order_products
@@ -14,8 +16,10 @@ class Product < ApplicationRecord
   has_many :photos, dependent: :destroy
   accepts_nested_attributes_for :photos, allow_destroy: true
 
-  has_many :stocks
+  has_many :stocks, dependent: :destroy
   accepts_nested_attributes_for :stocks, allow_destroy: true
+
+  has_many :requests, as: :source
 
   validates :barcode, presence: true
 
@@ -41,4 +45,18 @@ class Product < ApplicationRecord
 
     stocks.last.quantity
   end
+
+  aasm column: :state do
+    state :init, initial: true
+    state :parsing, :finished
+
+    event :parsing do
+      transitions from: :pending, to: :parsing
+    end
+
+    event :finish do
+      transitions from: :parsing, to: :finish
+    end
+  end
+
 end

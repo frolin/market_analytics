@@ -4,8 +4,12 @@ class CreateOrders < ActiveRecord::Migration[7.0]
       t.jsonb :api_data
       t.jsonb :excel_data
       t.datetime :date
-      t.references :import, null: false, foreign_key: true
-      t.references :campaign, null: false, foreign_key: true
+      t.references :store, null: false, foreign_key: true
+
+      t.string :srid, index: true
+      t.string :odid, index: true
+
+      t.boolean :notified,  default: false
 
       t.timestamps
     end

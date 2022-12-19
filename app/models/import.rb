@@ -1,5 +1,5 @@
 class Import < ApplicationRecord
-  belongs_to :campaign
+  belongs_to :store
 
   has_many :products
   has_many :orders

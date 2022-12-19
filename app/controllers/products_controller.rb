@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[ show edit update destroy ]
-  before_action :set_campaign, only: %i[ index ]
+  before_action :set_store, only: %i[ index ]
 
   # GET /products or /products.json
   def index
@@ -90,8 +90,8 @@ class ProductsController < ApplicationController
     @product = Product.find(params[:id])
   end
 
-  def set_campaign
-    @campaign = Campaign.find_by(number: params[:id] || params[:campaign_id])
+  def set_store
+    @store = Store.find_by(params[:store_id])
   end
 
   # Only allow a list of trusted parameters through.

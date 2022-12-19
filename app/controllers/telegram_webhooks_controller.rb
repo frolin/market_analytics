@@ -13,20 +13,19 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   use_session!
 
   def start!(*)
+    Telegram::InitUser.run(from: from)
+
     respond_with :message, text: Telegram::Greeting.new(from).greet, parse_mode: 'HTML'
 
-    inline_keyboard!
+    inline_menu!
   end
 
   def my!(*)
-    user = User.find_by(username: from['username'])
-    user.markets
-
-    sub_menu(user.markets)
+    sub_menu(tg_user.stores)
   end
 
   def add_store!(*)
-    inline_keyboard!
+    inline_menu!
   end
 
   def campaign_list!(*)
@@ -54,19 +53,20 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
   def add_store_wb!(token = nil, *)
     if token.present?
-      result = Telegram::AddNewStore.run(username: from['username'], token: token, type: :wb)
+      byebug
 
+      result = Telegram::AddNewStore.run(tg_user: tg_user, token: token, type: :wb)
       if result.valid?
         respond_with :message, text: Telegram::Greeting.new(from).success_add, parse_mode: 'HTML'
       else
         message = result.errors.messages.values.flatten.join(' ,')
         respond_with :message, text: message, parse_mode: 'HTML'
 
-        inline_keyboard!
+        inline_menu!
       end
 
     else
-      inline_keyboard!
+      inline_menu!
     end
   end
 
@@ -80,11 +80,11 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
         message = result.errors.messages.values.flatten.join(' ,')
         respond_with :message, text: message, parse_mode: 'HTML'
 
-        inline_keyboard!
+        inline_menu!
       end
 
     else
-      inline_keyboard!
+      inline_menu!
     end
   end
 
@@ -96,7 +96,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     }
   end
 
-  def inline_keyboard!(*)
+  def inline_menu!(*)
     respond_with :message, text: Telegram::Greeting.new(from).add_store, reply_markup: {
       inline_keyboard: [
         [
@@ -266,8 +266,12 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
   private
 
-  def user
+  def user?
     from['username'].in?(valid_users)
+  end
+
+  def tg_user
+    @tg_user ||= TgUser.find_by(username: from['username'])
   end
 
   def valid_users
@@ -275,7 +279,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   end
 
   def authorize!
-    return true if user
+    return true if user?
 
     raise AuthorizationError
   end

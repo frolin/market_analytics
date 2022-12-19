@@ -1,5 +1,5 @@
 class OrderProduct < ApplicationRecord
   belongs_to :product
   belongs_to :order
-  belongs_to :campaign
+  belongs_to :store
 end

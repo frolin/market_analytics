@@ -55,7 +55,12 @@ class Browser
     # options.add_argument("binary=/usr/bin/google-chrome")
     # Selenium::WebDriver::Chrome.path = '/usr/bin/google-chrome'
 
-    @chrome ||= Selenium::WebDriver.for(:remote, :url => ENV['CHROME_ADDRESS'], capabilities: [options])
+    client = Selenium::WebDriver::Remote::Http::Default.new
+    client.read_timeout = 60
+
+    @chrome ||= Selenium::WebDriver.for(:remote, :url => ENV['CHROME_ADDRESS'],
+                                        capabilities: [options],
+                                        http_client: client)
   end
 
   def take_proxy

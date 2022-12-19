@@ -32,6 +32,9 @@ services:
       - .:/app
       - rails_cache:/app/tmp/cache:delegated
       - bundle:/vendor/bundle:delegated
+      - gem_cache:/usr/local/bundle/gems
+      - ${HOME}/.irbrc:/root/.irbrc
+      - ${HOME}/.irb-history-market:/root/.irb-history
     env_file:
     - .env.dev
     ports:
@@ -49,18 +52,41 @@ services:
       - BOOTSNAP=true
     volumes:
       - .:/app
+      - rails_cache:/app/tmp/cache:delegated
+      - bundle:/vendor/bundle:delegated
+      - gem_cache:/usr/local/bundle/gems
     env_file:
       - .env.dev
     networks:
       - default
+#
+#  chrome:
+#    image: selenium/node-chrome:4.7.1-20221208
+#    shm_size: 2gb
+#    depends_on:
+#      - selenium-hub
+#    environment:
+#      - SE_EVENT_BUS_HOST=selenium-hub
+#      - SE_EVENT_BUS_PUBLISH_PORT=4442
+#      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+#
+#  selenium-hub:
+#    image: selenium/hub:4.7.1-20221208
+#    container_name: selenium-hub
+#    ports:
+#      - "4442:4442"
+#      - "4443:4443"
+#      - "4444:4444"
 
   chrome:
-    image: selenium/standalone-chrome
+    image: selenium/standalone-chrome-debug
     # Debug version enables VNC ability
     environment:
       - NODE_MAX_INSTANCES=5
+      - SE_DRAIN_AFTER_SESSION_COUNT=5
       - NODE_MAX_SESSION=5
       - JAVA_OPTS=-Dwebdriver.chrome.whitelistedIps=
+      - SCALE=4
     shm_size: 2g
     privileged: true
     volumes:
@@ -84,4 +110,5 @@ volumes:
   postgres:
   bundle:
   rails_cache:
+  gem_cache:
   irbrc_history:

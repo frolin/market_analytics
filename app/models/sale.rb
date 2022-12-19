@@ -1,6 +1,6 @@
 class Sale < ApplicationRecord
   belongs_to :order, optional: true
-  belongs_to :campaign
+  belongs_to :store
 
   store_accessor :api_data, :barcode, :forPay, :category, :subject, :warehouseName, :oblast, :brand, :price
 

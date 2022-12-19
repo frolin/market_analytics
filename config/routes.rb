@@ -24,15 +24,12 @@ Rails.application.routes.draw do
     get :google_export, to: 'supplies#google_export', as: :google_export
   end
 
-  resources :markets do
-    resources :campaigns do
-      get 'api_update', to: 'campaigns#api_update'
+  resources :stores do
+    get 'api_update', to: 'store#api_update'
 
-      resources :imports
-      resources :costs
-      resources :orders
-      resources :products
-
-    end
+    resources :imports
+    resources :costs
+    resources :orders
+    resources :products
   end
 end

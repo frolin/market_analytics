@@ -10,7 +10,10 @@ module Telegram
     end
 
     def campaign_list
-      "Список магазинов: #{user.wb.campaigns.pluck(:name)}"
+      campaigns_name = user.wb&.campaigns&.pluck(:name)
+      return 'Пусто' if campaigns_name&.size.to_i == 0
+
+      "Список магазинов: #{campaigns_name}"
     end
 
     def my

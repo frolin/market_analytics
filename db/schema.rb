@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_04_204942) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_18_000147) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -36,18 +36,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_04_204942) do
     t.index ["user_id", "user_type"], name: "user_index"
   end
 
-  create_table "campaigns", force: :cascade do |t|
-    t.string "name"
-    t.string "number"
-    t.string "slug"
-    t.bigint "market_id", null: false
-    t.jsonb "data"
-    t.string "token"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["market_id"], name: "index_campaigns_on_market_id"
-  end
-
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.string "slug"
@@ -66,13 +54,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_04_204942) do
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
   end
 
-  create_table "imports", force: :cascade do |t|
-    t.bigint "campaign_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["campaign_id"], name: "index_imports_on_campaign_id"
-  end
-
   create_table "keyword_results", force: :cascade do |t|
     t.bigint "keyword_id", null: false
     t.jsonb "data"
@@ -86,16 +67,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_04_204942) do
     t.string "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "markets", force: :cascade do |t|
-    t.string "name"
-    t.string "slug"
-    t.jsonb "data"
-    t.bigint "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_markets_on_user_id"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -114,39 +85,37 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_04_204942) do
     t.jsonb "data"
     t.datetime "date"
     t.bigint "order_id", null: false
-    t.bigint "import_id", null: false
-    t.bigint "campaign_id", null: false
+    t.bigint "store_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["campaign_id"], name: "index_order_costs_on_campaign_id"
-    t.index ["import_id"], name: "index_order_costs_on_import_id"
     t.index ["order_id"], name: "index_order_costs_on_order_id"
+    t.index ["store_id"], name: "index_order_costs_on_store_id"
   end
 
   create_table "order_products", force: :cascade do |t|
     t.bigint "product_id", null: false
     t.bigint "order_id", null: false
+    t.bigint "store_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "campaign_id", null: false
-    t.index ["campaign_id"], name: "index_order_products_on_campaign_id"
     t.index ["order_id"], name: "index_order_products_on_order_id"
     t.index ["product_id"], name: "index_order_products_on_product_id"
+    t.index ["store_id"], name: "index_order_products_on_store_id"
   end
 
   create_table "orders", force: :cascade do |t|
     t.jsonb "api_data"
     t.jsonb "excel_data"
     t.datetime "date"
-    t.bigint "import_id", null: false
-    t.bigint "campaign_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "notified", default: false
+    t.bigint "store_id", null: false
     t.string "srid"
     t.string "odid"
-    t.index ["campaign_id"], name: "index_orders_on_campaign_id"
-    t.index ["import_id"], name: "index_orders_on_import_id"
+    t.boolean "notified", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["odid"], name: "index_orders_on_odid"
+    t.index ["srid"], name: "index_orders_on_srid"
+    t.index ["store_id"], name: "index_orders_on_store_id"
   end
 
   create_table "photos", force: :cascade do |t|
@@ -183,22 +152,35 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_04_204942) do
     t.string "sku"
     t.string "barcode"
     t.bigint "offer_id"
+    t.decimal "price", precision: 8, scale: 2
+    t.decimal "purchase_price", precision: 8, scale: 2
     t.jsonb "content", default: {}
     t.jsonb "properties", default: {}
     t.jsonb "parameters", default: {}
     t.jsonb "image_data"
     t.jsonb "jsonb"
-    t.bigint "campaign_id"
+    t.jsonb "cost", default: {}
     t.bigint "import_id"
-    t.bigint "user_id", null: false
+    t.bigint "store_id"
+    t.bigint "user_id"
+    t.bigint "tg_user_id"
+    t.string "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.jsonb "cost", default: {}
-    t.decimal "price", precision: 8, scale: 2
-    t.decimal "purchase_price", precision: 8, scale: 2
-    t.index ["campaign_id"], name: "index_products_on_campaign_id"
     t.index ["import_id"], name: "index_products_on_import_id"
+    t.index ["store_id"], name: "index_products_on_store_id"
+    t.index ["tg_user_id"], name: "index_products_on_tg_user_id"
     t.index ["user_id"], name: "index_products_on_user_id"
+  end
+
+  create_table "requests", force: :cascade do |t|
+    t.string "source_type", null: false
+    t.bigint "source_id", null: false
+    t.string "type", null: false
+    t.jsonb "data", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["source_type", "source_id"], name: "index_requests_on_source"
   end
 
   create_table "sales", force: :cascade do |t|
@@ -206,13 +188,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_04_204942) do
     t.date "date"
     t.jsonb "api_data", default: {}
     t.jsonb "excel_data", default: {}
+    t.bigint "store_id"
+    t.boolean "notified", default: false
+    t.string "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "state"
-    t.boolean "notified", default: false
-    t.bigint "campaign_id"
-    t.index ["campaign_id"], name: "index_sales_on_campaign_id"
     t.index ["order_id"], name: "index_sales_on_order_id"
+    t.index ["store_id"], name: "index_sales_on_store_id"
   end
 
   create_table "stocks", force: :cascade do |t|
@@ -224,24 +206,27 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_04_204942) do
     t.index ["product_id"], name: "index_stocks_on_product_id"
   end
 
-  create_table "suply_products", force: :cascade do |t|
-    t.bigint "product_id", null: false
-    t.bigint "supply_id", null: false
+  create_table "stores", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.jsonb "data"
+    t.bigint "user_id"
+    t.bigint "tg_user_id"
+    t.string "number"
+    t.string "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["product_id"], name: "index_suply_products_on_product_id"
-    t.index ["supply_id"], name: "index_suply_products_on_supply_id"
+    t.index ["tg_user_id"], name: "index_stores_on_tg_user_id"
+    t.index ["user_id"], name: "index_stores_on_user_id"
   end
 
   create_table "supplies", force: :cascade do |t|
     t.string "name"
-    t.bigint "campaign_id"
-    t.bigint "market_id"
+    t.bigint "store_id", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["campaign_id"], name: "index_supplies_on_campaign_id"
-    t.index ["market_id"], name: "index_supplies_on_market_id"
+    t.index ["store_id"], name: "index_supplies_on_store_id"
     t.index ["user_id"], name: "index_supplies_on_user_id"
   end
 
@@ -261,12 +246,32 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_04_204942) do
     t.bigint "product_id", null: false
     t.bigint "supply_id", null: false
     t.integer "count"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.decimal "price", precision: 8, scale: 2
     t.decimal "purchase_price", precision: 8, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_supply_products_on_product_id"
     t.index ["supply_id"], name: "index_supply_products_on_supply_id"
+  end
+
+  create_table "tg_user_stores", force: :cascade do |t|
+    t.bigint "tg_user_id", null: false
+    t.bigint "store_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_tg_user_stores_on_store_id"
+    t.index ["tg_user_id"], name: "index_tg_user_stores_on_tg_user_id"
+  end
+
+  create_table "tg_users", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "username"
+    t.string "chat_id"
+    t.string "first_name"
+    t.jsonb "data", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_tg_users_on_user_id"
   end
 
   create_table "user_settings", force: :cascade do |t|
@@ -280,38 +285,39 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_04_204942) do
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
+    t.string "username"
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "username"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "campaigns", "markets"
   add_foreign_key "keyword_results", "keywords"
-  add_foreign_key "markets", "users"
-  add_foreign_key "order_costs", "campaigns"
-  add_foreign_key "order_costs", "imports"
   add_foreign_key "order_costs", "orders"
-  add_foreign_key "order_products", "campaigns"
+  add_foreign_key "order_costs", "stores"
   add_foreign_key "order_products", "orders"
   add_foreign_key "order_products", "products"
-  add_foreign_key "orders", "campaigns"
-  add_foreign_key "orders", "imports"
+  add_foreign_key "order_products", "stores"
+  add_foreign_key "orders", "stores"
   add_foreign_key "photos", "products"
   add_foreign_key "product_categories", "categories"
   add_foreign_key "product_categories", "products"
   add_foreign_key "product_keywords", "keywords"
   add_foreign_key "product_keywords", "products"
+  add_foreign_key "products", "stores"
+  add_foreign_key "products", "tg_users"
   add_foreign_key "products", "users"
-  add_foreign_key "sales", "campaigns"
+  add_foreign_key "sales", "stores"
   add_foreign_key "stocks", "products"
+  add_foreign_key "supplies", "stores"
   add_foreign_key "supplies", "users"
   add_foreign_key "supply_costs", "supply_products"
   add_foreign_key "supply_products", "products"
   add_foreign_key "supply_products", "supplies"
+  add_foreign_key "tg_user_stores", "stores"
+  add_foreign_key "tg_user_stores", "tg_users"
   add_foreign_key "user_settings", "users"
 end

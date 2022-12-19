@@ -5,15 +5,22 @@ class CreateProducts < ActiveRecord::Migration[7.0]
       t.jsonb :data
       t.string :sku
       t.string :barcode
+
       t.bigint :offer_id
+
+      t.decimal :price, :precision => 8, :scale => 2
+      t.decimal :purchase_price , :precision => 8, :scale => 2
+
       t.jsonb :content, default: {}
       t.jsonb :properties, default: {}
       t.jsonb :parameters, default: {}
       t.jsonb :image_data, :jsonb
+      t.jsonb :cost, default: {}
 
-      t.references :campaign
       t.references :import
-      t.references :user, null: false, foreign_key: true
+      t.references :store, null: true, foreign_key: true
+
+      t.string :state
 
       t.timestamps
     end

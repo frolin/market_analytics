@@ -1,1 +1,16 @@
 ru:
+  telegram:
+    notifications:
+      new_diff_parsed_data:
+        final_price: "🐦 Ообновилась цена! %{before} -> %{after}"
+        rating: "Обновился рейтинг! %{before} -> %{after}"
+        reviews_count: "Добавили новый отзыв!  %{before} -> %{after}"
+        questions_count: "Добавили новый вопрос! %{before} -> %{after}"
+  activerecord:
+    attributes:
+      request:
+        final_price: 'Финальная цена'
+        rating: 'Рейтинг'
+        reviews_count: 'Отзывы'
+        questions_count: 'Вопросы'
+        title: 'Название'

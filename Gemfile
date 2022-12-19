@@ -113,6 +113,8 @@ gem "noticed", "~> 1.5"
 gem 'proxy_fetcher', '~> 0.16'
 gem 'awesome_print'
 
+gem 'aasm'
+
 group :production do
   gem "sentry-ruby"
   gem "sentry-rails"
