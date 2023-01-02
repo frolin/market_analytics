@@ -1,0 +1,43 @@
+<tr class="<%= event.tr_class %>">
+  <!--<td class="text-truncate store-name">-->
+  <!--  <span data-toggle="tooltip" data-placement="top" title="<%#= store.requests.last.ip %>"-->
+  <!--        class="<%#= "tran-type badge badge-primary #{store.slug}-tag" %>">-->
+
+  <!--      <small><%#= t("store.slug.#{store.slug}") %></small>-->
+  <!--  </span>-->
+  <!--</td>-->
+  <td class="status-badge text-truncate ">
+    <!--      <i class="la la-dot-circle-o success font-medium-1 mr-1"></i>-->
+
+    <h6 class="mb-0 text-center"><%= event.show_link %></h6>
+    <h3><%= 'обновлено' if event.audits.count > 1 %></h3>
+  </td>
+  <td class="p-0 pl-1" style="width: 64px">
+    <img class="" src="<%= event.products.last.photos.first.image.url %>" alt="product-image">
+  </td>
+  <!--  <td class="p-0 store-badge" style="width: 50px;">-->
+  <!--    <span data-toggle="tooltip" data-placement="top" title="<%#= store.requests.last.ip %>"-->
+  <!--          class="<%#= "tran-type badge border-left-primary badge-striped #{store.slug}-tag" %>">-->
+  <!--      <small><%#= t("store.slug.#{store.slug}") %></small>-->
+  <!--    </span>-->
+  <!--         <p class="text-truncate"><small><%##= store.requests.last.ip %></small></p>-->
+  <!--  </td>-->
+
+
+  <td class="text-truncate" style="">
+    <!--                  <i class="la la-dot-circle-o success font-medium-1 mr-1"></i>-->
+    <div><%= event.api_data['subject'] %></div>
+    <small><%= event.api_data['category'] %></small>
+  </td>
+
+
+  <td class="text-truncate" style="width: 50px;">
+    <span><%= money(event.total_price) %></span>
+  </td>
+
+  <td class="text-truncate" style="width: 50px;">
+    <!--                  <i class="la la-dot-circle-o success font-medium-1 mr-1"></i>-->
+    <%= event.date.strftime("%F") %>
+  </td>
+
+</tr>

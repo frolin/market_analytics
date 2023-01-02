@@ -1,24 +1,16 @@
-<h1>Markets</h1>
+<div class="card">
+<h1>Магазин <%= @store.requests.last.data['name'] %></h1>
 
 <dl>
-  <dt>Slug:</dt>
-  <dd><%= @market.slug %></dd>
+  <dt>Владелец</dt>
+  <dd>  <%= @store.requests.last.data['ip'] %>  </dd>
+
+  <dt>Отзывы</dt>
+  <dd> <%= @store.requests.last.data['reviews'] %>  </dd>
+  <dt>Количество продаж</dt>
+  <dd> <%= @store.requests.last.data['sells_count'] %>  </dd>
 </dl>
 
-
-<dl>
-  <dt>Компании</dt>
-  <dd>
-    <% @market.campaigns.each do |campaign| %>
-      <%= campaign.id %>
-      <%= campaign.number %>
-      <%= campaign.token %>
-
-      <%= link_to 'Edit', edit_market_campaign_path(@market, campaign) %> |
-
-    <% end %>
-  </dd>
-</dl>
-
-<%= link_to 'Edit', edit_market_path(@market) %> |
-<%= link_to 'Back', markets_path %>
+<%= link_to 'Edit', edit_store_path(@store) %> |
+<%= link_to 'Back', stores_path %>
+</div>

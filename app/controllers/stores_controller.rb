@@ -8,6 +8,7 @@ class StoresController < ApplicationController
 
 	# GET /store/1 or /store/1.json
 	def show
+
 	end
 
 	# GET /store/new

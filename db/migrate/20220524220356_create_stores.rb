@@ -4,9 +4,9 @@ class CreateStores < ActiveRecord::Migration[7.0]
       t.string :name
       t.string :slug, uniq: true
       t.jsonb :data
+      t.string :url
+      t.string :type
 
-      t.references :user, null: true
-      t.references :tg_user, null: true
       t.string :number
 
       t.string :token, uniq: true

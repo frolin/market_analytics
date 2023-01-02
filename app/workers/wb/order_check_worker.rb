@@ -6,9 +6,9 @@ module Wb
       60 * (count + 1)
     end
     def perform
-      User.all.each do |user|
-        user.wb.campaigns.each { |campaign|
-          Imports::Wildberries::Orders.run!(user: user, campaign: campaign)
+      User.find_each do |user|
+        user.stores.each { |store|
+          ::Imports::Wb::Orders.run!(user: user, store: store)
         }
       end
     end

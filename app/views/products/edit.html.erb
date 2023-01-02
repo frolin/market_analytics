@@ -1,11 +1,18 @@
-  <h1 class="">Редактировать <%= @product.name %></h1>
+<h1 class="">Редактировать <%= @product.name %></h1>
 
 <div class="card">
 
 
-
   <%= render 'form', product: @product %>
 
-<!--  <%#= link_to 'Show', @product %> |-->
+
+  <div class="container">
+    <h2>Requests</h2>
+
+    <% @product.requests.each do |request| %>
+      <pre><%= JSON.pretty_generate(request.data) %></pre>
+    <% end %>
+  </div>
+  <!--  <%#= link_to 'Show', @product %> |-->
   <%#= link_to 'Back', products_path %>
 </div>

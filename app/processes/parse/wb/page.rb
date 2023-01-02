@@ -7,11 +7,12 @@ module Parse
         questions_count: '#a-Questions',
         rating: '.user-opinion__rating',
         title: 'h1',
-        final_price: '.price-block__final-price'
+        final_price: '.price-block__final-price',
+        seller_url: '.seller-info__name--link',
       }
 
       string :sku
-      attr_reader :image_urls, :reviews_count, :questions_count, :rating, :title, :final_price
+      attr_reader :image_urls, :reviews_count, :questions_count, :rating, :title, :final_price, :store_url
 
       def execute
         return if search.invalid?
@@ -20,7 +21,7 @@ module Parse
 
         begin
           @image_urls = find_images
-
+          @store_url = find_store_url
           @reviews_count = find_review_count
           @title = find_title
           @final_price = find_final_price
@@ -45,7 +46,7 @@ module Parse
       private
 
       def search
-        @search ||= Wildberries::SearchBySku.run(sku: sku)
+        @search ||= ::Wb::SearchBySku.run(sku: sku)
       end
 
       def find_images
@@ -74,6 +75,8 @@ module Parse
 
       def find_final_price
         find_elemennt(type: :css, name: SEARCH_CSS[:final_price]) do
+          return if @page.find_element(css: '.sold-out-product').present?
+
           @page.find_element(css: SEARCH_CSS[:final_price]).text
         end
       end
@@ -81,6 +84,12 @@ module Parse
       def find_review_count
         find_elemennt(type: :css, name: SEARCH_CSS[:reviews_count]) do
           @page.find_element(css: SEARCH_CSS[:reviews_count]).text.to_i
+        end
+      end
+
+      def find_store_url
+        find_elemennt(type: :css, name: SEARCH_CSS[:seller_url]) do
+          @page.find_element(css: SEARCH_CSS[:seller_url]).attribute('href')
         end
       end
 

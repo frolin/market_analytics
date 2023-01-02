@@ -6,7 +6,7 @@ module Api
     KEY = ''.freeze
     API_URI = "https://suppliers-api.wildberries.ru".freeze
 
-    HEADERS = {}.freeze
+    # HEADERS = { Authorization: token }.freeze
 
     private
 
@@ -28,7 +28,6 @@ module Api
 
       Rails.logger.info(message: "[API] Got response. Body: #{parsed_body.to_s}")
 
-
       if parsed_body.is_a?(Hash) && parsed_body['errors'].present?
         errors.add(:base, "Response error: method: #{api_method}")
         error_log(parsed_body['errorText'], parsed_body['additionalErrors'])
@@ -41,7 +40,7 @@ module Api
     end
 
     def connection
-      @connection ||= Faraday.new(base_url, headers: HEADERS) do |f|
+      @connection ||= Faraday.new(base_url, headers: { Authorization: token }) do |f|
         f.request :json # encode req bodies as JSON and automatically set the Content-Type header
         f.response :json # decode response bodies as JSON
       end
@@ -69,6 +68,10 @@ module Api
     end
 
     def type
+      raise NotImplementedError, 'Define in subclass'
+    end
+
+    def token
       raise NotImplementedError, 'Define in subclass'
     end
 

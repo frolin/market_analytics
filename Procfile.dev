@@ -1,3 +1,4 @@
 # web: rails s -b 0.0.0.0 -p 3333
 js: yarn build --watch
 css: yarn build:css --watch
+poller: BOT=dev_chat rake telegram:bot:poller

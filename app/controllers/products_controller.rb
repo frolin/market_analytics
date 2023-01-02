@@ -1,10 +1,10 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[ show edit update destroy ]
-  before_action :set_store, only: %i[ index ]
+  # before_action :set_store, only: %i[ index ]
 
   # GET /products or /products.json
   def index
-    @products = Product.all.decorate
+    @products = current_user.products.decorate
   end
 
   # GET /products/1 or /products/1.json

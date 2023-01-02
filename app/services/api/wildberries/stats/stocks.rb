@@ -12,14 +12,14 @@ module Api
         private
 
         def base_url
-          'https://suppliers-stats.wildberries.ru'
+          'https://statistics-api.wildberries.ru'
         end
 
         def api_method
           'api/v1/supplier/stocks'
         end
 
-        def key
+        def token
           store.token
         end
 
@@ -28,8 +28,7 @@ module Api
         end
 
         def params
-          { dateFrom: date_from,
-            key: key }
+          { dateFrom: date_from }
         end
       end
     end

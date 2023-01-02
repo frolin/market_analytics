@@ -9,8 +9,8 @@
 
   <div class="dropdown-menu arrow">
     <% Store.names.keys.each do |store| %>
-      <!--        <i class="fa fa-calendar-check mr-1"></i>-->
-      <%#= button_to store.upcase, store_path(store: { slug: store }), method: :post, class: "dropdown-item" %>
+      <i class="fa fa-calendar-check mr-1"></i>
+      <%= button_to store.upcase, new_store_path(slug: store), method: :get, class: "dropdown-item" %>
     <% end %>
     <!--    <div class="dropdown-divider"></div>-->
     <!--    <a class="dropdown-item" href="#"><i class="fa fa-cog mr-1"></i> Settings</a>-->
@@ -25,34 +25,34 @@
         <div class="card-header flex">
           <h5 class="card-title text-center"> <%= store.slug.upcase %> </h5>
         </div>
-        
-<!--        <div class="card-content">-->
-<!--          <div class="card-body">-->
-<!--            <div class="media d-flex">-->
-<!--              <div class="media-body text-left">-->
-<!--                <ul class="list-group list-group-flush">-->
-                  <%# store.each do |campaign| %>
-<!--                    <li class="list-group-item">-->
-                      <%#= link_to "#{campaign.name}-#{campaign.number}", edit_store_campaign_path(store, campaign.number) %>
 
-                      <%#= link_to '<i class="la la-refresh" aria-hidden="true"></i>'.html_safe, store_campaign_api_update_path(store, campaign.number) %>
-<!--                    </li>-->
+        <!--        <div class="card-content">-->
+        <!--          <div class="card-body">-->
+        <!--            <div class="media d-flex">-->
+        <!--              <div class="media-body text-left">-->
+        <!--                <ul class="list-group list-group-flush">-->
+        <%# store.each do |campaign| %>
+        <!--                    <li class="list-group-item">-->
+        <%#= link_to "#{campaign.name}-#{campaign.number}", edit_store_campaign_path(store, campaign.number) %>
 
-<!--                    Товароа: <%#= link_to campaign.products.count, store_campaign_products_path(store, campaign.number) %>-->
-<!--                    Заказов: <%#= campaign.orders.count %>-->
-<!--                    <br>-->
-<!--                    Обновлений: <%#= campaign.imports.count %> Последнее: <%#= campaign.imports.last&.created_at %>-->
-                    <%#= link_to 'подробнее', store_campaign_imports_path(store, campaign.number) %>
-                  <%# end %>
-<!--                </ul>-->
-<!--              </div>-->
+        <%#= link_to '<i class="la la-refresh" aria-hidden="true"></i>'.html_safe, store_campaign_api_update_path(store, campaign.number) %>
+        <!--                    </li>-->
 
-              <%#= link_to '<i class="bi bi-trash"></i>'.html_safe, store, method: :delete, data: { 'turbo-method': :delete, confirm: 'Are you sure?' } %>
+        <!--                    Товароа: <%#= link_to campaign.products.count, store_campaign_products_path(store, campaign.number) %>-->
+        <!--                    Заказов: <%#= campaign.orders.count %>-->
+        <!--                    <br>-->
+        <!--                    Обновлений: <%#= campaign.imports.count %> Последнее: <%#= campaign.imports.last&.created_at %>-->
+        <%#= link_to 'подробнее', store_campaign_imports_path(store, campaign.number) %>
+        <%# end %>
+        <!--                </ul>-->
+        <!--              </div>-->
+
+        <%#= link_to '<i class="bi bi-trash"></i>'.html_safe, store, method: :delete, data: { 'turbo-method': :delete, confirm: 'Are you sure?' } %>
 
 
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <!--        </div>-->
 
 
         <%= link_to 'Добавить магазин', new_store_path(store_id: store), class: "btn btn-primary" %>

@@ -4,6 +4,8 @@
   <%= link_to 'Новый товар ', new_product_path, class: "btn btn-primary" %>
 <% end %>
 
+<div></div>
+
 <div class="card">
   <table class="table table-striped table-hover table-sm">
     <thead>
@@ -25,7 +27,7 @@
           <% end %>
         </td>
         <td>
-          <b><%= link_to product.full_name, edit_product_path(product) %> </b> <br>
+          <b><%= link_to product.requests.last&.title, edit_product_path(product) %> </b> <br>
         </td>
         <td><%= product.barcode %></td>
         <td><%= money product.price %></td>

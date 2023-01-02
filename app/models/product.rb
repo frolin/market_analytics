@@ -1,11 +1,15 @@
 class Product < ApplicationRecord
   include AASM
 
-  belongs_to :store, optional: true
+  belongs_to :user
+  belongs_to :store
   belongs_to :import, optional: true
 
   has_many :order_products
   has_many :orders, through: :order_products
+
+  has_many :sale_products
+  has_many :sales, through: :sale_products
 
   has_many :supply_products, dependent: :destroy
   has_many :supplies, through: :supply_products
@@ -30,8 +34,9 @@ class Product < ApplicationRecord
 
   scope :wb_barcode, -> (barcode) { find_by("data @> ?", { wb: { barcode: barcode } }.to_json) }
 
-  def self.wb_find(barcode:)
-    find_by("data @> ?", { wb: { barcode: barcode } }.to_json)
+  def self.wb_find(param)
+
+    find_by("data @> ?", { "#{param.keys.first}" => param.values.first }.to_json)
   end
 
   def wb_sku

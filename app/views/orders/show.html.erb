@@ -1,14 +1,22 @@
-<h1>Orders</h1>
+<div class="card">
+  <div class="container">
+    <h1>Orders</h1>
+    <div class="p-2"><%= (ap @order.api_data).html_safe %></div>
+    <!--    <dl>-->
+    <!--      <dt>Api data:</dt>-->
+    <!--      <dt>Excel data:</dt>-->
+    <!--      <dd><%#= @order.excel_data %></dd>-->
+    <!--      <dt>Date:</dt>-->
+    <!--      <dd><%#= @order.date %></dd>-->
+    <!--    </dl>-->
+    <% if @order.audits.count > 1 %>
+      <h3>Versions</h3>
+      <% @order.audits.each do |audit| %>
+        <% hash1, hash2 = audit.audited_changes.values.flatten %>
+        <%= (ap Tools::HashDiff.call(hash1, hash2)).html_safe %>
+      <% end %>
+    <% end %>
+    <%= link_to 'Back', store_orders_path %>
 
-<dl>
-  <dt>Api data:</dt>
-  <dd><%= @order.api_data %></dd>
-  <dt>Excel data:</dt>
-  <dd><%= @order.excel_data %></dd>
-  <dt>Date:</dt>
-  <dd><%= @order.date %></dd>
-  <dt>Import:</dt>
-  <dd><%= @order.import %></dd>
-</dl>
-<%= link_to 'Edit', edit_order_path(@order) %> |
-<%= link_to 'Back', orders_path %>
+  </div>
+</div>

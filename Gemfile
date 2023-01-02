@@ -114,6 +114,9 @@ gem 'proxy_fetcher', '~> 0.16'
 gem 'awesome_print'
 
 gem 'aasm'
+gem "image_processing", "~> 1.8"
+gem "chartkick"
+gem "groupdate"
 
 group :production do
   gem "sentry-ruby"

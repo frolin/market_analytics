@@ -19,6 +19,7 @@ class CreateProducts < ActiveRecord::Migration[7.0]
 
       t.references :import
       t.references :store, null: true, foreign_key: true
+      t.references :user, null: false, foreign_key: true
 
       t.string :state
 

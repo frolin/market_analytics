@@ -1,5 +1,6 @@
 class Order < ApplicationRecord
-  belongs_to :import
+  audited
+
   belongs_to :store
 
   has_many :order_products, dependent: :destroy
@@ -8,9 +9,20 @@ class Order < ApplicationRecord
   has_many :costs, class_name: 'OrderCost'
   has_many :sales, dependent: :destroy
 
-  store_accessor :api_data, :category, :subject, :warehouseName, :oblast, :brand, :price
+  store_accessor :api_data, :category, :srid, :barcode, :subject, :warehouseName, :oblast, :brand, :price
 
   scope :recent, -> { where("created_at > #{30.minutes.ago}") }
+
+  after_save_commit :notify
+
+
+  def notify
+    Telegram::Notifications::OrdersNew.new(self).call
+  end
+
+  def canceled?
+    api_data['isCancel']
+  end
 
   def sell?
     sell.present?
@@ -36,6 +48,6 @@ class Order < ApplicationRecord
       start_first = DateTime.now.advance(days: -1).beginning_of_day
       start_last = DateTime.now.advance(days: -1).end_of_day
     end
-      Order.where(date: start_first..start_last).count
+    Order.where(date: start_first..start_last).count
   end
 end

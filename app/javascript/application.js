@@ -8,9 +8,19 @@ import "./controllers"
 import * as bootstrap from "bootstrap"
 import "./src/jquery"
 import './utils/jquery.bootstrap-touchspin'
+// import "chart.js"
+// import "Chart.bundle"
+// import "chartkick/chart.js"
+import('chartkick/chart.js')
 
+// const Chart =
+// Chart.defaults.global.defaultFontFamily = "Lato";
+// Chart.defaults.global.defaultFontSize = 18;
+// Chart.defaults.global.defaultFontColor = 'red';
 
 window.addEventListener('DOMContentLoaded', () => {
+    console.log('Chart: ', Chart)
+
     $('.select2').select2({
         theme: 'bootstrap4',
         templateResult: addUserPic,

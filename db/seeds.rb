@@ -8,21 +8,26 @@
 
 # User.create!(email: 'fralunia@gmail.com', password: 'qazwsx123', username: 'fralunia')
 
-PRODUCTS = [
-  ['Сития 02 Николаос', '5200119080657'],
-  ['Сития 02 премиум голд', '5200102951223'],
-  ['Сития 02 премиум голд', '5200102953203'],
-  ["KOKO", '5205657000631'],
-  ['Хориатико', '5200362400349'],
-  ['Agrilife', '8857121775285']
-]
+# PRODUCTS = [
+#   ['Сития 02 Николаос', '5200119080657'],
+#   ['Сития 02 премиум голд', '5200102951223'],
+#   ['Сития 02 премиум голд', '5200102953203'],
+#   ["KOKO", '5205657000631'],
+#   ['Хориатико', '5200362400349'],
+#   ['Agrilife', '8857121775285']
+# ]
+#
+# PRODUCTS.each do |product|
+#   product = Product.new(name: product.first,
+#                   barcode: product.second,
+#                   user_id: User.first.id)
+#
+#   product.photos.new(image: FFaker::Image.file)
+#
+#   product.save!
+# end
 
-PRODUCTS.each do |product|
-  product = Product.new(name: product.first,
-                  barcode: product.second,
-                  user_id: User.first.id)
 
-  product.photos.new(image: FFaker::Image.file)
 
-  product.save!
-end
+
+# TgUserStore.destroy_all && Store.destroy_all && Product.destroy_all && Request.destroy_all && Stock.destroy_all

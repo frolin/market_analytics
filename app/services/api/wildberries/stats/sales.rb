@@ -3,6 +3,7 @@ module Api
     module Stats
       class Sales < Api::WildberriesClient
         record :user
+        record :store
         string :date_from
 
         def execute
@@ -12,15 +13,15 @@ module Api
         private
 
         def base_url
-          'https://suppliers-stats.wildberries.ru'
+          'https://statistics-api.wildberries.ru'
         end
 
         def api_method
           '/api/v1/supplier/sales'
         end
 
-        def key
-          user.wb.campaigns.last.token
+        def token
+          store.token
         end
 
         def type
@@ -28,8 +29,7 @@ module Api
         end
 
         def params
-          { dateFrom: date_from,
-            key: key}
+          { dateFrom: date_from }
         end
       end
     end

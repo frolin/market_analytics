@@ -7,7 +7,7 @@ module Wb
     end
 
     def perform(store_id)
-      Imports::Wb::FromStock.run!(store_id: store_id)
+      Imports::Wb::FirstTime.run!(store_id: store_id)
     end
   end
 end

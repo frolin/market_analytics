@@ -7,3 +7,5 @@ development:
   :concurrency: 1
 :queues:
   - [default, 3]
+  - [check_sales, 3]
+  - [check_orders, 3]

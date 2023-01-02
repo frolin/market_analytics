@@ -7,7 +7,7 @@ module Wb
     end
 
     def perform
-      Store.wb.find_each do |store|
+      ::Store::Wb.find_each do |store|
         store.products.each do |product|
           Wb::ParsePageWorker.perform_async(product.id)
         end

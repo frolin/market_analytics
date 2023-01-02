@@ -30,6 +30,7 @@ Rails.application.routes.draw do
     resources :imports
     resources :costs
     resources :orders
+    resources :sales
     resources :products
   end
 end

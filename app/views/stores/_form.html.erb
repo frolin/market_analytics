@@ -12,7 +12,7 @@
 
 
 
-      <%= simple_form_for(@market, html: { class: 'form' }) do |f| %>
+      <%= simple_form_for(@store, html: { class: 'form' }) do |f| %>
         <%= f.error_notification %>
         <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 
@@ -20,7 +20,7 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <%= f.select :name, Market.names.keys.map { |w| [w.humanize, w] }, {}, { class: 'form-control' } %>
+                <%= f.select :name, Store.names.keys.map { |w| [w.humanize, w] }, {}, { class: 'form-control' } %>
               </div>
             </div>
           </div>
@@ -28,7 +28,7 @@
 
 
         <div class="form-actions">
-          <%= button_to markets_path, class: 'btn btn-warning mr-1' do %>
+          <%= button_to stores_path, class: 'btn btn-warning mr-1' do %>
             <span>Назад</span>
             <i class="ft-x"></i>
           <% end %>

@@ -14,7 +14,7 @@ module Api
         private
 
         def base_url
-          'https://suppliers-stats.wildberries.ru'
+          'hhttps://statistics-api.wildberries.ru'
         end
 
         def api_method

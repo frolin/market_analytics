@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_18_000147) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_04_121235) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,7 +23,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_18_000147) do
     t.string "user_type"
     t.string "username"
     t.string "action"
-    t.text "audited_changes"
+    t.jsonb "audited_changes"
     t.integer "version", default: 0
     t.string "comment"
     t.string "remote_address"
@@ -52,6 +52,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_18_000147) do
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
+  create_table "images", force: :cascade do |t|
+    t.string "name"
+    t.string "source_type", null: false
+    t.bigint "source_id", null: false
+    t.jsonb "image_data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["source_type", "source_id"], name: "index_images_on_source"
   end
 
   create_table "keyword_results", force: :cascade do |t|
@@ -162,14 +172,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_18_000147) do
     t.jsonb "cost", default: {}
     t.bigint "import_id"
     t.bigint "store_id"
-    t.bigint "user_id"
-    t.bigint "tg_user_id"
+    t.bigint "user_id", null: false
     t.string "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["import_id"], name: "index_products_on_import_id"
     t.index ["store_id"], name: "index_products_on_store_id"
-    t.index ["tg_user_id"], name: "index_products_on_tg_user_id"
     t.index ["user_id"], name: "index_products_on_user_id"
   end
 
@@ -181,6 +189,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_18_000147) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["source_type", "source_id"], name: "index_requests_on_source"
+  end
+
+  create_table "sale_products", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "sale_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_sale_products_on_product_id"
+    t.index ["sale_id"], name: "index_sale_products_on_sale_id"
   end
 
   create_table "sales", force: :cascade do |t|
@@ -210,14 +227,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_18_000147) do
     t.string "name"
     t.string "slug"
     t.jsonb "data"
-    t.bigint "user_id"
-    t.bigint "tg_user_id"
+    t.string "url"
+    t.string "type"
     t.string "number"
     t.string "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["tg_user_id"], name: "index_stores_on_tg_user_id"
-    t.index ["user_id"], name: "index_stores_on_user_id"
   end
 
   create_table "supplies", force: :cascade do |t|
@@ -254,20 +269,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_18_000147) do
     t.index ["supply_id"], name: "index_supply_products_on_supply_id"
   end
 
-  create_table "tg_user_stores", force: :cascade do |t|
-    t.bigint "tg_user_id", null: false
-    t.bigint "store_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["store_id"], name: "index_tg_user_stores_on_store_id"
-    t.index ["tg_user_id"], name: "index_tg_user_stores_on_tg_user_id"
-  end
-
   create_table "tg_users", force: :cascade do |t|
-    t.bigint "user_id"
+    t.bigint "user_id", null: false
     t.string "username"
     t.string "chat_id"
     t.string "first_name"
+    t.boolean "is_admin"
     t.jsonb "data", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -282,10 +289,22 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_18_000147) do
     t.index ["user_id"], name: "index_user_settings_on_user_id"
   end
 
+  create_table "user_stores", force: :cascade do |t|
+    t.bigint "store_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_user_stores_on_store_id"
+    t.index ["user_id", "store_id"], name: "index_user_stores_on_user_id_and_store_id", unique: true
+    t.index ["user_id"], name: "index_user_stores_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "username"
+    t.string "first_name"
+    t.string "role"
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -308,8 +327,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_18_000147) do
   add_foreign_key "product_keywords", "keywords"
   add_foreign_key "product_keywords", "products"
   add_foreign_key "products", "stores"
-  add_foreign_key "products", "tg_users"
   add_foreign_key "products", "users"
+  add_foreign_key "sale_products", "products"
+  add_foreign_key "sale_products", "sales"
   add_foreign_key "sales", "stores"
   add_foreign_key "stocks", "products"
   add_foreign_key "supplies", "stores"
@@ -317,7 +337,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_18_000147) do
   add_foreign_key "supply_costs", "supply_products"
   add_foreign_key "supply_products", "products"
   add_foreign_key "supply_products", "supplies"
-  add_foreign_key "tg_user_stores", "stores"
-  add_foreign_key "tg_user_stores", "tg_users"
   add_foreign_key "user_settings", "users"
+  add_foreign_key "user_stores", "stores"
+  add_foreign_key "user_stores", "users"
 end

@@ -1,11 +1,82 @@
 ru:
+  store:
+    slug:
+      wb: Wildberries
+      ozon: OZON
+      ya_market: ЯМаркет
   telegram:
     notifications:
-      new_diff_parsed_data:
-        final_price: "🐦 Ообновилась цена! %{before} -> %{after}"
-        rating: "Обновился рейтинг! %{before} -> %{after}"
-        reviews_count: "Добавили новый отзыв!  %{before} -> %{after}"
-        questions_count: "Добавили новый вопрос! %{before} -> %{after}"
+      diff_product_parsed_data:
+        final_price: "➡ Ообновилась цена"
+        rating: "➡ Обновился рейтинг"
+        reviews_count: "➡ Добавили новый отзыв"
+        questions_count: "➡ Добавили новый вопрос"
+        diff: "Количество:  %{before}️ → %{after}"
+      store_parsed_data:
+        name: "%{value}"
+        ip: "Владелец: %{value}"
+        ogrnip: "%{value}"
+        rating: "Рейтинг: %{value}"
+        reviews: "Отзывы: %{value}"
+        sells_count: "Количество продаж: %{value}"
+        products_count: "Всего: %{value}"
+        defective_count: "Процент брака: %{value}"
+        delivered_count: "Процент доставок: %{value}"
+      order:
+        new:
+          date: "Дата: %{value}"
+          nm_id: ""
+          odid: ""
+          srid: ""
+          brand: ""
+          oblast: ""
+          barcode: ""
+          g_number: ""
+          sticker: ""
+          subject: ""
+          category: ""
+          income_id: ""
+          is_cancel: ""
+          tech_size: ""
+          cancel_dt: ""
+          total_price: ""
+          warehouse_name: "Склад: %{value}"
+          last_change_date: ""
+          discount_percent: ""
+          supplier_article: ""
+
+      sale:
+        new:
+          spp: "СПП: %{value}"
+          date: "Дата: %{value}"
+          nm_id: "Номер %{value}"
+          odid: "Odid: %{value}"
+          srid: "Srid: %{value}"
+          brand: "Бренд: %{value}"
+          for_pay: ""
+          sale_id: ""
+          barcode: ""
+          g_number: ""
+          sticker: ""
+          subject: ""
+          is_storno: ""
+          category: ""
+          income_id: ""
+          is_supply: ""
+          tech_size: ""
+          region_name: ""
+          total_price: ""
+          country_name: ""
+          finished_price: ""
+          is_realization: ""
+          price_with_disc: ""
+          warehouse_name: ""
+          last_change_date: ""
+          discount_percent: ""
+          oblast_okrug_name: ""
+          supplier_article: ""
+          promo_code_discount: ""
+
   activerecord:
     attributes:
       request:

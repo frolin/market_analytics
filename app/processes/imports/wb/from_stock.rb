@@ -8,21 +8,19 @@ module Imports
       attr_reader :stock_response
 
       def execute
-        return if stock_response.invalid?
+        result = stock_response.uniq { |res| res['nmId'] }
 
-        result = stock_response.result.uniq { |res| res['nmId'] }
         result.each do |stock|
           next if Product.find_by(barcode: stock['barcode'])
 
-          product = create_product_from_stock(stock)
-          ::Wb::ParsePageWorker.perform_async(product.id)
+          create_product_from_stock(stock)
         end
       end
 
       private
 
       def store
-        @store ||= Store.find(store_id)
+        @store ||= ::Store.find(store_id)
       end
 
       def create_product_from_stock(stock)
@@ -30,6 +28,7 @@ module Imports
           p.barcode = stock['barcode']
           p.sku = stock['nmId']
           p.store = store
+          p.user = store.users.admin
 
           p.stocks.new do |s|
             s.api_data = stock
@@ -43,7 +42,7 @@ module Imports
       end
 
       def stock_response
-        @stock_response ||= Api::Wildberries::Stats::Stocks.run(store: store, date_from: date)
+        @stock_response ||= Api::Wildberries::Stats::Stocks.run!(store: store, date_from: date)
       end
 
       def date

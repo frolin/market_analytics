@@ -52,40 +52,44 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   end
 
   def add_store_wb!(token = nil, *)
-    if token.present?
-      byebug
+    return inline_menu! if token.blank?
 
-      result = Telegram::AddNewStore.run(tg_user: tg_user, token: token, type: :wb)
-      if result.valid?
-        respond_with :message, text: Telegram::Greeting.new(from).success_add, parse_mode: 'HTML'
-      else
-        message = result.errors.messages.values.flatten.join(' ,')
-        respond_with :message, text: message, parse_mode: 'HTML'
+    result = Telegram::Wb::NewStore.run(tg_user: tg_user, token: token)
 
-        inline_menu!
-      end
-
+    if result.valid?
+      respond_with :message, text: Telegram::Greeting.new(from).success_add, parse_mode: 'HTML'
+      respond_with :animation, animation: File.open('app/assets/images/telegram/work_in_progress.gif'), caption: 'Собираем информацию...'
     else
+      save_context :add_store_wb!
+      message = result.errors.messages.values.flatten.join(' ,')
+      respond_with :message, text: message, parse_mode: 'HTML'
+
       inline_menu!
     end
+
+  ensure
+    delete_message
   end
 
+  def delete_message
+    TG_BOT.delete_message(chat_id: from['id'], message_id: payload['message_id'])
+  end
   def add_store_ozon!(token = nil, *)
-    if token.present?
-      result = Telegram::AddNewStore.run(username: from['username'], token: token, type: :ozon)
+    inline_menu! unless token.present?
 
-      if result.valid?
-        respond_with :message, text: Telegram::Greeting.new(from).success_add, parse_mode: 'HTML'
-      else
-        message = result.errors.messages.values.flatten.join(' ,')
-        respond_with :message, text: message, parse_mode: 'HTML'
+    result = Telegram::AddNewStore.run(username: from['username'], token: token, type: :ozon)
 
-        inline_menu!
-      end
-
+    if result.valid?
+      respond_with :message, text: Telegram::Greeting.new(from).success_add, parse_mode: 'HTML'
     else
+      message = result.errors.messages.values.flatten.join(' ,')
+      respond_with :message, text: message, parse_mode: 'HTML'
+
       inline_menu!
     end
+
+  ensure
+
   end
 
   def sub_menu(list = nil)
@@ -100,8 +104,8 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     respond_with :message, text: Telegram::Greeting.new(from).add_store, reply_markup: {
       inline_keyboard: [
         [
-          { text: 'Добавить Wildberries', callback_data: 'add_campaign_wb' },
-          { text: 'Добавить Ozon', callback_data: 'add_campaign_ozon' },
+          { text: 'Wildberries', callback_data: 'add_campaign_wb' },
+          { text: 'Ozon', callback_data: 'add_campaign_ozon' },
         ],
       ],
     }
@@ -271,7 +275,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   end
 
   def tg_user
-    @tg_user ||= TgUser.find_by(username: from['username'])
+    @tg_user ||= TgUser.find_by(username: from['username']) || TgUser.find_by(chat_id: from['chat_id'])
   end
 
   def valid_users

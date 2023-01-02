@@ -3,6 +3,7 @@ module Api
     module Stats
       class Orders < Api::WildberriesClient
         record :user
+        record :store
         string :date_from
         integer :flag, default: 0
 
@@ -14,15 +15,15 @@ module Api
         private
 
         def base_url
-          'https://suppliers-stats.wildberries.ru'
+          'https://statistics-api.wildberries.ru'
         end
 
         def api_method
           'api/v1/supplier/orders'
         end
 
-        def key
-          user.wb.campaigns.last.token
+        def token
+          store.token
         end
 
         def type
@@ -31,8 +32,7 @@ module Api
 
         def params
           { dateFrom: date_from,
-            flag: flag,
-            key: key}
+            flag: flag}
         end
       end
     end
