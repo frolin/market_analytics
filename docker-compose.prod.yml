@@ -64,6 +64,11 @@ services:
       - NODE_MAX_INSTANCES=5
       - NODE_MAX_SESSION=5
       - RAILS_LOG_TO_STDOUT=true
+      - NODE_MAX_INSTANCES=5
+      - SE_DRAIN_AFTER_SESSION_COUNT=5
+      - NODE_MAX_SESSION=5
+      - JAVA_OPTS=-Dwebdriver.chrome.whitelistedIps=
+      - SCALE=4
     shm_size: 2g
     privileged: true
     volumes:
