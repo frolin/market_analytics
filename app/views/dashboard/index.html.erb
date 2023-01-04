@@ -6,7 +6,7 @@
         <div class="card-body">
           <div class="media d-flex">
             <div class="media-body text-left">
-              <h3 class="info"><%= current_user.stores.sum(&:sales).count %> </h3>
+              <h3 class="info"><%= current_user.sales_count %> </h3>
               <h3>Продажи</h3>
             </div>
             <div>
@@ -26,7 +26,7 @@
         <div class="card-body">
           <div class="media d-flex">
             <div class="media-body text-left">
-              <h3 class="warning"><%= current_user.stores.sum(&:orders).count %></h3>
+              <h3 class="warning"><%= current_user.orders_count%></h3>
               <h3>Заказы</h3>
             </div>
             <div>
@@ -46,7 +46,7 @@
         <div class="card-body">
           <div class="media d-flex">
             <div class="media-body text-left">
-              <h3 class="success"><%= current_user.stores.sum(&:products).count %></h3>
+              <h3 class="success"><%= current_user.products_count %></h3>
               <h3>Товары</h3>
             </div>
             <div>

@@ -8,20 +8,23 @@ module Imports
       date :date_from, default: DateTime.now.beginning_of_week - 7.days
 
       def execute
-        new_orders = []
+        found_orders = []
         updated_orders = []
 
-        orders.each do |order|
-          @found_order = store.orders.wb_find(odid: order['odid'])
+        new_orders = orders.reject do |order|
+          found_order = store.orders.wb_find(odid: order['odid'])
+          found_orders << found_order if found_order
 
-          if @found_order && data_diff?(order)
-            @found_order.api_data.merge!(order)
-            @found_order.save!
+          if found_order && data_diff?(order, found_order)
+            found_order.api_data.merge!(order)
+            found_order.save!
             updated_orders << @found_order
-
-            next
           end
 
+          found_order.present?
+        end
+
+        new_orders.each do |order|
           product = store.products.find_by(barcode: order['barcode'])
           order = store.orders.new(api_data: order,
                                    date: order['date'],
@@ -34,15 +37,15 @@ module Imports
           new_orders << order
         end
 
+        Rails.logger.info("Orders from api: #{orders.size}")
         Rails.logger.info("Updated orders: #{updated_orders.size}")
+        Rails.logger.info("Found orders: #{found_orders.size}")
         Rails.logger.info("New orders: #{new_orders.size}")
       end
 
-      def data_diff?(order)
-        return unless @found_order
-
-        order_api_data = @found_order.api_data.except('lastChangeDate')
-        api_data_order = order.except('lastChangeDate')
+      def data_diff?(api_order, found_order)
+        order_api_data = found_order.api_data.except('lastChangeDate')
+        api_data_order = api_order.except('lastChangeDate')
 
         (api_data_order.to_a.compact - order_api_data.to_a.compact).size > 0
       end
