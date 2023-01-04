@@ -22,7 +22,7 @@ services:
       - worker
       - chrome
     build: .
-    command: /bin/sh -c "bundle && rails s -b 0.0.0.0 -p 3333"
+    command: /bin/sh -c "bundle && puma -t 4:4 "
     stdin_open: true
     tty: true
     environment:
@@ -32,8 +32,11 @@ services:
       - .:/app
       - rails_cache:/app/tmp/cache:delegated
       - bundle:/vendor/bundle:delegated
+      - /home/frolin/.ssh/:root/.ssh
+      - - ${HOME}/.irbrc:/root/.irbrc
+      - ${HOME}/.irb-history-market:/root/.irb-history
     env_file:
-    - .env.prod
+      - .env.prod
     ports:
       - "3333:3333"
 
@@ -80,8 +83,8 @@ services:
       dockerfile: Dockerfile-Redis
     command: redis-server --include /usr/local/etc/redis/redis.conf
     volumes:
-#      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-#      - ./redis/data:/data:rw
+      #      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+      #      - ./redis/data:/data:rw
       - /opt/redis/etc/redis.conf:/usr/local/etc/redis/redis.conf
       - /opt/redis/data:/data
     ports:

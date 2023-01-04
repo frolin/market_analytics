@@ -5,6 +5,7 @@ Rails.application.configure do
   # ssl
   config.force_ssl = true
   routes.default_url_options = { host: 'markets-pulse.ru', protocol: 'https' } # https is necessary!
+  config.telegram_updates_controller.session_store = :redis_store, { expires_in: 1.month }
 
   # Code is not reloaded between requests.
   config.cache_classes = true
