@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   require 'sidekiq/web'
   require 'sidekiq/cron/web'
 
-  telegram_webhook TelegramWebhooksController, :dev_chat
+  telegram_webhook TelegramWebhooksController, ENV['BOT_NAME']
 
   authenticate :user do
     mount Sidekiq::Web => '/sidekiq'
