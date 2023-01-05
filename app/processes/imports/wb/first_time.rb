@@ -7,7 +7,6 @@ module Imports
 
       def execute
         Imports::Wb::FromStock.run!(store_id: store.id)
-
         page_data = Parse::Wb::Page.run(sku: store.products.first.sku)
 
         if page_data.store_url.present?
@@ -15,6 +14,7 @@ module Imports
           ::Wb::ParseStoreWorker.perform_async(store.id, true)
         end
 
+        ::Wb::StoreCheckWorker.perform_async(store.users.admin.id, store.id )
         store.products.each { |product| ::Wb::ParsePageWorker.perform_async(product.id, true) }
       end
 

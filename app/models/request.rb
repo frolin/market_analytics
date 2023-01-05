@@ -1,7 +1,7 @@
 class Request < ApplicationRecord
   belongs_to :source, polymorphic: true
 
-  after_save_commit :notify
+  # after_save_commit :notify
 
   store_accessor :data, :url, :rating, :reviews_count, :ip, :questions_count, :title, :final_price
 

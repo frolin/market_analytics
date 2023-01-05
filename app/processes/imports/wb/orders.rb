@@ -18,7 +18,7 @@ module Imports
           if found_order && data_diff?(order, found_order)
             found_order.api_data.merge!(order)
             found_order.save!
-            updated_orders << @found_order
+            updated_orders << found_order
           end
 
           found_order.present?
@@ -68,7 +68,7 @@ module Imports
         total_price = order['api_data']['totalPrice']
         discount = order['api_data']['discountPercent']
 
-        total_price - (total_price * discount / 199)
+        total_price - (total_price * discount / 100)
       end
     end
 

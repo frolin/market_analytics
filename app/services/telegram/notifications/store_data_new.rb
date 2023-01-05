@@ -12,9 +12,9 @@ module Telegram
         return if message_data.blank?
 
         notification = ::NewParsedData.with(diff_data: message_data, source: @source, photo: photo_path,
-                                            text: message_text, user_ids: @source.tg_users.pluck(:id))
+                                            text: message_text, user_ids: @source.users.pluck(:id))
 
-        notification.deliver_later(@source.tg_users.uniq)
+        notification.deliver_later(@source.users.admin)
       end
 
       private
@@ -22,7 +22,7 @@ module Telegram
       def message_text
         msg = []
         msg << "🆔 <b>Магазин:</b> <a href='#{@source.url}'> #{@request.data['name']} </a>"
-        msg << message_data.flatten
+        msg << message_data
 
         msg.join("\n")
       end
@@ -31,7 +31,7 @@ module Telegram
         @request.diff_old_new.map do |keys|
           keys.map do |key, value|
             I18n.t("telegram.notifications.diff_store_parsed_data.#{key}")
-          end
+          end.compact.flatten
         end
       end
 

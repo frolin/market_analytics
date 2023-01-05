@@ -10,9 +10,9 @@ check_sales:
   class: "Wb::SalesCheckWorker"
   queue: 'check_sales'
 
-check_ads:
+parse_product_pages:
   cron: "*/30 * * * *" # execute at every 30 minute
-  class: "Wb::AdCheckWorker"
+  class: "Wb::ProductParserWorker"
   queue: 'default'
 
 check_stock:
@@ -20,22 +20,23 @@ check_stock:
   class: "Wb::StocksCheckWorker"
   queue: 'default'
 
-check_position:
-  cron: "0 7,18 * * *" # execute at every 30 minute
-  class: "Wb::PositionCheckWorker"
-  queue: 'default'
+#check_ads:
+#  cron: "*/30 * * * *" # execute at every 30 minute
+#  class: "Wb::AdCheckWorker"
+#  queue: 'default'
 
-order_notifications_tg:
-  cron: "*/1 * * * *" # execute at every 30 minute
-  class: "Wb::OrderNotificationsWorker"
-  queue: 'default'
 
-sales_notifications_tg:
-  cron: "*/1 * * * *" # execute at every 30 minute
-  class: "Wb::SalesNotificationsWorker"
-  queue: 'default'
+#check_position:
+#  cron: "0 7,18 * * *" # execute at every 30 minute
+#  class: "Wb::PositionCheckWorker"
+#  queue: 'default'
 
-parse_product_pages:
-  cron: "*/30 * * * *" # execute at every 30 minute
-  class: "Wb::ProductParserWorker"
-  queue: 'default'
+#order_notifications_tg:
+#  cron: "*/1 * * * *" # execute at every 30 minute
+#  class: "Wb::OrderNotificationsWorker"
+#  queue: 'default'
+
+#sales_notifications_tg:
+#  cron: "*/1 * * * *" # execute at every 30 minute
+#  class: "Wb::SalesNotificationsWorker"
+#  queue: 'default'

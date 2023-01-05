@@ -24,6 +24,7 @@ module Telegram
       def message_text
         msg = []
         msg << "🆔 <b>Магазин:</b> <a href='#{@store.url}'> #{@request.data['name']} </a>"
+        msg << "Новая продажа"
         msg << data_text.flatten
 
         msg.join("\n")
@@ -32,7 +33,7 @@ module Telegram
       def data_text
         @sale.api_data.map do |key, value|
           I18n.t("telegram.notifications.sale.new.#{key.underscore}", value: value)
-        end
+        end.flatten.compact
       end
 
 
