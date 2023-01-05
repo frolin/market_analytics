@@ -17,14 +17,14 @@ module Imports
 
           if @found_sale && data_diff?(sale)
             @found_sale.api_data.merge!(sale)
-            @found_sale.state =  @found_sale.canceled? ? :canceled : :sold
+            @found_sale.state = @found_sale.canceled? ? :canceled : :sold
             @found_sale.save!
 
             updated_sales << @found_sale
-            found_sales << sale
 
             next
           elsif @found_sale
+            found_sales << sale
             next
           end
 

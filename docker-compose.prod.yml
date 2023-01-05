@@ -32,13 +32,14 @@ services:
       - .:/app
       - rails_cache:/app/tmp/cache:delegated
       - bundle:/vendor/bundle:delegated
-      - /home/frolin/.ssh/:root/.ssh
-      - - ${HOME}/.irbrc:/root/.irbrc
+      - /home/frolin/.ssh:/root/.ssh
+      - ${HOME}/.irbrc:/root/.irbrc
       - ${HOME}/.irb-history-market:/root/.irb-history
     env_file:
-      - .env.prod
+    - .env.prod
     ports:
       - "3333:3333"
+      - "443:443"
 
   worker:
     depends_on:
@@ -64,11 +65,6 @@ services:
       - NODE_MAX_INSTANCES=5
       - NODE_MAX_SESSION=5
       - RAILS_LOG_TO_STDOUT=true
-      - NODE_MAX_INSTANCES=5
-      - SE_DRAIN_AFTER_SESSION_COUNT=5
-      - NODE_MAX_SESSION=5
-      - JAVA_OPTS=-Dwebdriver.chrome.whitelistedIps=
-      - SCALE=4
     shm_size: 2g
     privileged: true
     volumes:
@@ -85,13 +81,13 @@ services:
   redis:
     build:
       context: .
-      dockerfile: Dockerfile-Redis
+      dockerfile: Dockerfile-redis
     command: redis-server --include /usr/local/etc/redis/redis.conf
     volumes:
-      #      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-      #      - ./redis/data:/data:rw
-      - /opt/redis/etc/redis.conf:/usr/local/etc/redis/redis.conf
-      - /opt/redis/data:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/data:/data:rw
+#      - /opt/redis/etc/redis.conf:/usr/local/etc/redis/redis.conf
+#      - /opt/redis/data:/data
     ports:
       - '6379:6379'
     restart: always
