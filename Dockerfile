@@ -11,6 +11,6 @@ WORKDIR /app
 
 COPY Gemfile Gemfile.lock ./
 
-RUN bundle check || bundle install
+RUN bundle check || bundle config set --local without 'development test'
 
-COPY . ./
+COPY . ./app
