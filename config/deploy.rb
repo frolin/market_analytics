@@ -43,7 +43,7 @@ end
 # set :pty, true
 
 # Default value for :linked_files is []
-append :linked_files, 'config/master.key', 'config/credentials/production.key'
+# append :linked_files, 'config/master.key', 'config/credentials/production.key'
 
 # Default value for linked_dirs is []
 # append :linked_dirs, "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "storage"
