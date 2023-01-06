@@ -38,7 +38,7 @@ namespace :composing do
           execute("docker-compose",
                   "--project-name=#{fetch(:application)}",
                   "-f", "docker-compose.prod.yml",
-                  "restart", "-d", "--no-deps", "app"
+                  "up", "-d", "--no-deps", "app"
           )
         end
       end
