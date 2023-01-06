@@ -30,15 +30,15 @@ namespace :composing do
     task :app do
       on roles(:app) do
         within current_path do
+          # execute("docker-compose",
+          #         "--project-name=#{fetch(:application)}",
+          #         "-f", "docker-compose.prod.yml",
+          #         "build", "app"
+          # )
           execute("docker-compose",
                   "--project-name=#{fetch(:application)}",
                   "-f", "docker-compose.prod.yml",
-                  "build", "app"
-          )
-          execute("docker-compose",
-                  "--project-name=#{fetch(:application)}",
-                  "-f", "docker-compose.prod.yml",
-                  "up", "-d", "--no-deps", "app"
+                  "restart", "-d", "--no-deps", "app"
           )
         end
       end

@@ -22,7 +22,7 @@ services:
       - worker
       - chrome
     build: .
-    command: /bin/sh -c "bundle check && puma -t 4:4 "
+    command: /bin/sh -c "bundle && puma -t 4:4 "
     stdin_open: true
     tty: true
     environment:
@@ -46,7 +46,7 @@ services:
     depends_on:
       - redis
     build: .
-    command: sh -c "bundle check && bundle exec sidekiq"
+    command: sh -c "bundle && bundle exec sidekiq"
     stdin_open: true
     tty: true
     environment:
