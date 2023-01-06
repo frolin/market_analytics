@@ -32,7 +32,8 @@ services:
       - .:/app
       - rails_cache:/app/tmp/cache:delegated
       - /var/www/market_analytics/shared/certs:/root
-      - bundle:/vendor/bundle:delegated
+      - bundle:/usr/local/bundle
+      - node_modules:/app/node_modules
       - /home/frolin/.ssh:/root/.ssh
       - ${HOME}/.irbrc:/root/.irbrc
       - ${HOME}/.irb-history-market:/root/.irb-history
@@ -97,3 +98,4 @@ volumes:
   postgres:
   bundle:
   rails_cache:
+  node_modules:
