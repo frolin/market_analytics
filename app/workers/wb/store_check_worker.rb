@@ -9,7 +9,7 @@ module Wb
       user =  User.find(user_id)
       store = Store.find(store_id)
       return unless user && store
-      byebug
+
       ::Imports::Wb::Orders.run!(user: user, store: store)
       ::Imports::Wb::Sales.run!(user: user, store: store)
     end

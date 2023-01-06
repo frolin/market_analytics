@@ -31,6 +31,7 @@ services:
     volumes:
       - .:/app
       - rails_cache:/app/tmp/cache:delegated
+      - /var/www/market_analytics/shared/certs:/root
       - bundle:/vendor/bundle:delegated
       - /home/frolin/.ssh:/root/.ssh
       - ${HOME}/.irbrc:/root/.irbrc

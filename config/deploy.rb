@@ -10,6 +10,28 @@ set :repo_url, "git@github.com:frolin/market_analytics.git"
 # Default deploy_to directory is /var/www/my_app_name
 set :deploy_to, "/var/www/#{fetch(:application)}"
 
+namespace :deploy do
+  desc "Initialize application"
+  task :initialize do
+    invoke 'composing:build'
+    invoke 'composing:database:up'
+    invoke 'composing:database:create'
+    invoke 'composing:database:migrate'
+  end
+
+  after :published, :restart do
+    invoke 'composing:restart:web'
+    invoke 'composing:database:migrate'
+  end
+
+  before :finished, :clear_containers do
+    on roles(:app) do
+      execute "docker ps -a -q -f status=exited | xargs -r docker rm -v"
+      execute "docker images -f dangling=true -q | xargs -r docker rmi -f"
+    end
+  end
+end
+
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
 
