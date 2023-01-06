@@ -20,8 +20,8 @@ namespace :deploy do
   end
 
   after :published, :restart do
-    invoke 'composing:restart:web'
-    invoke 'composing:database:migrate'
+    invoke 'composing:restart:app'
+    # invoke 'composing:database:migrate'
   end
 
   before :finished, :clear_containers do
@@ -43,7 +43,7 @@ end
 # set :pty, true
 
 # Default value for :linked_files is []
-# append :linked_files, "config/database.yml", 'config/master.key'
+append :linked_files, 'config/master.key', 'config/credentials/production.key'
 
 # Default value for linked_dirs is []
 # append :linked_dirs, "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "storage"
