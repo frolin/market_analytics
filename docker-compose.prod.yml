@@ -43,6 +43,8 @@ services:
       - ${HOME}/.irb-history-market:/root/.irb-history
     env_file:
     - .env.prod
+    ports:
+      - 3000:3000
 
   nginx:
     build:
