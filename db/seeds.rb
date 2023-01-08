@@ -30,5 +30,5 @@
 
 
 
-Sale.destroy_all && SaleProduct.destroy_all && OrderProduct.destroy_all && Order.destroy_all && UserStore.destroy_all && Store.destroy_all && Product.destroy_all && Request.destroy_all && Stock.destroy_all && User.destroy_all
+#Sale.destroy_all && SaleProduct.destroy_all && OrderProduct.destroy_all && Order.destroy_all && UserStore.destroy_all && Store.destroy_all && Product.destroy_all && Request.destroy_all && Stock.destroy_all && User.destroy_all
 

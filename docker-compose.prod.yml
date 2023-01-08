@@ -7,6 +7,7 @@ networks:
 services:
   db:
     image: postgres
+    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -24,6 +25,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/app.Dockerfile
+    restart: always
     command: /bin/sh -c "bundle exec puma -C config/puma.rb"
     stdin_open: true
     tty: true
@@ -32,34 +34,19 @@ services:
       - BOOTSNAP=true
     volumes:
       - .:/app
-      - rails_cache:/app/tmp/cache:delegated
-      - /root:/root
-      - ./config:/app/config
+      #      - rails_cache:/app/tmp/cache:delegate
+      - /etc/letsencrypt:/etc/letsencrypt/
       - bundle:/usr/local/bundle
-      - ./shared/config/credentials:/app/config/credentials
       - node_modules:/app/node_modules
       - /home/frolin/.ssh:/root/.ssh
       - ${HOME}/.irbrc:/root/.irbrc
       - ${HOME}/.irb-history-market:/root/.irb-history
     env_file:
-    - .env.prod
+      - .env.prod
     ports:
       - 3000:3000
-
-  nginx:
-    build:
-      context: .
-      dockerfile: ./docker/nginx.Dockerfile
-    depends_on:
-      - app
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/error.log:/etc/nginx/error_log.log
-      - ./nginx/cache/:/etc/nginx/cache
-      - /etc/letsencrypt/:/etc/letsencrypt/
-    ports:
-      - 80:80
       - 443:443
+      - 80:80
 
   worker:
     depends_on:
@@ -67,6 +54,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/app.Dockerfile
+    restart: always
     command: /bin/sh -c "bundle install && bundle exec sidekiq"
     stdin_open: true
     tty: true
@@ -83,6 +71,7 @@ services:
   chrome:
     image: selenium/standalone-chrome-debug:latest
     # Debug version enables VNC ability
+    restart: always
     environment:
       - NODE_MAX_INSTANCES=5
       - NODE_MAX_SESSION=5
@@ -108,12 +97,27 @@ services:
     volumes:
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
       - ./redis/data:/data:rw
-#      - /opt/redis/etc/redis.conf:/usr/local/etc/redis/redis.conf
-#      - /opt/redis/data:/data
+    #      - /opt/redis/etc/redis.conf:/usr/local/etc/redis/redis.conf
+    #      - /opt/redis/data:/data
     ports:
       - '6379:6379'
     restart: always
 
+
+  #  nginx:
+  #    build:
+  #      context: .
+  #      dockerfile: ./docker/nginx.Dockerfile
+  #    depends_on:
+  #      - app
+  #    volumes:
+  #      - ./nginx.conf:/etc/nginx/nginx.conf
+  #      - ./nginx/error.log:/etc/nginx/error_log.log
+  #      - ./nginx/cache/:/etc/nginx/cache
+  #      - /etc/letsencrypt/:/etc/letsencrypt/
+  #    ports:
+  #     - 80:80
+#      - 443:443
 volumes:
   postgres:
   bundle:
