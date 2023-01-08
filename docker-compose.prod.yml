@@ -7,7 +7,6 @@ networks:
 services:
   db:
     image: postgres
-    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -16,6 +15,7 @@ services:
       - postgres:/data/postgres
     ports:
       - "5433:5432"
+    restart: always
 
   app:
     depends_on:
@@ -25,8 +25,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/app.Dockerfile
-    restart: always
-    command: /bin/sh -c "bundle exec puma -C config/puma.rb"
+    command: /bin/sh -c "rake telegram:bot:set_webhook && bundle exec puma -C config/puma.rb"
     stdin_open: true
     tty: true
     environment:
@@ -47,6 +46,7 @@ services:
       - 3000:3000
       - 443:443
       - 80:80
+    restart: always
 
   worker:
     depends_on:
@@ -54,7 +54,6 @@ services:
     build:
       context: .
       dockerfile: ./docker/app.Dockerfile
-    restart: always
     command: /bin/sh -c "bundle install && bundle exec sidekiq"
     stdin_open: true
     tty: true
@@ -67,11 +66,11 @@ services:
       - .env.prod
     networks:
       - default
+    restart: always
 
   chrome:
     image: selenium/standalone-chrome-debug:latest
     # Debug version enables VNC ability
-    restart: always
     environment:
       - NODE_MAX_INSTANCES=5
       - NODE_MAX_SESSION=5
@@ -88,6 +87,7 @@ services:
     logging:
       driver: none
       # Disable noisy logs.
+    restart: always
 
   redis:
     build:
