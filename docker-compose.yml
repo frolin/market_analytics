@@ -21,9 +21,11 @@ services:
       - db
       - worker
       - chrome
-    build: .
-    # command: /bin/sh -c "bundle"
-#    stdin_open: true
+    build:
+      context: .
+      dockerfile: ./docker/app.Dockerfile
+    command: /bin/sh -c "bundle install && rails s -b 0.0.0.0 -p 3333"
+    stdin_open: true
     tty: true
     environment:
       - RAILS_ENV=development
@@ -43,8 +45,10 @@ services:
   worker:
     depends_on:
       - redis
-    build: .
-    command: sh -c "bundle && bundle exec sidekiq"
+    build:
+      context: .
+      dockerfile: ./docker/app.Dockerfile
+    command: sh -c "bundle install && bundle exec sidekiq"
     stdin_open: true
     tty: true
     environment:
@@ -101,7 +105,6 @@ services:
       # Disable noisy logs.
 
   redis:
-    image: afnia/redis-alpine
     image: redis
     ports:
       - "6379:6379"

@@ -7,6 +7,7 @@ module Telegram
         @store = sale.store
         @user = sale.store.users.admin
         @request = sale.store.requests.last
+        @product_info = sale.products.first.requests.last
       end
 
       def call
@@ -31,11 +32,26 @@ module Telegram
       end
 
       def data_text
-        @sale.api_data.map do |key, value|
-          I18n.t("telegram.notifications.sale.new.#{key.underscore}", value: value)
-        end.flatten.compact
-      end
+        # ✅ Выкуп [1] : 1 772 ₽
+        # 📈 Сегодня: 1 на 1 772 ₽
+        # 🆔 Арт: 139200844 (https : // www.wildberries.ru / catalog / 139200844 / detail.aspx? targetUrl = XS)
+        # 📁 Рюкзаки
+        # 🏷 / BP - 01 (https : // www.wildberries.ru / catalog / 139200844 / detail.aspx? targetUrl = XS)
+        # ⭐️ Рейтинг: 5.0
+        # 💬 Отзывы: 4
+        # 💵 Сегодня таких: 1 на 1 772 ₽
+        # 💶 Вчера таких: 0
+        # 💼 Комиссия: 23 %
+        #   🌐 Коледино → Московская
+        # 📦 27 шт.хватит на 22 дн.
 
+        text = @sale.api_data.map do |key, value|
+          I18n.t("telegram.notifications.sale.new.#{key.underscore}", value: value)
+        end.compact_blank
+
+        text << "⭐Рейтинг: #{@product_info.rating}"
+        text << "💬Отзывы: #{@product_info.reviews_count}"
+      end
 
       def photo_path
         @sale.products.last.photos.first.image.url
