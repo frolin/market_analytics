@@ -9,8 +9,8 @@ module Wb
     end
     def perform
       User.all.each do |user|
-        user.wb.campaigns.each { |campaign|
-          Imports::Wildberries::Stocks.run!(user: user, campaign: campaign)
+        user.stores.each { |store|
+          Imports::Wb::Stocks.run!(user: user, store: store)
         }
       end
     end

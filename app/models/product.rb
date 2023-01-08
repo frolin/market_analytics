@@ -35,7 +35,6 @@ class Product < ApplicationRecord
   scope :wb_barcode, -> (barcode) { find_by("data @> ?", { wb: { barcode: barcode } }.to_json) }
 
   def self.wb_find(param)
-
     find_by("data @> ?", { "#{param.keys.first}" => param.values.first }.to_json)
   end
 

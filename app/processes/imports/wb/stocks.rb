@@ -2,25 +2,24 @@ module Imports
   module Wb
     class Stocks < ActiveInteraction::Base
       record :user
-      record :campaign
+      record :store
       date :date_from, default: DateTime.current
 
       def execute
         not_fond_barcodes = []
         created_stock = []
-        # import = campaign.imports.create!(type: Stock)
 
         raise 'Empty stock data' unless stocks_data.valid?
 
         stocks_data.result.each do |stock|
-          product = Product.wb_find(barcode: stock['barcode'])
+          product = Product.find_by(barcode: stock['barcode'])
 
           if product.blank?
             not_fond_barcodes << stock['barcode']
             next
           end
 
-          Import.transaction do
+          Product.transaction do
             product.stocks.create(api_data: stock, quantity: stock['quantity'])
             created_stock << { product: product, stock: stock }
           end
@@ -32,14 +31,14 @@ module Imports
         Rails.logger.info("Stock create: #{created_stock.size}")
 
         if created_stock.any?
-          Telegram::StockReport.send_message(user, created_stock)
+          ::Telegram::Notifications::StocksNew.new(store, created_stock).send_message
         end
       end
 
       private
 
       def stocks(date)
-        Api::Wildberries::Stats::Stocks.run(user: user, date_from: format_date(date))
+        Api::Wildberries::Stats::Stocks.run(store: store, date_from: format_date(date))
       end
 
       def stocks_data
