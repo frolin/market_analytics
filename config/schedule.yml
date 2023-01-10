@@ -13,12 +13,12 @@ check_sales:
 parse_product_pages:
   cron: "*/30 * * * *" # execute at every 30 minute
   class: "Wb::ProductParserWorker"
-  queue: 'default'
+  queue: 'parse_page'
 
 check_stock:
   cron: "0 9,19 * * *" # execute at every 30 minute
   class: "Wb::StocksCheckWorker"
-  queue: 'default'
+  queue: 'check_stocks'
 
 #check_ads:
 #  cron: "*/30 * * * *" # execute at every 30 minute

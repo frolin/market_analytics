@@ -9,29 +9,16 @@ module Imports
         not_fond_barcodes = []
         created_stock = []
 
-        raise 'Empty stock data' unless stocks_data.valid?
+        raise 'Empty stock data' unless stocks_data.result.present?
 
-        stocks_data.result.each do |stock|
-          product = Product.find_by(barcode: stock['barcode'])
+        stock = stocks_data.result.select { |product| product['quantity'] > 0 }
 
-          if product.blank?
-            not_fond_barcodes << stock['barcode']
-            next
-          end
+        new_stock = store.stocks.create!(api_data: stock)
 
-          Product.transaction do
-            product.stocks.create(api_data: stock, quantity: stock['quantity'])
-            created_stock << { product: product, stock: stock }
-          end
-        end
+        Rails.logger.info("Stock create: #{stock.size}")
 
-        not_found_barcodes = not_fond_barcodes.uniq.map { |i| [i, not_fond_barcodes.count(i)] }.to_h
-
-        Rails.logger.info("Not found barcodes: #{not_found_barcodes}")
-        Rails.logger.info("Stock create: #{created_stock.size}")
-
-        if created_stock.any?
-          ::Telegram::Notifications::StocksNew.new(store, created_stock).send_message
+        if new_stock.present?
+          ::Telegram::Notifications::StocksNew.new(store).call
         end
       end
 
@@ -46,7 +33,7 @@ module Imports
           begin
             stock_data = stocks(date_from)
 
-            unless stock_data.valid?
+            if stock_data.result.blank?
               stock_data = stocks(DateTime.current.advance(days: -1))
             end
 

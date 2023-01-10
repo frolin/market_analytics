@@ -28,7 +28,6 @@ module Api
                  end
 
       parsed_body = response.body
-        binding.pry
 
       if api_type == :report
         code = parsed_body.dig('result', 'code')

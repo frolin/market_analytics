@@ -10,6 +10,8 @@ class Store < ApplicationRecord
   has_many :orders
   has_many :sales
 
+  has_many :stocks, dependent: :destroy
+
   has_many :requests, as: :source
 
   has_many :costs, class_name: 'OrderCost'

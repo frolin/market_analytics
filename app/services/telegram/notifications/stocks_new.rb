@@ -4,15 +4,14 @@ module Telegram
       include ApplicationHelper
       include ActionView::Helpers::NumberHelper
 
-      def initialize(store, data)
+      def initialize(store)
         @store = store
-        @data = data
       end
 
-      def send_message
+      def call
         notification = ::Stocks.with(source: @store,
-                                       text: message_text,
-                                       user_ids: @store.users.admin.tg_users.pluck(:id))
+                                     text: message_text,
+                                     user_ids: @store.users.admin.tg_users.pluck(:id))
 
         notification.deliver_later(@store.users.admin)
       end
@@ -22,7 +21,7 @@ module Telegram
         message << "------------------"
 
         message << "Остатки:"
-        message << "#{sales_message}"
+        message << "#{stock_message}"
 
         message << "------------------"
         message << "Всего заказов за сегодня: #{Order.today_count}"
@@ -34,15 +33,27 @@ module Telegram
 
       private
 
-      def sales_message
-        # products = @data.uniq { |data| data[:product].name }
+      def stock_message
+        result = Hash.new { |h, k| h[k] = [] }
 
-        @data.map.with_index do |data, i|
-          product = data[:product].decorate
-          "#{i + 1}.#{data[:stock]['warehouseName']} #{product.requests.last.title} - #{data[:product].wb_quantity} шт."
-        end.join("\n")
+        stocks = last_stock_data.group_by { |stock| stock['barcode'] }
+
+        stocks.each do |barcode|
+          product = @store.products.find_by(barcode: barcode[0])
+          next if product.blank?
+
+          barcode[1].each do |stock|
+            result[product.requests.last.title] << { warehouse_name: stock['warehouseName'],
+                                                     quantity: stock['quantity'] }
+          end
+        end
+
+        result
       end
 
+      def last_stock_data
+        @store.stocks.last.api_data
+      end
     end
   end
 end

@@ -4,8 +4,10 @@ production:
 staging:
   :concurrency: 2
 development:
-  :concurrency: 1
+  :concurrency: 3
 :queues:
   - [default, 3]
   - [check_sales, 3]
   - [check_orders, 3]
+  - [check_stocks, 3]
+  - [parse_page, 3]

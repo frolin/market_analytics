@@ -20,8 +20,6 @@ class Product < ApplicationRecord
   has_many :photos, dependent: :destroy
   accepts_nested_attributes_for :photos, allow_destroy: true
 
-  has_many :stocks, dependent: :destroy
-  accepts_nested_attributes_for :stocks, allow_destroy: true
 
   has_many :requests, as: :source
 

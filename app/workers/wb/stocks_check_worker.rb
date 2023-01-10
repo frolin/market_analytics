@@ -2,7 +2,7 @@ module Wb
   class StocksCheckWorker
     include Sidekiq::Worker
 
-    sidekiq_options queue: :default , retry: 3
+    sidekiq_options queue: :check_stocks , retry: 3
 
     sidekiq_retry_in do |count, exception|
       60 * (count + 1)
