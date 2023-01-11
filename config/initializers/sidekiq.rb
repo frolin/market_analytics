@@ -1,5 +1,5 @@
 Sidekiq.configure_server do |config|
-   config.on(:startup) do
+  config.on(:startup) do
     schedule_file = "config/schedule.yml"
 
     if File.exist?(schedule_file)
@@ -7,9 +7,22 @@ Sidekiq.configure_server do |config|
     end
   end
 
-  config.redis = { url: ENV["REDIS_URL"] }
+  if Rails.env.production?
+    config.redis = { url: ENV["REDIS_URL"],
+                     password: Rails.application.credentials.production.redis.password
+    }
+  else
+    config.redis = { url: ENV["REDIS_URL"] }
+  end
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = { url: ENV["REDIS_URL"] }
+
+  if Rails.env.production?
+    config.redis = { url: ENV["REDIS_URL"],
+                     password: Rails.application.credentials.production.redis.password
+    }
+  else
+    config.redis = { url: ENV["REDIS_URL"] }
+  end
 end
