@@ -33,7 +33,7 @@ module Telegram
         msg << "#{@order.product.title}"
         msg << "⭐#{@order.product.rating} 💬 #{@order.product.reviews_count} \n"
 
-        msg << "📈 Заказы: сегодня: #{@order.product.today_orders.count} вчера: #{@order.product.yesterday_orders.count}"
+        msg << "📈 Продажи: сегодня: #{@order.product.today_orders.count} вчера: #{@order.product.yesterday_orders.count}"
 
         msg << data_text
 

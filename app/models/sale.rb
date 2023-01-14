@@ -9,7 +9,10 @@ class Sale < ApplicationRecord
 
   after_save_commit :notify
 
-  store_accessor :api_data, :barcode, :forPay, :category, :subject, :warehouseName, :oblast, :brand, :price
+  store_accessor :api_data, :barcode, :forPay, :category, :spp, :subject, :warehouseName, :oblast, :brand, :price
+
+  scope :sold, -> { where(state: :sold) }
+  scope :canceled, -> { where(state: :canceled) }
 
   def self.today_count
     start_first = DateTime.now.beginning_of_day
@@ -30,5 +33,36 @@ class Sale < ApplicationRecord
     api_data['saleID'].chars.first == 'R'
   end
 
+  def product
+    products.last
+  end
+
+  def warehouse
+    api_data['warehouseName']
+  end
+
+  def price
+    api_data['finishedPrice']
+  end
+
+  def country
+    api_data['countryName']
+  end
+
+  def discount
+    api_data['discountPercent']
+  end
+
+  def pay
+    api_data['forPay']
+  end
+
+  def region
+    api_data['regionName']
+  end
+
+  def oblast
+    api_data['oblastOkrugName']
+  end
 
 end

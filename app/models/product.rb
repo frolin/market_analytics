@@ -63,16 +63,24 @@ class Product < ApplicationRecord
     orders.where(date: DateTime.now.beginning_of_day..DateTime.now.end_of_day)
   end
 
-  def yesterday_orders
-    orders.where(date: DateTime.now.beginning_of_day.advance(days: -1)..DateTime.now.end_of_day.advance(days: -1))
-  end
-
   def today_sales
     sales.where(date: DateTime.now.beginning_of_day..DateTime.now.end_of_day)
   end
 
+  def yesterday_orders
+    orders.where(date: DateTime.now.beginning_of_day.advance(days: -1)..DateTime.now.end_of_day.advance(days: -1))
+  end
+
+  def yesterday_sales
+    sales.where(date: DateTime.now.beginning_of_day.advance(days: -1)..DateTime.now.end_of_day.advance(days: -1))
+  end
+
   def stock
     store.stocks.where.not(api_data: {}).last.for_product(barcode)
+  end
+
+  def photo_url
+    photos.first.image.url
   end
 
   def url

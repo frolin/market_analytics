@@ -1,6 +1,7 @@
 module Telegram
   module Notifications
     class SalesNew
+      include ApplicationHelper
 
       def initialize(sale)
         @sale = sale
@@ -11,8 +12,6 @@ module Telegram
       end
 
       def call
-        return if data_text.blank?
-
         notification = ::NewParsedData.with(source: @store, photo: photo_path,
                                             text: message_text,
                                             user_ids: @user.tg_users.pluck(:id))
@@ -24,9 +23,23 @@ module Telegram
 
       def message_text
         msg = []
+        if @sale.canceled?
+          msg << "❌ Новый возврат \n"
+        else
+          msg << "✅ Новая продажа \n"
+        end
+
         msg << "🆔 <b>Магазин:</b> <a href='#{@store.url}'> #{@request.data['name']} </a>"
-        msg << "Новая продажа"
-        msg << data_text.flatten
+        msg << "📆 #{I18n.l(@sale.api_data['date'].to_datetime)} \n"
+
+        msg << "📁 #{@sale.subject}"
+        msg << "🏷️ <a href='#{@sale.product.url}'> #{@sale.barcode} </a>"
+        msg << "#{@sale.product.title}"
+        msg << "⭐#{@sale.product.rating} 💬 #{@sale.product.reviews_count} \n"
+
+        msg << "📈 Заказы: сегодня: #{@sale.product.today_orders.count} вчера: #{@sale.product.yesterday_orders.count} \n"
+
+        msg << data_text
 
         msg.join("\n")
       end
@@ -45,16 +58,26 @@ module Telegram
         #   🌐 Коледино → Московская
         # 📦 27 шт.хватит на 22 дн.
 
-        text = @sale.api_data.map do |key, value|
-          I18n.t("telegram.notifications.sale.new.#{key.underscore}", value: value)
-        end.compact_blank
+        text = []
 
-        text << "⭐Рейтинг: #{@product_info.rating}"
-        text << "💬Отзывы: #{@product_info.reviews_count}"
+        text << "🚃 Доставка: #{@sale.warehouse} →  #{@sale.oblast} область"
+        text << "💰 Цена: #{money(@sale.price)}, скидка #{@sale.discount} %"
+        text << "💰 Выплата: #{money(@sale.pay)}"
+        text << "💳 Прибыль: ? \n"
+
+
+
+        text << "Остатки: \n #{stock_count}"
+      end
+
+      def stock_count
+        @sale.product.stock.map do |stock|
+          "📦️ #{stock[:warehouse]} → #{stock[:quantity]}шт. \n"
+        end.join(" ")
       end
 
       def photo_path
-        @sale.products.last.photos.first.image.url
+        @sale.product.photo_url
       end
 
     end
