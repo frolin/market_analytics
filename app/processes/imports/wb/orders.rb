@@ -2,7 +2,6 @@ module Imports
   module Wb
     class Orders < ActiveInteraction::Base
       class NewOrdersApiError < StandardError; end
-
       record :user
       record :store
       date :date_from, default: DateTime.now.beginning_of_week - 7.days
@@ -64,12 +63,6 @@ module Imports
       #   campaign.orders.where.not("api_data @> ?", { "#{param.keys.first}" => param.values.first }.to_json)
       # end
 
-      def price(order)
-        total_price = order['api_data']['totalPrice']
-        discount = order['api_data']['discountPercent']
-
-        total_price - (total_price * discount / 100)
-      end
     end
 
   end

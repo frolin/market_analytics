@@ -1,6 +1,7 @@
 module Telegram
   module Notifications
     class OrdersNew
+      include ApplicationHelper
 
       def initialize(order)
         @order = order
@@ -23,8 +24,17 @@ module Telegram
 
       def message_text
         msg = []
+        msg << "🔔 Новый заказ"
         msg << "🆔 <b>Магазин:</b> <a href='#{@store.url}'> #{@request.data['name']} </a>"
-        msg << "Новый заказ"
+        msg << "📆 #{I18n.l(@order.api_data['date'].to_datetime)} \n"
+
+        msg << "📁 #{@order.subject}"
+        msg << "🏷️ <a href='#{@order.product.url}'> #{@order.barcode} </a>"
+        msg << "#{@order.product.title}"
+        msg << "⭐#{@order.product.rating} 💬 #{@order.product.reviews_count} \n"
+
+        msg << "📈 Заказы: сегодня: #{@order.product.today_orders.count} вчера: #{@order.product.yesterday_orders.count}"
+
         msg << data_text
 
         msg.join("\n")
@@ -33,17 +43,35 @@ module Telegram
       def diff_text
         @request.diff_old_new.map do |keys|
           keys.map do |key, value|
+            next unless I18n.exists?("telegram.notifications.diff_store_parsed_data.#{key}")
+
             I18n.t("telegram.notifications.diff_store_parsed_data.#{key}")
-          end.flatten.compact
+          end
         end.flatten.compact
       end
 
       def data_text
-        @order.api_data.map do |key, value|
-          I18n.t("telegram.notifications.order.new.#{key.underscore}", value: value)
-        end.flatten.compact
+        text = []
+
+        text << "🚃 Доставка: #{@order.warehouse} → #{@order.oblast} область"
+        text << "💰 Цена: #{money(price)}"
+        text << "💳 Скидка: #{@order.discount} % \n"
+
+        text << "Остатки: \n #{stock_count}"
       end
 
+      def price
+        total_price = @order.api_data['totalPrice']
+        discount = @order.api_data['discountPercent']
+
+        total_price - (total_price * discount / 100)
+      end
+
+      def stock_count
+        @order.product.stock.map do |stock|
+          "📦️ #{stock[:warehouse]} → #{stock[:quantity]}шт. \n"
+        end.join(" ")
+      end
 
       def photo_path
         @order.products.last.photos.first.image.url

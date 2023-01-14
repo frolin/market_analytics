@@ -1,4 +1,10 @@
 ru:
+  date:
+    formats:
+      default: "%d/%m/%Y"
+  time:
+    formats:
+      default: "%d.%m.%Y-%H:%M:%S"
   store:
     slug:
       wb: Wildberries
@@ -24,26 +30,26 @@ ru:
         delivered_count: "Процент доставок: %{value}"
       order:
         new:
-          date: "Дата: %{value}"
-          nm_id: ""
-          odid: ""
-          srid: ""
+
           brand: "Бренд: %{value}"
           oblast: "Область: %{value}"
-          barcode: "ШК: %{value}"
-          g_number: ""
-          sticker: ""
+          barcode: "🏷️ %{value}"
           subject: "Предмет: %{value}"
           category: "Категория: %{value}"
-          income_id: ""
-          is_cancel: ""
-          tech_size: ""
-          cancel_dt: ""
-          total_price: ""
+          total_price: "{value}"
           warehouse_name: "Склад: %{value}"
-          last_change_date: ""
           discount_percent: "Скидка %{value}"
-          supplier_article: ""
+#         nm_id: ""
+#         odid: ""
+#         srid: ""
+#         is_cancel: ""
+#         g_number: ""
+#         sticker: ""
+#         income_id: ""
+#         tech_size: ""
+#         cancel_dt: ""
+#         last_change_date: ""
+#         supplier_article: ""
 
       sale:
         new:

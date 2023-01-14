@@ -20,7 +20,6 @@ class Product < ApplicationRecord
   has_many :photos, dependent: :destroy
   accepts_nested_attributes_for :photos, allow_destroy: true
 
-
   has_many :requests, as: :source
 
   validates :barcode, presence: true
@@ -46,6 +45,38 @@ class Product < ApplicationRecord
     return if stocks.blank?
 
     stocks.last.quantity
+  end
+
+  def title
+    requests.last.title
+  end
+
+  def rating
+    requests.last.rating
+  end
+
+  def reviews_count
+    requests.last.reviews_count
+  end
+
+  def today_orders
+    orders.where(date: DateTime.now.beginning_of_day..DateTime.now.end_of_day)
+  end
+
+  def yesterday_orders
+    orders.where(date: DateTime.now.beginning_of_day.advance(days: -1)..DateTime.now.end_of_day.advance(days: -1))
+  end
+
+  def today_sales
+    sales.where(date: DateTime.now.beginning_of_day..DateTime.now.end_of_day)
+  end
+
+  def stock
+    store.stocks.where.not(api_data: {}).last.for_product(barcode)
+  end
+
+  def url
+    requests.last.url
   end
 
   aasm column: :state do

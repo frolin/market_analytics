@@ -9,11 +9,12 @@ class Order < ApplicationRecord
   has_many :costs, class_name: 'OrderCost'
   has_many :sales, dependent: :destroy
 
-  store_accessor :api_data, :category, :srid, :barcode, :subject, :warehouseName, :oblast, :brand, :price
+  store_accessor :api_data, :category, :srid, :barcode, :subject, :oblast, :brand, :price
 
   scope :recent, -> { where("created_at > #{30.minutes.ago}") }
+  scope :today, -> { where(date: DateTime.now.beginning_of_day..DateTime.now.end_of_day).count }
 
-  after_save_commit :notify
+  after_create_commit :notify
 
 
   def notify
@@ -50,4 +51,21 @@ class Order < ApplicationRecord
     end
     Order.where(date: start_first..start_last).count
   end
+
+  def warehouse
+    api_data['warehouseName']
+  end
+
+  def price
+    api_data['totalPrice']
+  end
+
+  def discount
+    api_data['discountPercent']
+  end
+
+  def product
+    products.last
+  end
+
 end

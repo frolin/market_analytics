@@ -1,6 +1,4 @@
 module ApplicationHelper
-
-
   # https://gist.github.com/fjahr/b3828b9f4e333e74ba1894687d65e055
   def bootstrap_class_for(flash_type)
     { success: 'alert-success', error: 'alert-danger', alert: 'alert-warning', notice: 'alert-info' }.stringify_keys[flash_type.to_s] || flash_type.to_s
@@ -42,7 +40,7 @@ module ApplicationHelper
   end
 
   def money(int)
-    number_to_currency(int, unit: "₽", separator: ",", delimiter: "", format: "%n %u")
+    ActionController::Base.helpers.number_to_currency(int, unit: "₽", separator: ",", delimiter: "", format: "%n %u")
   end
 
   def market_prefix(name)

@@ -36,7 +36,6 @@ class Store < ApplicationRecord
   def logo
     images.last.image.url
   end
-
 end
 
 require_dependency 'store/wb'
