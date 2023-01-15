@@ -44,8 +44,6 @@ services:
       - .env.prod
     ports:
       - 3000:3000
-      - 443:443
-      - 80:80
     restart: always
 
   worker:
@@ -117,7 +115,7 @@ services:
     ports:
      - 80:80
      - 443:443
-     -
+
 volumes:
   postgres:
   bundle:
