@@ -8,7 +8,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   rescue_from 'AuthorizationError', with: :deny_access
   ###
 
-  use_session!
+  # use_session!
 
   def start!(*)
     Telegram::InitUser.run(from: from)
