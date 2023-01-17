@@ -75,8 +75,13 @@ class Product < ApplicationRecord
     sales.where(date: DateTime.now.beginning_of_day.advance(days: -1)..DateTime.now.end_of_day.advance(days: -1))
   end
 
-  def stock
+
+  def stock_for_product
     store.stocks.where.not(api_data: {}).last.for_product(barcode)
+  end
+
+  def article
+
   end
 
   def photo_url

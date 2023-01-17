@@ -4,8 +4,9 @@ module Telegram
       include ApplicationHelper
       include ActionView::Helpers::NumberHelper
 
-      def initialize(store)
+      def initialize(store, barcodes = [])
         @store = store
+        @barcodes = barcodes
       end
 
       def call
@@ -18,37 +19,41 @@ module Telegram
 
       def message_text
         message = []
-        message << "------------------"
-
-        message << "Остатки:"
+        message << "🏪 Остатки:"
         message << "#{stock_message}"
 
         message << "------------------"
-        message << "Всего заказов за сегодня: #{Order.today_count}"
-        message << "Всего продаж за сегодня: #{Sale.today_count}"
+        message << "Заказов за сегодня: #{@store.orders.today.count}шт. / на сумму: #{money(today_orders_sum)}"
+        message << "Продажи за сегодня: #{@store.sales.today.count}шт. / на сумму: #{money(today_sales_sum)}"
 
-        message << "\n #остатки"
         message.join("\n")
       end
 
       private
 
       def stock_message
-        result = Hash.new { |h, k| h[k] = [] }
+        # barcodes = last_stock_data.pluck('barcode')
+        # products = @store.products.where(barcode: barcodes)
+        # products.map do |product|
+        #   ["🚃 #{product.title}", stock_count(product)]
+        # end.flatten.join("\n")
 
-        stocks = last_stock_data.group_by { |stock| stock['barcode'] }
-
-        stocks.each do |barcode|
-          product = @store.products.find_by(barcode: barcode[0])
-          next if product.blank?
-
-          barcode[1].each do |stock|
-            result[product.requests.last.title] << { warehouse_name: stock['warehouseName'],
-                                                     quantity: stock['quantity'] }
+        @store.stocks.last.by_products.map do |product_name, stocks|
+          stock_data = stocks.map do |s|
+            "📦️ #{s[:warehouse]} → #{s[:quantity]}шт. "
           end
-        end
 
-        result
+          ["\n 🏷 #{product_name}", stock_data]
+        end.join("\n")
+
+      end
+
+      def today_orders_sum
+        @store.orders.today.sum { |product| product.price }
+      end
+
+      def today_sales_sum
+        @store.sales.today.sum { |sale| sale.price }
       end
 
       def last_stock_data

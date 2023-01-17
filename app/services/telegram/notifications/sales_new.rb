@@ -71,7 +71,7 @@ module Telegram
       end
 
       def stock_count
-        @sale.product.stock.map do |stock|
+        @sale.product.stock_for_product.map do |stock|
           "📦️ #{stock[:warehouse]} → #{stock[:quantity]}шт. \n"
         end.join(" ")
       end

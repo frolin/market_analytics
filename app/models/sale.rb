@@ -12,6 +12,7 @@ class Sale < ApplicationRecord
   store_accessor :api_data, :barcode, :forPay, :category, :spp, :subject, :warehouseName, :oblast, :brand, :price
 
   scope :sold, -> { where(state: :sold) }
+  scope :today, -> { where(date: DateTime.now.beginning_of_day..DateTime.now.end_of_day) }
   scope :canceled, -> { where(state: :canceled) }
 
   def self.today_count

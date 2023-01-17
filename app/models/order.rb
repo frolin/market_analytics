@@ -12,10 +12,9 @@ class Order < ApplicationRecord
   store_accessor :api_data, :category, :srid, :barcode, :subject, :oblast, :brand, :price
 
   scope :recent, -> { where("created_at > #{30.minutes.ago}") }
-  scope :today, -> { where(date: DateTime.now.beginning_of_day..DateTime.now.end_of_day).count }
+  scope :today, -> { where(date: DateTime.now.beginning_of_day..DateTime.now.end_of_day) }
 
   after_create_commit :notify
-
 
   def notify
     Telegram::Notifications::OrdersNew.new(self).call
@@ -57,7 +56,9 @@ class Order < ApplicationRecord
   end
 
   def price
-    api_data['totalPrice']
+    return 0 unless api_data['totalPrice']
+
+    api_data['totalPrice'] * (1 - api_data['discountPercent'].to_f / 100)
   end
 
   def discount
