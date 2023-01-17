@@ -153,21 +153,21 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     respond_with :message, text: inline_query(user.products, 0)
   end
 
-  def memo!(*args)
-    if args.any?
-      session[:memo] = args.join(' ')
-      respond_with :message, text: t('.notice')
-    else
-      respond_with :message, text: t('.prompt')
-      save_context :memo!
-    end
-  end
+  # def memo!(*args)
+  #   if args.any?
+  #     session[:memo] = args.join(' ')
+  #     respond_with :message, text: t('.notice')
+  #   else
+  #     respond_with :message, text: t('.prompt')
+  #     save_context :memo!
+  #   end
+  # end
 
-  def remind_me!(*)
-    to_remind = session.delete(:memo)
-    reply = to_remind || t('.nothing')
-    respond_with :message, text: reply
-  end
+  # def remind_me!(*)
+  #   to_remind = session.delete(:memo)
+  #   reply = to_remind || t('.nothing')
+  #   respond_with :message, text: reply
+  # end
 
   def keyboard!(value = nil, *)
     if value
@@ -233,18 +233,18 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
   # As there is no chat id in such requests, we can not respond instantly.
   # So we just save the result_id, and it's available then with `/last_chosen_inline_result`.
-  def chosen_inline_result(result_id, _query)
-    session[:last_chosen_inline_result] = result_id
-  end
+  # def chosen_inline_result(result_id, _query)
+  #   session[:last_chosen_inline_result] = result_id
+  # end
 
-  def last_chosen_inline_result!(*)
-    result_id = session[:last_chosen_inline_result]
-    if result_id
-      respond_with :message, text: t('.selected', result_id: result_id)
-    else
-      respond_with :message, text: t('.prompt')
-    end
-  end
+  # def last_chosen_inline_result!(*)
+  #   result_id = session[:last_chosen_inline_result]
+  #   if result_id
+  #     respond_with :message, text: t('.selected', result_id: result_id)
+  #   else
+  #     respond_with :message, text: t('.prompt')
+  #   end
+  # end
 
   def message(message)
     if message['reply_to_message'].present?
