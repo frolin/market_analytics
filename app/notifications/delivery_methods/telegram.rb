@@ -1,12 +1,10 @@
 class DeliveryMethods::Telegram < Noticed::DeliveryMethods::Base
   def deliver
-    recipient.tg_users.each do |recipient|
-      if params[:photo]
-        TG_BOT.send_photo(chat_id: "#{recipient.chat_id}",
-                          caption: params[:text], photo: File.open(photo_path), parse_mode: 'HTML')
-      else
-        TG_BOT.send_message(chat_id: "#{recipient.chat_id}", text: params[:text], parse_mode: 'HTML')
-      end
+    if params[:photo]
+      TG_BOT.send_photo(chat_id: "#{recipient.chat_id}",
+                        caption: params[:text], photo: File.open(photo_path), parse_mode: 'HTML')
+    else
+      TG_BOT.send_message(chat_id: "#{recipient.chat_id}", text: params[:text], parse_mode: 'HTML')
     end
   end
 

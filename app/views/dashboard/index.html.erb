@@ -26,7 +26,7 @@
         <div class="card-body">
           <div class="media d-flex">
             <div class="media-body text-left">
-              <h3 class="warning"><%= current_user.orders_count%></h3>
+              <h3 class="warning"><%= current_user.orders_count %></h3>
               <h3>Заказы</h3>
             </div>
             <div>
@@ -130,15 +130,17 @@
         </div>
       </div>
     </div>
+  <% end %>
 
 
+  <% current_user.stores.each do |store| %>
     <%= line_chart [:orders, :sales].map { |event|
       { name: event.to_s, data: store.send(event).group_by_day(:date).count }
     } %>
-    <%= render partial: 'dashboard/recent_events', locals: { store: store } %>
 
   <% end %>
 
+    <%= render partial: 'dashboard/recent_events', locals: { stores: current_user.stores } %>
 
 </div>
 

@@ -1,14 +1,15 @@
 module Parse
   module Wb
     class Store < ActiveInteraction::Base
+      MAX_TIMEOUT = 15
       LOGO = '.seller-details__logo img'
       SUPPLIER_DATA = '.seller-details__tip-info'
-
+      SUPPLIER_CONTENT = '.tooltip-supplier .tooltip__content'
       SELLER_DETAILS = {
         name: '.seller-details__title',
         rating: '.address-rate-mini',
         reviews: '.seller-details__review',
-        products_count: '.seller-details__count-products',
+        products_count: '.catalog-title-wrap .goods-count',
         sells_count: '.seller-details__parameter-value--delivered',
         delivered_count: '.seller-details__parameter-value--delivery',
         defective_count: '.seller-details__parameter-value--defective'
@@ -20,6 +21,8 @@ module Parse
       def execute
         @store_page = Browser.new(store.url).run
 
+        Rails.logger.info("Start parse store page. Visit #{store.url}")
+
         begin
           @store_data = find_store_data
           @supplier_data = find_supplier_data
@@ -29,6 +32,7 @@ module Parse
         end
 
         @store_data.merge(@supplier_data)
+
       end
 
       private
@@ -40,9 +44,15 @@ module Parse
             element.present? && element.text.present?
           end
 
+          Rails.logger.debug("start find store_data css: #{css}")
+
           hash[name] = @store_page.find_element(css: css).text if element_found
 
           hash
+
+        rescue Selenium::WebDriver::Error::NoSuchElementError, Selenium::WebDriver::Error::TimeoutError
+          nil
+
         end
       end
 
@@ -50,7 +60,8 @@ module Parse
         find_element(type: :css, name: SUPPLIER_DATA) do
           @store_page.find_element(css: SUPPLIER_DATA).click
           sleep 1
-          supplier_data = @store_page.find_element(css: '.tooltip-supplier .tooltip__content').text
+          Rails.logger.debug("start find supplier_data css: #{SUPPLIER_CONTENT}")
+          supplier_data = @store_page.find_element(css: SUPPLIER_CONTENT).text
 
           { ip: supplier_data.split("\n").first, ogrnip: supplier_data.split("\n").last }
         end
@@ -63,6 +74,9 @@ module Parse
         end
 
         @store_page.find_elements(css: LOGO).last.attribute('src') if element_found
+
+      rescue Selenium::WebDriver::Error::NoSuchElementError, Selenium::WebDriver::Error::TimeoutError
+        nil
       end
 
       def find_element(type:, name:)
@@ -73,7 +87,7 @@ module Parse
 
           yield if block_given? && element_found
 
-        rescue Selenium::WebDriver::Error::NoSuchElementError
+        rescue Selenium::WebDriver::Error::NoSuchElementError, Selenium::WebDriver::Error::TimeoutError
           nil
         end
       end
@@ -83,7 +97,7 @@ module Parse
       end
 
       def wait
-        Selenium::WebDriver::Wait.new(timeout: 30)
+        Selenium::WebDriver::Wait.new(timeout: MAX_TIMEOUT)
       end
     end
   end

@@ -10,9 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_09_221905) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_21_104753) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "accounts", force: :cascade do |t|
+    t.string "from"
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "audits", force: :cascade do |t|
     t.integer "auditable_id"
@@ -123,6 +130,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_09_221905) do
     t.boolean "notified", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["odid", "store_id"], name: "index_orders_on_odid_and_store_id", unique: true
     t.index ["odid"], name: "index_orders_on_odid"
     t.index ["srid"], name: "index_orders_on_srid"
     t.index ["store_id"], name: "index_orders_on_store_id"
@@ -233,6 +241,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_09_221905) do
     t.string "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "account_id", null: false
+    t.index ["account_id"], name: "index_stores_on_account_id"
   end
 
   create_table "supplies", force: :cascade do |t|
@@ -270,7 +280,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_09_221905) do
   end
 
   create_table "tg_users", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.string "username"
     t.string "chat_id"
     t.string "first_name"
@@ -310,6 +320,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_09_221905) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "account_id"
+    t.index ["account_id"], name: "index_users_on_account_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -332,6 +344,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_09_221905) do
   add_foreign_key "sale_products", "sales"
   add_foreign_key "sales", "stores"
   add_foreign_key "stocks", "stores"
+  add_foreign_key "stores", "accounts"
   add_foreign_key "supplies", "stores"
   add_foreign_key "supplies", "users"
   add_foreign_key "supply_costs", "supply_products"
@@ -340,4 +353,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_09_221905) do
   add_foreign_key "user_settings", "users"
   add_foreign_key "user_stores", "stores"
   add_foreign_key "user_stores", "users"
+  add_foreign_key "users", "accounts"
 end

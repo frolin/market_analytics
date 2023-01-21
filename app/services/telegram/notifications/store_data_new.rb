@@ -2,10 +2,11 @@ module Telegram
   module Notifications
     class StoreDataNew
 
-      def initialize(request:, first_time: false)
+      def initialize(request:, user: nil, first_time: false)
         @source = request.source
         @request = request
         @first_time = first_time
+        @user = user
       end
 
       def call
@@ -14,7 +15,13 @@ module Telegram
         notification = ::NewParsedData.with(diff_data: message_data, source: @source, photo: photo_path,
                                             text: message_text, user_ids: @source.users.pluck(:id))
 
-        notification.deliver_later(@source.users.admin)
+        if @user.present?
+          notification.deliver_later(@user.tg_user)
+        else
+          @source.tg_users.each do |tg_user|
+            notification.deliver_later(tg_user)
+          end
+        end
       end
 
       private

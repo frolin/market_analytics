@@ -1,14 +1,11 @@
 module Imports
   module Wb
     class Stocks < ActiveInteraction::Base
-      record :user
+      record :user, default: nil
       record :store
       date :date_from, default: DateTime.current
 
       def execute
-        not_fond_barcodes = []
-        created_stock = []
-
         raise 'Empty stock data' unless stocks_data.result.present?
 
         stock = stocks_data.result.select { |product| product['quantity'] > 0 }

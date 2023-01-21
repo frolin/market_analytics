@@ -4,7 +4,8 @@ class ProductsController < ApplicationController
 
   # GET /products or /products.json
   def index
-    @products = current_user.products.decorate
+    # store = params[:store_id]
+    @products = current_user.stores.last.products.decorate
   end
 
   # GET /products/1 or /products/1.json

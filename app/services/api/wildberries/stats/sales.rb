@@ -2,7 +2,6 @@ module Api
   module Wildberries
     module Stats
       class Sales < Api::WildberriesClient
-        record :user
         record :store
         string :date_from
 

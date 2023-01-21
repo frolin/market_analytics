@@ -8,12 +8,13 @@ class Sale < ApplicationRecord
   has_many :products, through: :sale_products
 
   after_save_commit :notify
+  attr_accessor :skip_notify
 
   store_accessor :api_data, :barcode, :forPay, :category, :spp, :subject, :warehouseName, :oblast, :brand, :price
 
   scope :sold, -> { where(state: :sold) }
-  scope :today, -> { where(date: DateTime.now.beginning_of_day..DateTime.now.end_of_day) }
   scope :canceled, -> { where(state: :canceled) }
+  scope :today, -> { where(date: DateTime.now.beginning_of_day..DateTime.now.end_of_day) }
 
   def self.today_count
     start_first = DateTime.now.beginning_of_day
@@ -27,6 +28,8 @@ class Sale < ApplicationRecord
   end
 
   def notify
+    return if skip_notify
+
     Telegram::Notifications::SalesNew.new(self).call
   end
 

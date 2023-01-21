@@ -26,7 +26,7 @@ module Api
 
       parsed_body = response.body
 
-      Rails.logger.info(message: "[API] Got response. Body: #{parsed_body.to_s}")
+      # Rails.logger.info(message: "[API] Got response. Body: #{parsed_body.to_s}")
 
       if parsed_body.is_a?(Hash) && parsed_body['errors'].present?
         errors.add(:base, "Response error: method: #{api_method}")

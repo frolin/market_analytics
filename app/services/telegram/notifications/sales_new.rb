@@ -14,9 +14,11 @@ module Telegram
       def call
         notification = ::NewParsedData.with(source: @store, photo: photo_path,
                                             text: message_text,
-                                            user_ids: @user.tg_users.pluck(:id))
+                                            user_ids: @store.tg_users.pluck(:id))
 
-        notification.deliver_later(@user)
+         @store.tg_users.each do |tg_user|
+          notification.deliver_later(tg_user)
+        end
       end
 
       private
@@ -71,7 +73,7 @@ module Telegram
       end
 
       def stock_count
-        @sale.product.stock_for_product.map do |stock|
+        @sale.product.stock.map do |stock|
           "📦️ #{stock[:warehouse]} → #{stock[:quantity]}шт. \n"
         end.join(" ")
       end

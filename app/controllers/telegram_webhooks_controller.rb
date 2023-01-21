@@ -6,9 +6,9 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
   before_action :authorize!
   rescue_from 'AuthorizationError', with: :deny_access
-  ###
-
-  # use_session!
+  ALLOW_USERS = ['fralunia', 'Serg1923'].freeze
+  ALLOW_IDS = [445590809].freeze
+  use_session!
 
   def start!(*)
     Telegram::InitUser.run(from: from)
@@ -20,6 +20,13 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
   def my!(*)
     sub_menu(tg_user.stores)
+  end
+
+  def stock!
+
+    tg_user.user.stores.each do |store|
+      ::Imports::Wb::Stocks.run!(store: store, user: tg_user.user)
+    end
   end
 
   def add_store!(*)
@@ -56,7 +63,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
     if result.valid?
       respond_with :message, text: Telegram::Greeting.new(from).success_add, parse_mode: 'HTML'
-      respond_with :animation, animation: File.open('app/assets/images/telegram/work_in_progress.gif'), caption: 'Собираем информацию...'
+      # respond_with :animation, animation: File.open('app/assets/images/telegram/work_in_progress.gif'), caption: 'Собираем информацию...'
     else
       save_context :add_store_wb!
       message = result.errors.messages.values.flatten.join(' ,')
@@ -72,6 +79,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   def delete_message
     TG_BOT.delete_message(chat_id: from['id'], message_id: payload['message_id'])
   end
+
   def add_store_ozon!(token = nil, *)
     inline_menu! unless token.present?
 
@@ -269,15 +277,15 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   private
 
   def user?
-    from['username'].in?(valid_users)
+    if from['username'].present?
+      from['username'].in?(ALLOW_USERS)
+    else
+      from['id'].in?(ALLOW_IDS)
+    end
   end
 
   def tg_user
-    @tg_user ||= TgUser.find_by(username: from['username']) || TgUser.find_by(chat_id: from['chat_id'])
-  end
-
-  def valid_users
-    ['fralunia']
+    @tg_user ||= TgUser.find_by(username: from['username']) || TgUser.find_by(chat_id: from['id'])
   end
 
   def authorize!
@@ -286,8 +294,12 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     raise AuthorizationError
   end
 
+  def name
+    from['username'] || from['first_name']
+  end
+
   def deny_access
-    respond_with :message, text: "Кто вы #{username}? Я вас не знаю, обратитесь к адиминстратору"
+    respond_with :message, text: "Кто вы #{name }? Я вас не знаю, обратитесь к адиминстратору"
   end
 
 end

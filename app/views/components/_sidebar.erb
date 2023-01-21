@@ -11,7 +11,7 @@
           </li>
           <% current_user.stores.each do |store| %>
             <li>
-              <a class="menu-item" href="<%= store_path(store) %>"><i></i><span data-i18n="Crypto"><%= store.slug.capitalize %></span></a>
+              <a class="menu-item" href="<%= store_path(store) %>"><i></i><span data-i18n="Crypto"><%= store.name %></span></a>
             </li>
 
           <% end %>
@@ -29,7 +29,7 @@
         <a href="<%= products_path %>">
           <i class="la la-cube"></i>
           <span class="menu-title" data-i18n="Dashboard">Товары</span>
-          <span class="badge badge badge-info badge-pill float-right mr-2"><%= current_user.products.count %></span></a>
+          <span class="badge badge badge-info badge-pill float-right mr-2"><%= current_user.stores.last.products.count %></span></a>
       </li>
 
       <li class="">

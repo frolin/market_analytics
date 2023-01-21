@@ -2,7 +2,6 @@ module Api
   module Wildberries
     module Stats
       class Orders < Api::WildberriesClient
-        record :user
         record :store
         string :date_from
         integer :flag, default: 0

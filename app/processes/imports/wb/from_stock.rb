@@ -9,6 +9,7 @@ module Imports
 
       def execute
         result = stock_response.uniq { |res| res['nmId'] }
+        store.stocks.create!(api_data: result)
 
         result.each do |stock|
           next if Product.find_by(barcode: stock['barcode'])
@@ -30,7 +31,8 @@ module Imports
           p.store = store
           p.user = store.users.admin
 
-          p.stocks.new do |s|
+
+          p.store.stocks.new do |s|
             s.api_data = stock
             s.api_data.merge!(url: "https://www.wildberries.ru/catalog/#{stock['nmId']}/detail.aspx?targetUrl=GP")
           end

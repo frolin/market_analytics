@@ -2,17 +2,19 @@ module Imports
   module Wb
     class Orders < ActiveInteraction::Base
       class NewOrdersApiError < StandardError; end
-      record :user
+
+      boolean :first_time, default: false
+      # record :user
       record :store
       date :date_from, default: DateTime.now.beginning_of_week - 7.days
 
       def execute
+        new_orders = []
         found_orders = []
         updated_orders = []
 
-        new_orders = orders.reject do |order|
+        orders.each do |order|
           found_order = store.orders.wb_find(odid: order['odid'])
-          found_orders << found_order if found_order
 
           if found_order && data_diff?(order, found_order)
             found_order.api_data.merge!(order)
@@ -20,26 +22,33 @@ module Imports
             updated_orders << found_order
           end
 
-          found_order.present?
+          found_orders << found_order if found_order
+          new_orders << order if found_order.blank?
         end
 
         new_orders.each do |order|
           product = store.products.find_by(barcode: order['barcode'])
+          next if product.blank?
+
           order = store.orders.new(api_data: order,
                                    date: order['date'],
                                    odid: order['odid'],
                                    srid: order['srid'])
 
           order.order_products.new(product: product, store: store)
+          order.skip_notify = true if first_time
           order.save!
-
-          new_orders << order
         end
 
-        Rails.logger.info("Orders from api: #{orders.size}")
-        Rails.logger.info("Updated orders: #{updated_orders.size}")
-        Rails.logger.info("Found orders: #{found_orders.size}")
-        Rails.logger.info("New orders: #{new_orders.size}")
+        log = {
+          orders: orders.size,
+          updated_orders: updated_orders.size,
+          found_orders: found_orders.size,
+          new_orders: new_orders.size
+        }
+
+        Rails.logger.info("Orders from api report #{store.name}:")
+        Rails.logger.info("#{ap log}")
       end
 
       def data_diff?(api_order, found_order)
@@ -52,7 +61,7 @@ module Imports
       private
 
       def orders
-        @orders ||= Api::Wildberries::Stats::Orders.run!(user: user, store: store, date_from: format_date)
+        @orders ||= Api::Wildberries::Stats::Orders.run!(store: store, date_from: format_date)
       end
 
       def format_date

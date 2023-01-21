@@ -9,14 +9,18 @@ class Order < ApplicationRecord
   has_many :costs, class_name: 'OrderCost'
   has_many :sales, dependent: :destroy
 
-  store_accessor :api_data, :category, :srid, :barcode, :subject, :oblast, :brand, :price
+  validates_uniqueness_of :odid, scope: :store_id
+
+  store_accessor :api_data, :category, :barcode, :subject, :oblast, :brand, :price
 
   scope :recent, -> { where("created_at > #{30.minutes.ago}") }
   scope :today, -> { where(date: DateTime.now.beginning_of_day..DateTime.now.end_of_day) }
 
   after_create_commit :notify
-
+  attr_accessor :skip_notify
   def notify
+    return if skip_notify
+
     Telegram::Notifications::OrdersNew.new(self).call
   end
 

@@ -5,11 +5,11 @@ module Wb
     sidekiq_retry_in do |count, exception|
       60 * (count + 1)
     end
+
     def perform
-      User.find_each do |user|
-        user.stores.each { |store|
-          ::Imports::Wb::Orders.run!(user: user, store: store)
-        }
+      Store.find_each do |store|
+        # @todo create import worker for each store 
+        ::Imports::Wb::Orders.run!(store: store)
       end
     end
   end

@@ -6,6 +6,7 @@ module Checks
       DIFF_ATTRS = %i(name, rating, reviews, products_count, sells_count,
       delivered_count, defective_count, ip, ogrnip]).freeze
 
+      integer :user_id, default: nil
       integer :store_id
       boolean :first_time, default: false
 
@@ -14,6 +15,10 @@ module Checks
         raise 'Something went wrong with request' unless page_data.valid?
 
         request_data = page_data.result
+
+        if store.name.blank?
+          store.update!(name: request_data[:name])
+        end
 
         if first_time || request_data_diff?(request_data)
           @request = Request::Store.new(source: store)
@@ -29,7 +34,11 @@ module Checks
           logo.save!
         end
 
-        Telegram::Notifications::StoreDataNew.new(request: @request, first_time: true).call
+        if first_time
+          Telegram::Notifications::StoreDataNew.new(request: @request,
+                                                    user: user || store.users.admin,
+                                                    first_time: true).call
+        end
       end
 
       private
@@ -52,6 +61,12 @@ module Checks
 
       def store
         @store ||= Store.find(store_id)
+      end
+
+      def user
+        return if user_id.blank?
+
+        @user ||= User.find(user_id)
       end
 
       def product

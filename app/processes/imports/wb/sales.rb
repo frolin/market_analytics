@@ -1,7 +1,7 @@
 module Imports
   module Wb
     class Sales < ActiveInteraction::Base
-      record :user
+      boolean :first_time, default: false
       record :store
       date :date_from, default: Date.current.beginning_of_week - 7.days
 
@@ -40,18 +40,24 @@ module Imports
             sale.order = order if order.present?
             sale.state = sale.canceled? ? :canceled : :sold
             sale.sale_products.new(product: product)
+
+            sale.skip_notify = true if first_time
+
             sale.save!
             new_sales << sale
           end
         end
 
-        Rails.logger.info("Api Sales count: #{sales.count}")
-        Rails.logger.info("Found sales count: #{found_sales.count}")
-        Rails.logger.info("NOT FOUND PRODUCT: #{not_found_product.count}")
+        log = {
+          sales_count_from_api: sales.count,
+          found_sales: found_sales.count,
+          not_found_product: not_found_product.count,
+          new_sales: new_sales.count,
+          update_sales: updated_sales.size
+        }
 
-        Rails.logger.info("New sales count: #{new_sales.count}")
-        Rails.logger.info("Sales create: #{new_sales.size}")
-        Rails.logger.info("Sales updated: #{updated_sales.size}")
+        Rails.logger.info("Orders from api report #{store.name}:")
+        Rails.logger.info("#{ap log}")
       end
 
       private
@@ -65,7 +71,7 @@ module Imports
       end
 
       def sales
-        @sales ||= Api::Wildberries::Stats::Sales.run!(user: user, store: store, date_from: date_from.strftime("%Y-%m-%d"))
+        @sales ||= Api::Wildberries::Stats::Sales.run!(store: store, date_from: date_from.strftime("%Y-%m-%d"))
       end
 
       def find_order(sale)

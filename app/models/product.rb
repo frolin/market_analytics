@@ -5,10 +5,10 @@ class Product < ApplicationRecord
   belongs_to :store
   belongs_to :import, optional: true
 
-  has_many :order_products
+  has_many :order_products, dependent: :destroy
   has_many :orders, through: :order_products
 
-  has_many :sale_products
+  has_many :sale_products, dependent: :destroy
   has_many :sales, through: :sale_products
 
   has_many :supply_products, dependent: :destroy
@@ -33,6 +33,9 @@ class Product < ApplicationRecord
 
   def self.wb_find(param)
     find_by("data @> ?", { "#{param.keys.first}" => param.values.first }.to_json)
+  end
+  def stock
+    store.stocks.last.for_product(barcode)
   end
 
   def wb_sku
@@ -73,15 +76,6 @@ class Product < ApplicationRecord
 
   def yesterday_sales
     sales.where(date: DateTime.now.beginning_of_day.advance(days: -1)..DateTime.now.end_of_day.advance(days: -1))
-  end
-
-
-  def stock_for_product
-    store.stocks.where.not(api_data: {}).last.for_product(barcode)
-  end
-
-  def article
-
   end
 
   def photo_url

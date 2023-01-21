@@ -4,21 +4,28 @@ module Telegram
       include ApplicationHelper
       include ActionView::Helpers::NumberHelper
 
-      def initialize(store, barcodes = [])
+      def initialize(store, user = nil)
         @store = store
-        @barcodes = barcodes
+        @user = user
       end
 
       def call
         notification = ::Stocks.with(source: @store,
                                      text: message_text,
-                                     user_ids: @store.users.admin.tg_users.pluck(:id))
+                                     user_ids: @store.users.ids)
 
-        notification.deliver_later(@store.users.admin)
+        if @user
+          notification.deliver_later(@user)
+        else
+          @store.tg_users.each do |tg_user|
+            notification.deliver_later(tg_user)
+          end
+        end
       end
 
       def message_text
         message = []
+        message << "🆔 <b> Магазин:</b> #{@store.title}- #{@store.ip} \n"
         message << "🏪 Остатки:"
         message << "#{stock_message}"
 
