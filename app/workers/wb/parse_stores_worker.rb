@@ -8,7 +8,7 @@ module Wb
 
     def perform
       Store.find_each do |store|
-        Checks::Wb::StorePage.run!(store_id: store.id)
+        ::Wb::ParseStoreWorker.perform_async(store.id)
       end
     end
   end
