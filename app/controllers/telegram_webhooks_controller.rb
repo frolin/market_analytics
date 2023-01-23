@@ -18,19 +18,51 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     inline_menu!
   end
 
+  def my_stores!
+    stores = tg_user.user.stores.map do |store|
+      { text: "🆔 #{store.name}", callback_data: "store/#{store.id}" }
+    end
+
+    respond_with :message, text: 'Список магазинов:', reply_markup: {
+      inline_keyboard: [
+        stores,
+        [{ text: "🆕 Добавить", callback_data: "add_new_store" }]
+      ],
+    }
+  end
+
+  def settings!
+    respond_with :message, text: Telegram::Greeting.new(from).under_construction, parse_mode: 'HTML'
+  end
+
+  def reports!
+    respond_with :message, text: Telegram::Greeting.new(from).under_construction, parse_mode: 'HTML'
+  end
+
   def my!(*)
     sub_menu(tg_user.stores)
   end
 
   def stock!
-
     tg_user.user.stores.each do |store|
-      ::Imports::Wb::Stocks.run!(store: store, user: tg_user.user)
+      ::Telegram::Notifications::StocksNew.new(store).call
     end
   end
 
   def add_store!(*)
     inline_menu!
+  end
+
+  def inline_menu!(*)
+    respond_with :message, text: Telegram::Greeting.new(from).add_store, reply_markup: {
+      inline_keyboard: [
+        [
+          { text: '🟣 Wildberries', callback_data: 'add_campaign_wb' },
+          { text: '🔵 OZON', callback_data: 'add_campaign_ozon' },
+          { text: '🟠 ЯМаркет', callback_data: 'add_campaign_ya_market' },
+        ],
+      ],
+    }
   end
 
   def campaign_list!(*)
@@ -40,12 +72,20 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   def callback_query(data)
     # bot.delete_message(chat_id: from["id"], message_id: payload["message"]["message_id"])
     case data
+    when 'add_new_store' then add_store!
     when 'add_campaign_wb'
       save_context :add_store_wb!
       respond_with :message, text: 'Введите api ключ из ЛК'
     when 'add_campaign_ozon'
       save_context :add_store_ozon!
-      respond_with :message, text: 'Введите api ключ из ЛК'
+      respond_with :message, text: Telegram::Greeting.new(from).under_construction, parse_mode: 'HTML'
+
+      # respond_with :message, text: 'Введите api ключ из ЛК'
+    when 'add_campaign_ya_market'
+      save_context :add_ya_market!
+      respond_with :message, text: Telegram::Greeting.new(from).under_construction, parse_mode: 'HTML'
+
+      # respond_with :message, text: 'Введите api ключ из ЛК'
     when 'check_price'
       answer_callback_query 'проверяю цены'
       answer_inline_query price_check
@@ -81,21 +121,27 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   end
 
   def add_store_ozon!(token = nil, *)
-    inline_menu! unless token.present?
+    respond_with :message, text: Telegram::Greeting.new(from).under_construction, parse_mode: 'HTML'
 
-    result = Telegram::AddNewStore.run(username: from['username'], token: token, type: :ozon)
+    # inline_menu! unless token.present?
 
-    if result.valid?
-      respond_with :message, text: Telegram::Greeting.new(from).success_add, parse_mode: 'HTML'
-    else
-      message = result.errors.messages.values.flatten.join(' ,')
-      respond_with :message, text: message, parse_mode: 'HTML'
+    # result = Telegram::AddNewStore.run(username: from['username'], token: token, type: :ozon)
+    #
+    # if result.valid?
+    #   respond_with :message, text: Telegram::Greeting.new(from).success_add, parse_mode: 'HTML'
+    # else
+    #   message = result.errors.messages.values.flatten.join(' ,')
+    #   respond_with :message, text: message, parse_mode: 'HTML'
+    #
+    #   inline_menu!
+    # end
+    #
+    # ensure
 
-      inline_menu!
-    end
+  end
 
-  ensure
-
+  def add_campaign_ya_market
+    respond_with :message, text: Telegram::Greeting.new(from).under_construction, parse_mode: 'HTML'
   end
 
   def sub_menu(list = nil)
@@ -103,17 +149,6 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
     respond_with :message, text: t('.prompt'), reply_markup: {
       inline_keyboard: [data],
-    }
-  end
-
-  def inline_menu!(*)
-    respond_with :message, text: Telegram::Greeting.new(from).add_store, reply_markup: {
-      inline_keyboard: [
-        [
-          { text: 'Wildberries', callback_data: 'add_campaign_wb' },
-          { text: 'Ozon', callback_data: 'add_campaign_ozon' },
-        ],
-      ],
     }
   end
 
@@ -299,7 +334,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   end
 
   def deny_access
-    respond_with :message, text: "Кто вы #{name }? Я вас не знаю, обратитесь к адиминстратору"
+    respond_with :message, text: "⚠ Кто вы #{name}? \n Я вас не знаю, обратитесь к адиминстратору"
   end
 
 end

@@ -28,7 +28,7 @@ module Telegram
 
       def message_text
         msg = []
-        msg << "🆔 <b>Магазин:</b> <a href='#{@source.url}'> #{@request.data['name']} </a>"
+        msg << "🆔 <a href='#{@source.url}'> #{@request.data['name']} </a>"
         msg << message_data
 
         msg.join("\n")
@@ -43,9 +43,16 @@ module Telegram
       end
 
       def data_text
-        @request.data.map do |key, value|
-          I18n.t("telegram.notifications.store_parsed_data.#{key}", value: value)
-        end
+        info = []
+        store_info = @request.data
+        info << "⭐ Рейтинг: #{store_info['rating']}"
+        info << "💬 #{store_info['reviews']}"
+        info << "🏷 Всего: #{store_info['products_count']}"
+        info << "📈 Продаж: #{store_info['sells_count']}"
+        info << "📈 Процент брака: #{store_info['defective_count']}"
+        info << "🆔 #{store_info['ip']}"
+        info << "🆔 #{store_info['ogrnip']}"
+        info
       end
 
       def message_data

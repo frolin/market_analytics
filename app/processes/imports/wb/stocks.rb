@@ -8,7 +8,7 @@ module Imports
       def execute
         raise 'Empty stock data' unless stocks_data.result.present?
 
-        stock = stocks_data.result.select { |product| product['quantity'] > 0 }
+        stock = stocks_data.result #.select { |product| product['quantity'] > 0 }
 
         new_stock = store.stocks.create!(api_data: stock)
 
