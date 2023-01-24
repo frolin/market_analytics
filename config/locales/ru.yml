@@ -17,7 +17,7 @@ ru:
         reviews_count: "➡ Добавили новый отзыв"
         questions_count: "➡ Добавили новый вопрос"
         diff: "Количество:  %{before}️ → %{after}"
-      store_parsed_data:
+      diff_store_parsed_data:
         name: "%{value}"
         ip: "Владелец: %{value}"
         ogrnip: "%{value}"
@@ -29,7 +29,6 @@ ru:
         delivered_count: "Процент доставок: %{value}"
       order:
         new:
-
           brand: "Бренд: %{value}"
           oblast: "Область: %{value}"
           barcode: "🏷️ %{value}"

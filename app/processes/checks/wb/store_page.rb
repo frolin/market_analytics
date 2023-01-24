@@ -3,11 +3,11 @@ require "selenium-webdriver"
 module Checks
   module Wb
     class StorePage < ActiveInteraction::Base
-      DIFF_ATTRS = %i(name, rating, reviews, products_count, sells_count,
-      delivered_count, defective_count, ip, ogrnip]).freeze
+      DIFF_ATTRS = %i(name rating reviews products_count sells_count
+      delivered_count defective_count ip ogrnip).freeze
 
-      integer :user_id, default: nil
       integer :store_id
+      integer :user_id, default: nil
       boolean :first_time, default: false
 
       def execute

@@ -37,7 +37,7 @@ module Telegram
       def diff_text
         @request.diff_old_new.map do |keys|
           keys.map do |key, value|
-            I18n.t("telegram.notifications.diff_store_parsed_data.#{key}")
+            I18n.t("telegram.notifications.diff_store_parsed_data.#{key}", value: value)
           end.compact.flatten
         end
       end

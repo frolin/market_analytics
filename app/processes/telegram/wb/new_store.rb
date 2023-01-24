@@ -16,11 +16,17 @@ module Telegram
         halt_if_errors!
 
         if store.present? && !user_in_store?
-          UserStore.create!(user: tg_user.user, store: store)
-          ::Checks::Wb::StorePage.run!(store_id: store.id, user_id: tg_user.user, first_time: true)
+          ActiveRecord::Base.transaction do
+            UserStore.create!(user: tg_user.user, store: store)
+            tg_user.user.update!(account: store.account)
+
+            Telegram::Notifications::StoreDataNew.new(request: store.requests.last,
+                                                      user: tg_user.user,
+                                                      first_time: true).call
+          end
         else
           ActiveRecord::Base.transaction do
-            account =  tg_user.user.account || Account.create!(from: 'telegram')
+            account = tg_user.user.account || Account.create!(from: 'telegram')
 
             tg_user.user.update!(role: 'admin', account: account) if store.blank?
             new_store = ::Store::Wb.create!(token: token, account: account)
