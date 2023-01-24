@@ -7,22 +7,6 @@ Sidekiq.configure_server do |config|
     end
   end
 
-  if Rails.env.production?
-    config.redis = { url: ENV["REDIS_URL"],
-                     password: Rails.application.credentials.production.redis.password
-    }
-  else
-    config.redis = { url: ENV["REDIS_URL"] }
-  end
+    config.redis = { url: ENV["REDIS_URL"]   }
 end
 
-Sidekiq.configure_client do |config|
-
-  if Rails.env.production?
-    config.redis = { url: ENV["REDIS_URL"],
-                     password: Rails.application.credentials.production.redis.password
-    }
-  else
-    config.redis = { url: ENV["REDIS_URL"] }
-  end
-end
