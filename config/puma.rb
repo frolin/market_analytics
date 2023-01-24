@@ -23,7 +23,7 @@ environment ENV.fetch("RAILS_ENV") { "production" }
 
 # Specifies the `pidfile` that Puma will use.
 pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
-
+bind 'unix://tmp/sockets/markets-pulse.sock' if ENV['RAILS_ENV'] == 'production'
 # Specifies the number of `workers` to boot in clustered mode.
 # Workers are forked web server processes. If using threads and workers together
 # the concurrency of the application would be max `threads` * `workers`.
@@ -42,8 +42,8 @@ workers ENV.fetch("WEB_CONCURRENCY") { 2 }
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
 
-if ENV['RAILS_ENV'] == 'production'
-  ssl_bind '0.0.0.0', '8080',
-           key: '/etc/letsencrypt/live/markets-pulse.ru/privkey.pem',
-           cert: '/etc/letsencrypt/live/markets-pulse.ru/fullchain.pem'
-end
+# if ENV['RAILS_ENV'] == 'production'
+#   ssl_bind '0.0.0.0', '8080',
+#            key: '/etc/letsencrypt/live/markets-pulse.ru/privkey.pem',
+#            cert: '/etc/letsencrypt/live/markets-pulse.ru/fullchain.pem'
+# end
