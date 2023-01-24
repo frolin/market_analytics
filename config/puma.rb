@@ -43,7 +43,7 @@ workers ENV.fetch("WEB_CONCURRENCY") { 2 }
 plugin :tmp_restart
 
 if ENV['RAILS_ENV'] == 'production'
-  ssl_bind '0.0.0.0', '443',
+  ssl_bind '0.0.0.0', '8080',
            key: '/etc/letsencrypt/live/markets-pulse.ru/privkey.pem',
            cert: '/etc/letsencrypt/live/markets-pulse.ru/fullchain.pem'
 end
