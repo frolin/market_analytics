@@ -81,6 +81,6 @@ test:
 #
 production:
   <<: *default
-  database: market_analytics_production
-  username: market_analytics
+  database: market_pulse_production
+  username: deployer_postgresql_user
   password: <%= ENV["MARKET_ANALYTICS_DATABASE_PASSWORD"] %>
