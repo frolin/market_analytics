@@ -1,7 +1,4 @@
-deploy: git_pull_and_restart_app
+deploy: deploy_to_prod
 
-git_pull_and_restart_app:
-	git pull
-	docker-compose -f docker-compose.prod.yml exec app rails db:migrate
-	docker-compose -f docker-compose.prod.yml exec app puma restart
-	docker-compose -f docker-compose.prod.yml restart worker
+deploy_to_prod:
+	ansible-playbook -i ansible-rails/inventories/production.ini ansible-rails/deploy.yml --vault-password-file ansible-rails/.vault_pass
