@@ -8,6 +8,7 @@
 /.bundle
 ./idea/*
 ./idea/
+.byebug_history
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*
