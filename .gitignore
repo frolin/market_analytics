@@ -41,3 +41,5 @@
 /config/chrome_profile/MP Bot/
 
 /config/credentials/production.key
+
+/ansible-rails/
