@@ -5,7 +5,7 @@ module Telegram
     end
 
     def greet
-      "Салют, #{@from['first_name']}!"
+      "Приветствую, #{@from['first_name']}!"
     end
 
     def campaign_list

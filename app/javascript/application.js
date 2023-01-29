@@ -1,6 +1,6 @@
 // Entry point for the build script in your package.json
 import "@hotwired/turbo-rails"
-import { Turbo } from "@hotwired/turbo-rails"
+import {Turbo} from "@hotwired/turbo-rails"
 
 Turbo.session.drive = false
 
@@ -11,9 +11,13 @@ import './utils/jquery.bootstrap-touchspin'
 // import "chart.js"
 // import "Chart.bundle"
 // import "chartkick/chart.js"
-import('chartkick/chart.js')
+import 'chartkick/chart.js'
+import './lib/moment.min.js'
+import './lib/daterangepicker.js'
 
-// const Chart =
+import './lib/select2.full.min.js'
+// import 'lib/pagination/datepicker.js'
+
 // Chart.defaults.global.defaultFontFamily = "Lato";
 // Chart.defaults.global.defaultFontSize = 18;
 // Chart.defaults.global.defaultFontColor = 'red';
@@ -21,20 +25,36 @@ import('chartkick/chart.js')
 window.addEventListener('DOMContentLoaded', () => {
     console.log('Chart: ', Chart)
 
-    $('.select2').select2({
-        theme: 'bootstrap4',
-        templateResult: addUserPic,
-        templateSelection: addUserPic
-    })
 })
 $(document).ready(function () {
-    $(".select2-tags").select2({
-        // tags: true,
-        theme: 'bootstrap4'
-        // tokenSeperators: [','],
-        // theme: 'bootstrap',
-        // placeholder: 'seperated by space'
+    // $(".select2-tags").select2({
+    //     // tags: true,
+    //     theme: 'bootstrap4'
+    //     // tokenSeperators: [','],
+    //     // theme: 'bootstrap',
+    //     // placeholder: 'seperated by space'
+    // });
+
+
+    // $('.select2').select2({
+    //     theme: 'bootstrap4',
+    //     templateResult: addUserPic,
+    //     templateSelection: addUserPic
+    // });
+
+    $('.date-range-picker').daterangepicker({
+        format: 'mm/dd/yyyy',
+        startDate: '-3d'
     });
+
+    $(function () {
+        $('input[name="daterange"]').daterangepicker({
+            opens: 'left'
+        }, function (start, end, label) {
+            console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        });
+    });
+
 });
 
 function addUserPic(opt) {

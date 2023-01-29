@@ -1,10 +1,10 @@
 module Imports
   module Wb
     class FirstTime < ActiveInteraction::Base
-      include ActiveInteraction::Extras::ErrorAndHalt
       integer :store_id
 
       def execute
+        byebug
         # Импортируем вб остатки
         ::Imports::Wb::FromStock.run!(store_id: store.id)
         # Берем первый sku у продукт парсим адрес магазина

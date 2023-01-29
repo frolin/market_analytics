@@ -31,8 +31,7 @@ module Parse
           @store_page.close
         end
 
-        @store_data.merge(@supplier_data)
-
+        @store_data.merge(@supplier_data) if @supplier_data
       end
 
       private

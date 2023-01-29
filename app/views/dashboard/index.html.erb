@@ -1,12 +1,29 @@
+<div class="container">
+  <div class="row">
+    <div class='col-md-6 col-sm-6 col-12'>
+      <div class="input-group">
+        <%= form_tag(dashboard_index_path, id: 'date-picker') do %>
+          <%= text_field :date, :range, name: 'date_range' %>
+          <%= submit_tag "Submit", hidden: true, :disable_with => "Submitting..." %>
+        <% end %>
+
+        <!--        <form method='get' enctype='multipart/form-data' id='date-picker'>-->
+        <!--          <input type="text" value="01/01/2018 - 01/15/2018"/>-->
+        <!--        </form>-->
+      </div>
+    </div>
+  </div>
+
+</div>
 <!-- eCommerce statistic -->
 <div class="row">
   <div class="col-xl-3 col-lg-6 col-12">
-    <div class="card pull-up">
+    <div class="card">
       <div class="card-content">
         <div class="card-body">
           <div class="media d-flex">
             <div class="media-body text-left">
-              <h3 class="info"><%= current_user.sales_count %> </h3>
+              <h3 class="info"><%= @seles_count %> </h3>
               <h3>Продажи</h3>
             </div>
             <div>
@@ -21,7 +38,7 @@
     </div>
   </div>
   <div class="col-xl-3 col-lg-6 col-12">
-    <div class="card pull-up">
+    <div class="card">
       <div class="card-content">
         <div class="card-body">
           <div class="media d-flex">
@@ -41,7 +58,7 @@
     </div>
   </div>
   <div class="col-xl-3 col-lg-6 col-12">
-    <div class="card pull-up">
+    <div class="card">
       <div class="card-content">
         <div class="card-body">
           <div class="media d-flex">
@@ -61,7 +78,7 @@
     </div>
   </div>
   <div class="col-xl-3 col-lg-6 col-12">
-    <div class="card pull-up">
+    <div class="card">
       <div class="card-content">
         <div class="card-body">
           <div class="media d-flex">
@@ -87,11 +104,11 @@
 <div id="crypto-stats-3" class="row">
   <% current_user.stores.each do |store| %>
     <div class="col-xl-4 col-lg-6 col-12">
-      <div class="card crypto-card-3 pull-up">
+      <div class="card crypto-card-3">
         <div class="card-content">
           <div class="card-body pb-0">
             <div class="d-flex flex-sm-column flex-lg-row">
-              <div class="logo pr-2 mr-auto" style="max-width: 120px ">
+              <div class="logo pr-2 mr-auto" style="width: 100px ">
                 <%= image_tag image_path("markets/#{store.slug}.png"), width: '100%' %>
 
                 <!--                            <i class="cc BTC warning font-large-2" title="BTC"></i>-->
@@ -140,7 +157,7 @@
 
   <% end %>
 
-    <%= render partial: 'dashboard/recent_events', locals: { stores: current_user.stores } %>
+  <%= render partial: 'dashboard/recent_events', locals: { stores: current_user.stores } %>
 
 </div>
 
@@ -261,13 +278,13 @@
 <!--                <td class="text-truncate">iPhone X</td>-->
 <!--                <td class="text-truncate p-1">-->
 <!--                  <ul class="list-unstyled users-list m-0">-->
-<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="John Doe" class="avatar avatar-sm pull-up">-->
+<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="John Doe" class="avatar avatar-sm">-->
 <!--                      <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-19.png" alt="Avatar">-->
 <!--                    </li>-->
-<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Katherine Nichols" class="avatar avatar-sm pull-up">-->
+<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Katherine Nichols" class="avatar avatar-sm">-->
 <!--                      <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-18.png" alt="Avatar">-->
 <!--                    </li>-->
-<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Joseph Weaver" class="avatar avatar-sm pull-up">-->
+<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Joseph Weaver" class="avatar avatar-sm">-->
 <!--                      <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-17.png" alt="Avatar">-->
 <!--                    </li>-->
 <!--                    <li class="avatar avatar-sm">-->
@@ -281,10 +298,10 @@
 <!--                <td class="text-truncate">Pixel 2</td>-->
 <!--                <td class="text-truncate p-1">-->
 <!--                  <ul class="list-unstyled users-list m-0">-->
-<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Alice Scott" class="avatar avatar-sm pull-up">-->
+<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Alice Scott" class="avatar avatar-sm">-->
 <!--                      <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-16.png" alt="Avatar">-->
 <!--                    </li>-->
-<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Charles Miller" class="avatar avatar-sm pull-up">-->
+<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Charles Miller" class="avatar avatar-sm">-->
 <!--                      <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-15.png" alt="Avatar">-->
 <!--                    </li>-->
 <!--                  </ul>-->
@@ -295,13 +312,13 @@
 <!--                <td class="text-truncate">OnePlus</td>-->
 <!--                <td class="text-truncate p-1">-->
 <!--                  <ul class="list-unstyled users-list m-0">-->
-<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Christine Ramos" class="avatar avatar-sm pull-up">-->
+<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Christine Ramos" class="avatar avatar-sm">-->
 <!--                      <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-11.png" alt="Avatar">-->
 <!--                    </li>-->
-<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Thomas Brewer" class="avatar avatar-sm pull-up">-->
+<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Thomas Brewer" class="avatar avatar-sm">-->
 <!--                      <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-10.png" alt="Avatar">-->
 <!--                    </li>-->
-<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Alice Chapman" class="avatar avatar-sm pull-up">-->
+<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Alice Chapman" class="avatar avatar-sm">-->
 <!--                      <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-9.png" alt="Avatar">-->
 <!--                    </li>-->
 <!--                    <li class="avatar avatar-sm">-->
@@ -315,13 +332,13 @@
 <!--                <td class="text-truncate">Galaxy</td>-->
 <!--                <td class="text-truncate p-1">-->
 <!--                  <ul class="list-unstyled users-list m-0">-->
-<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Ryan Schneider" class="avatar avatar-sm pull-up">-->
+<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Ryan Schneider" class="avatar avatar-sm">-->
 <!--                      <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-14.png" alt="Avatar">-->
 <!--                    </li>-->
-<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Tiffany Oliver" class="avatar avatar-sm pull-up">-->
+<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Tiffany Oliver" class="avatar avatar-sm">-->
 <!--                      <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-13.png" alt="Avatar">-->
 <!--                    </li>-->
-<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Joan Reid" class="avatar avatar-sm pull-up">-->
+<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Joan Reid" class="avatar avatar-sm">-->
 <!--                      <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-12.png" alt="Avatar">-->
 <!--                    </li>-->
 <!--                  </ul>-->
@@ -332,13 +349,13 @@
 <!--                <td class="text-truncate">Moto Z2</td>-->
 <!--                <td class="text-truncate p-1">-->
 <!--                  <ul class="list-unstyled users-list m-0">-->
-<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Kimberly Simmons" class="avatar avatar-sm pull-up">-->
+<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Kimberly Simmons" class="avatar avatar-sm">-->
 <!--                      <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-8.png" alt="Avatar">-->
 <!--                    </li>-->
-<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Willie Torres" class="avatar avatar-sm pull-up">-->
+<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Willie Torres" class="avatar avatar-sm">-->
 <!--                      <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-7.png" alt="Avatar">-->
 <!--                    </li>-->
-<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Rebecca Jones" class="avatar avatar-sm pull-up">-->
+<!--                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Rebecca Jones" class="avatar avatar-sm">-->
 <!--                      <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-6.png" alt="Avatar">-->
 <!--                    </li>-->
 <!--                    <li class="avatar avatar-sm">-->

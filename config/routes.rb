@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   get '/users/settings', to: 'user_settings#show', as: 'profile_page'
 
   get "dashboard/index"
+  post "dashboard/index", to: 'dashboard#index'
+
   root to: "dashboard#index"
   resources :products
   resources :supplies do

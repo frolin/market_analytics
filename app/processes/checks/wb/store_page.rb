@@ -23,6 +23,7 @@ module Checks
         if first_time || request_data_diff?(request_data)
           @request = Request::Store.new(source: store)
           @request.data = request_data
+          @request.skip_notify = true if first_time
           @request.save!
         end
 
