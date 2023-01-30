@@ -126,4 +126,7 @@ group :production do
   gem "sentry-ruby"
   gem "sentry-rails"
   gem "sentry-sidekiq"
+
+  gem 'yabeda-sidekiq'
+  gem 'yabeda-prometheus'
 end
