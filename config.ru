@@ -2,5 +2,6 @@
 
 require_relative "config/environment"
 
+use Yabeda::Prometheus::Exporter if Rails.env.production?
 run Rails.application
 Rails.application.load_server
