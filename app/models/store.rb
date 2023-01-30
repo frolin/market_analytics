@@ -32,11 +32,11 @@ class Store < ApplicationRecord
   end
 
   def title
-    requests.last.name
+    requests.last&.name
   end
 
   def ip
-    requests.last.ip
+    requests.last&.ip
   end
 
   def admin
@@ -48,7 +48,7 @@ class Store < ApplicationRecord
   end
 
   def logo
-    images.last.image.url
+    images.last&.image&.url
   end
 
   def tg_users
