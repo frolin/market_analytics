@@ -12,7 +12,9 @@ module Imports
         not_found_product = []
         # import = campaign.imports.create!
 
-        sales.each do |sale|
+        raise "Error: #{sales.errors.messages}" unless sales.valid?
+
+        sales.result.each do |sale|
           @found_sale = store.sales.wb_find(saleID: sale['saleID'])
 
           if @found_sale && data_diff?(sale)
@@ -49,7 +51,7 @@ module Imports
         end
 
         log = {
-          sales_count_from_api: sales.count,
+          sales_count_from_api: sales.result.count,
           found_sales: found_sales.count,
           not_found_product: not_found_product.count,
           new_sales: new_sales.count,
@@ -71,7 +73,7 @@ module Imports
       end
 
       def sales
-        @sales ||= Api::Wildberries::Stats::Sales.run!(store: store, date_from: date_from.strftime("%Y-%m-%d"))
+        @sales ||= Api::Wildberries::Stats::Sales.run(store: store, date_from: date_from.strftime("%Y-%m-%d"))
       end
 
       def find_order(sale)

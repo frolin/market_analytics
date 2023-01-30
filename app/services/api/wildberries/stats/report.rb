@@ -18,7 +18,7 @@ module Api
         end
 
         def api_method
-          '/api/v1/supplier/reportDetailByPeriod'
+          'api/v1/supplier/reportDetailByPeriod'
         end
 
         def key

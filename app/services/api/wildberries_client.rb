@@ -2,17 +2,13 @@ module Api
   class WildberriesClient < ActiveInteraction::Base
     CONNECT_TTL = 5
 
-    # API_VERSION = 'v2'.freeze
-    KEY = ''.freeze
-    API_URI = "https://suppliers-api.wildberries.ru".freeze
-
     # HEADERS = { Authorization: token }.freeze
 
     private
 
     def response
       # return true unless Rails.env.production?
-      Rails.logger.info(message: "[API] request Method: #{api_method}, params: #{base_params.merge(params).to_s}")
+      Rails.logger.info(message: "[API] request to: #{base_url + '/' + api_method}, with params: #{base_params.merge(params).to_s}")
 
       response = if type == :get
                    connection.get(api_method, base_params.merge!(params))
@@ -26,7 +22,7 @@ module Api
 
       parsed_body = response.body
 
-      # Rails.logger.info(message: "[API] Got response. Body: #{parsed_body.to_s}")
+      Rails.logger.debug(message: "[API] Got response. Body: #{parsed_body.to_s}")
 
       if parsed_body.is_a?(Hash) && parsed_body['errors'].present?
         errors.add(:base, "Response error: method: #{api_method}")
@@ -35,6 +31,7 @@ module Api
 
       parsed_body
     rescue StandardError => e
+      errors.add(:base, "Response error: smothing went wrong with api url: #{base_url + api_method}")
       error_log(e, parsed_body = nil)
       # Sentry.capture_exception(e)
     end

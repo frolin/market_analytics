@@ -16,7 +16,7 @@ module Api
         end
 
         def api_method
-          '/api/v1/supplier/sales'
+          'api/v1/supplier/sales'
         end
 
         def token

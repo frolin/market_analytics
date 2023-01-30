@@ -13,7 +13,9 @@ module Imports
         found_orders = []
         updated_orders = []
 
-        orders.each do |order|
+        raise "Error: #{orders.errors.messages}" unless orders.valid?
+
+        orders.result.each do |order|
           found_order = store.orders.wb_find(odid: order['odid'])
 
           if found_order && data_diff?(order, found_order)
@@ -41,7 +43,7 @@ module Imports
         end
 
         log = {
-          orders: orders.size,
+          orders: orders.result.size,
           updated_orders: updated_orders.size,
           found_orders: found_orders.size,
           new_orders: new_orders.size
@@ -61,7 +63,7 @@ module Imports
       private
 
       def orders
-        @orders ||= Api::Wildberries::Stats::Orders.run!(store: store, date_from: format_date)
+        @orders ||= Api::Wildberries::Stats::Orders.run(store: store, date_from: format_date)
       end
 
       def format_date
