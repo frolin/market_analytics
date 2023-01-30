@@ -81,7 +81,7 @@ services:
     privileged: true
     volumes:
       - /dev/shm:/dev/shm
-      - ./config/chrome_profile:/home/seluser/chrome_profile
+#      - ./config/chrome_profile:/home/seluser/chrome_profile
     ports:
       - '4444:4444'
       - '5900:5900'
