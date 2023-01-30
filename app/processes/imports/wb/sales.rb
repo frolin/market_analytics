@@ -56,7 +56,7 @@ module Imports
           update_sales: updated_sales.size
         }
 
-        Rails.logger.info("Orders from api report #{store.name}:")
+        Rails.logger.info("Sales from api report #{store.name}:")
         Rails.logger.info("#{ap log}")
       end
 

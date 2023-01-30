@@ -5,4 +5,5 @@
 //= link vendor/core.js
 //= link vendor/vendor.js
 //= link lib/moment.min.js
+//= link lib/daterangepicker.js
 //= link lib/select2.full.min.js

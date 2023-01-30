@@ -13,7 +13,7 @@ import './utils/jquery.bootstrap-touchspin'
 // import "chartkick/chart.js"
 import 'chartkick/chart.js'
 import './lib/moment.min.js'
-import './lib/daterangepicker.js'
+// import './lib/daterangepicker.js'
 
 import './lib/select2.full.min.js'
 // import 'lib/pagination/datepicker.js'
