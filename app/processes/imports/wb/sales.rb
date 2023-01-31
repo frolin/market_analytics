@@ -58,8 +58,7 @@ module Imports
           update_sales: updated_sales.size
         }
 
-        Rails.logger.info("Sales from api report #{store.name}:")
-        Rails.logger.info(log.to_json)
+        Rails.logger.info("Sales from api report #{store.name}: #{log.to_json}")
       end
 
       private

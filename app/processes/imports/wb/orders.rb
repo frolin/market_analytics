@@ -49,8 +49,7 @@ module Imports
           new_orders: new_orders.size
         }
 
-        Rails.logger.info("Orders from api report #{store.name}:")
-        Rails.logger.info(log.to_json)
+        Rails.logger.info("Orders from api report #{store.name}: #{log.to_json}")
       end
 
       def data_diff?(api_order, found_order)

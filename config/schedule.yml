@@ -21,7 +21,7 @@ check_stock:
   queue: 'check_stocks'
 
 parse_stores_page:
-  cron: "0 /1 * * * *" # execute at every 30 minute
+  cron: "0 * * * *" # execute at every 30 minute
   class: "Wb::ParseStoresWorker"
   queue: 'parse_store_page'
 
