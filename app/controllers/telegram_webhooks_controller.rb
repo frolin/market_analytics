@@ -6,7 +6,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
   before_action :authorize!
   rescue_from 'AuthorizationError', with: :deny_access
-  ALLOW_USERS = ['fralunia', 'Serg1923'].freeze
+  ALLOW_USERS = ['fralunia', 'Serg1923', 'alexsmertushka'].freeze
   ALLOW_IDS = [445590809].freeze
   use_session!
 
