@@ -59,7 +59,7 @@ module Imports
         }
 
         Rails.logger.info("Sales from api report #{store.name}:")
-        Rails.logger.info("#{ap log}")
+        Rails.logger.info(log.to_json)
       end
 
       private
