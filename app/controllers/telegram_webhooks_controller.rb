@@ -45,7 +45,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
   def stock!
     tg_user.user.stores.each do |store|
-      ::Telegram::Notifications::StocksNew.new(store).call
+      ::Telegram::Notifications::StocksNew.new(store, tg_user.user).call
     end
   end
 
