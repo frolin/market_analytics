@@ -27,7 +27,7 @@ module Telegram
 
       def message_text
         msg = []
-        msg << "🔔 Новый заказ"
+        msg << "🔔 Новый заказ \n"
         msg << "🆔 <b>Магазин:</b> <a href='#{@store.url}'> #{@request.data['name']} </a>"
         msg << "📆 #{I18n.l(@order.api_data['date'].to_datetime)} \n"
 
@@ -36,7 +36,7 @@ module Telegram
         msg << "#{@order.product.title}"
         msg << "⭐#{@order.product.rating} 💬 #{@order.product.reviews_count} \n"
 
-        msg << "📈 Продажи: сегодня: #{@order.product.today_orders.count} вчера: #{@order.product.yesterday_orders.count}"
+        msg << "📈 Заказы: сегодня: #{@order.product.today_orders.count} вчера: #{@order.product.yesterday_orders.count}"
 
         msg << data_text
 
