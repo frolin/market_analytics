@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_21_104753) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_02_182620) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,6 +19,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_21_104753) do
     t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "ads", force: :cascade do |t|
+    t.bigint "advert_id"
+    t.bigint "store_id"
+    t.integer "ad_type"
+    t.integer "status"
+    t.datetime "create_time"
+    t.datetime "change_time"
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_ads_on_store_id"
   end
 
   create_table "audits", force: :cascade do |t|
@@ -242,6 +255,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_21_104753) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "account_id", null: false
+    t.string "ads_token"
     t.index ["account_id"], name: "index_stores_on_account_id"
   end
 

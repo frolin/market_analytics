@@ -12,3 +12,4 @@ development:
   - [check_stocks, 3]
   - [parse_page, 3]
   - [parse_store_page, 2]
+  - [ads_api_check, 2]

@@ -49,11 +49,15 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     end
   end
 
-  def add_store!(*)
-    inline_menu!
+  def add_ads!
+    ads_inline_menu
   end
 
-  def inline_menu!(*)
+  def add_store!(*)
+    store_inline_menu!
+  end
+
+  def store_inline_menu!(*)
     respond_with :message, text: Telegram::Greeting.new(from).add_store, reply_markup: {
       inline_keyboard: [
         [
@@ -64,6 +68,20 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
       ],
     }
   end
+
+  def ads_inline_menu(*)
+    respond_with :message, text: Telegram::Greeting.new(from).add_store, reply_markup: {
+      inline_keyboard: [
+        [
+          { text: '', callback_data: 'add_campaign_wb' },
+          { text: '🔵 OZON', callback_data: 'add_campaign_ozon' },
+          { text: '🟠 ЯМаркет', callback_data: 'add_campaign_ya_market' },
+        ],
+      ],
+    }
+  end
+
+
 
   def campaign_list!(*)
     respond_with :message, text: Telegram::Greeting.new(from).campaign_list, parse_mode: 'HTML'
@@ -97,7 +115,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   end
 
   def add_store_wb!(token = nil, *)
-    return inline_menu! if token.blank?
+    return store_inline_menu! if token.blank?
 
     result = Telegram::Wb::NewStore.run(tg_user: tg_user, token: token)
 
@@ -109,7 +127,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
       message = result.errors.messages.values.flatten.join(' ,')
       respond_with :message, text: message, parse_mode: 'HTML'
 
-      inline_menu!
+      store_inline_menu!
     end
 
   ensure
@@ -123,7 +141,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   def add_store_ozon!(token = nil, *)
     respond_with :message, text: Telegram::Greeting.new(from).under_construction, parse_mode: 'HTML'
 
-    # inline_menu! unless token.present?
+    # store_inline_menu! unless token.present?
 
     # result = Telegram::AddNewStore.run(username: from['username'], token: token, type: :ozon)
     #
@@ -133,7 +151,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     #   message = result.errors.messages.values.flatten.join(' ,')
     #   respond_with :message, text: message, parse_mode: 'HTML'
     #
-    #   inline_menu!
+    #   store_inline_menu!
     # end
     #
     # ensure

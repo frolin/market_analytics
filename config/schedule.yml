@@ -16,7 +16,7 @@ parse_product_pages:
   queue: 'parse_page'
 
 check_stock:
-  cron: "0 9,19 * * *" # execute at every 9amm, 19pm minute
+  cron: "0 9,23 * * *" # execute at every 9amm, 19pm minute
   class: "Wb::StocksCheckWorker"
   queue: 'check_stocks'
 
@@ -24,6 +24,12 @@ parse_stores_page:
   cron: "0 * * * *" # execute at every hour
   class: "Wb::ParseStoresWorker"
   queue: 'parse_store_page'
+
+ads_api_check:
+  cron: "*/5 * * * *" # execute at every hour
+  class: "Wb::AdsApiCheckWorker"
+  queue: 'ads_api_check'
+
 
 #check_ads:
 #  cron: "*/30 * * * *" # execute at every 30 minute

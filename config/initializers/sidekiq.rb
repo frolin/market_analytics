@@ -7,8 +7,7 @@ Sidekiq.configure_server do |config|
     end
   end
 
-    config.redis = { url: ENV["REDIS_URL"]   }
+  config.redis = { url: ENV["REDIS_URL"]   }
 
-    Yabeda::Prometheus::Exporter.start_metrics_server!
-
+  Yabeda::Prometheus::Exporter.start_metrics_server! if Rails.env.production?
 end

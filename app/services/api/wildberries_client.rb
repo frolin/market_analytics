@@ -31,7 +31,7 @@ module Api
 
       parsed_body
     rescue StandardError => e
-      errors.add(:base, "Response error: smothing went wrong with api url: #{base_url + api_method}")
+      errors.add(:base, "Response error: smothing went wrong with api url: #{base_url + api_method} error: #{e}")
       error_log(e, parsed_body = nil)
       # Sentry.capture_exception(e)
     end

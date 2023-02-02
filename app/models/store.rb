@@ -16,8 +16,9 @@ class Store < ApplicationRecord
 
   has_many :requests, as: :source
 
-  has_many :costs, class_name: 'OrderCost'
-  has_many :supplies
+  has_many :costs, class_name: 'OrderCost', dependent: :destroy
+  has_many :supplies, dependent: :destroy
+  has_many :ads, dependent: :destroy
 
   has_many :images, as: :source, dependent: :destroy
   accepts_nested_attributes_for :images, allow_destroy: true

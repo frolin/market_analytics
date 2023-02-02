@@ -2,7 +2,7 @@ require "selenium-webdriver"
 
 module Checks
   module Wb
-    class Ads < ActiveInteraction::Base
+    class AdsWeb < ActiveInteraction::Base
       PRODUCT_XPATH = '/html/body/app-root/div/div[1]/div[2]/div/app-campaigns-list/div/div[2]/app-datatable/div[2]/div/div[3]/div'
       BUDGET_PATH = '/html/body/app-root/div/div[1]/div[2]/div/app-edit-auction-campaign/div/form/div[1]/div/div/div[1]'
 

@@ -47,3 +47,6 @@
 
 ansible-rails/
 ansible-rails/*
+.byebug_history
+market_analytics.sql
+market_analytics.imi
