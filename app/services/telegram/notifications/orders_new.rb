@@ -11,8 +11,7 @@ module Telegram
       end
 
       def call
-        return if data_text.blank?
-
+        return if @order.notified? || data_text.blank?
 
         notification = ::NewParsedData.with(source: @store, photo: photo_path,
                                             text: message_text,
@@ -21,6 +20,8 @@ module Telegram
         @store.tg_users.each do |tg_user|
           notification.deliver_later(tg_user)
         end
+
+        @order.update!(notified: true)
       end
 
       private

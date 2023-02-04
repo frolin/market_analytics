@@ -19,9 +19,7 @@ module Checks
                              ad_type: ad['type'],
                              status: ad['status'],
                              create_time: ad['createTime'],
-                             change_time: ad['changeTime'],
-
-            )
+                             change_time: ad['changeTime'])
 
             new_ads.data = ads_data
             new_ads.store = store

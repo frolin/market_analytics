@@ -15,7 +15,6 @@ class User < ApplicationRecord
   has_many :user_stores, dependent: :destroy
   has_many :stores, through: :user_stores
 
-
   has_many :wb, class_name: 'Store::Wb'
   has_many :ya_market, class_name: 'Store::YaMarket'
   has_many :ozon, class_name: 'Store::Ozon'

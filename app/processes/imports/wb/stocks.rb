@@ -14,9 +14,9 @@ module Imports
 
         Rails.logger.info("Stock create: #{stock.size}")
 
-        if new_stock.present?
-          ::Telegram::Notifications::StocksNew.new(store).call
-        end
+        # if new_stock.present?
+        #   ::Telegram::Notifications::StocksNew.new(store).call
+        # end
       end
 
       private

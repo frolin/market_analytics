@@ -12,13 +12,16 @@ module Telegram
       end
 
       def call
+        return if @sale.notified? || data_text.blank?
         notification = ::NewParsedData.with(source: @store, photo: photo_path,
                                             text: message_text,
                                             user_ids: @store.tg_users.pluck(:id))
 
          @store.tg_users.each do |tg_user|
           notification.deliver_later(tg_user)
-        end
+         end
+
+        @sale.update!(notified: true)
       end
 
       private
