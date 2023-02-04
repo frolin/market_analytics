@@ -27,6 +27,11 @@ ru:
         products_count: "Всего: %{value}"
         defective_count: "Процент брака: %{value}"
         delivered_count: "Процент доставок: %{value}"
+      diff_store_ads_data:
+        daily_budget: 'Дневной бюджет изменён %{before}️ → %{after}'
+        price: 'Ставка изменена  %{before}️ → %{after}'
+        status: 'Изменился статус компании %{before}️ → %{after}'
+
       order:
         new:
           brand: "Бренд: %{value}"
@@ -82,6 +87,11 @@ ru:
           promo_code_discount: ""
 
   activerecord:
+    attributes:
+      ads:
+        statuses:
+          pause: Остановлена
+          show: Показывается
     errors:
       messages:
         record_invalid: 'Возникли ошибки: %{errors}'

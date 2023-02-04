@@ -10,6 +10,7 @@ module Telegram
 
       def call
         return if @diff_request.blank?
+        return if @request.notified?
 
 
         notification = ::NewParsedData.with(diff_data: @diff_request, source: @source, photo: photo_path,
@@ -18,8 +19,7 @@ module Telegram
         case @source.class.name
         when 'Product'
           @source.store.tg_users.each { |tg_user| notification.deliver_later(tg_user) }
-        when 'Store'
-          @source.tg_users.each { |tg_user| notification.deliver_later(tg_user) }
+          request.update!(notified: true)
         end
       end
 
