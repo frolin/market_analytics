@@ -28,9 +28,9 @@ ru:
         defective_count: "Процент брака: %{value}"
         delivered_count: "Процент доставок: %{value}"
       diff_store_ads_data:
-        daily_budget: 'Дневной бюджет изменён %{before}️ → %{after}'
-        price: 'Ставка изменена  %{before}️ → %{after}'
-        status: 'Изменился статус компании %{before}️ → %{after}'
+        daily_budget: 'Дневной бюджет изменён: %{before}️ → %{after}'
+        price: 'Ставка изменена:  %{before}️ → %{after}'
+        status: 'Изменился статус компании: %{before}️ → %{after}'
 
       order:
         new:

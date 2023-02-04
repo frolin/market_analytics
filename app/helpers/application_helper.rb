@@ -34,13 +34,12 @@ module ApplicationHelper
     end
   end
 
-
   def icon(name)
     content_tag(:i, '', class: "la la-#{name}")
   end
 
-  def money(int)
-    ActionController::Base.helpers.number_to_currency(int, unit: "₽", separator: ",", delimiter: "", format: "%n %u")
+  def money(int, precision: 2)
+    ActionController::Base.helpers.number_to_currency(int, unit: "₽", separator: ",", precision: precision, delimiter: "", format: "%n %u")
   end
 
   def market_prefix(name)
