@@ -9,7 +9,10 @@ module Telegram
       end
 
       def call
+        return if @ad.notified?
         return if message_text.blank?
+
+
 
         notification = ::Ads.with(source: @store,
                                   text: message_text,
