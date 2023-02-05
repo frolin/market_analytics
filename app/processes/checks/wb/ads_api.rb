@@ -4,6 +4,8 @@ module Checks
       record :store
 
       def execute
+        return unless store.ads_token
+
         ads_list = Api::Wildberries::Ads::Adverts.run!(store: store)
 
         ads_list.each do |ad|
