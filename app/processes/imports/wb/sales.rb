@@ -3,7 +3,7 @@ module Imports
     class Sales < ActiveInteraction::Base
       boolean :first_time, default: false
       record :store
-      date :date_from, default: Date.current.beginning_of_week - 7.days
+      date :date_from, default: DateTime.now - 3.month
 
       def execute
         new_sales = []
