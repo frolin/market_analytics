@@ -9,10 +9,7 @@ module Telegram
       end
 
       def call
-        return if @ad.notified?
         return if message_text.blank?
-
-
 
         notification = ::Ads.with(source: @store,
                                   text: message_text,
@@ -27,8 +24,11 @@ module Telegram
 
       def message_text
         url = "https://cmp.wildberries.ru/campaigns/list/active/edit/search/#{@ad.advert_id}"
+        ads_type = I18n.t(@ad.ad_type, scope: [:activerecord, :attributes, :ads, :type])
+
         msg = []
         msg << "🧾 Рекламная компания: <a href='#{url}'> #{@ad.subject_name.capitalize}</a> \n"
+        msg << "🧾 Тип РК: #{ads_type}"
         msg << "🆔 <b>Магазин:</b> <a href='#{@store.url}'> #{@store.title} </a>"
         msg << audit_changes
         msg.join("\n")

@@ -92,6 +92,11 @@ ru:
         statuses:
           pause: Остановлена
           show: Показывается
+        type:
+          search: реклама в поиске
+          recommendation: Рекомендации
+          catalog: Каталог
+          card_list: Карточка товара
     errors:
       messages:
         record_invalid: 'Возникли ошибки: %{errors}'
