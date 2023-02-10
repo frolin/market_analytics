@@ -26,4 +26,3 @@ class Request < ApplicationRecord
     source.requests[-2].data
   end
 end
-

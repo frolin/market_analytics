@@ -12,7 +12,6 @@ module Telegram
         return if @diff_request.blank?
         return if @request.notified?
 
-
         notification = ::NewParsedData.with(diff_data: @diff_request, source: @source, photo: photo_path,
                                             text: message_text, user_ids: @source.store.tg_users.pluck(:id))
 
