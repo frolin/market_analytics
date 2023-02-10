@@ -14,19 +14,21 @@ module Wb
 
       begin
         loop do
-          puts "Start new iteration with keyword: \'#{keyword.name}\' for product: \'#{product.name}\'"
+          puts "Start new iteration with keyword: \'#{keyword.name}\' for product: \'#{product.title}\'"
+
+          while @page.find_elements(css: ".product-card.j-card-item").count != 100
+            @page.execute_script("window.scrollBy(0,50)")
+          end
+          # sleep 3
 
           @wait.until do
-
-            if element_is_displayed?(type: :css, name: "#c#{product.wb_sku}")
-              found_product = @page.find_element(css: "#c#{product.wb_sku}")
+            if element_is_displayed?(type: :css, name: "#c#{product.sku}")
+              found_product = @page.find_element(css: "#c#{product.sku}")
 
               if ads?(found_product)
                 puts "Found ads at page #{current_page_number}"
                 keyword.keyword_results.create!(data: data(found_product))
-
-                goto_next_page
-                next
+                return
               end
 
               puts "Found product at page #{current_page_number}"
@@ -58,6 +60,7 @@ module Wb
       }
 
       if search
+        sleep 2
         search_form = @page.find_element(css: '#searchInput')
         search_form.send_keys(keyword.name)
         search_form.send_keys(:return)

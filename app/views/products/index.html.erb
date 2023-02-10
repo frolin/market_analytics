@@ -27,7 +27,7 @@
           <% end %>
         </td>
         <td>
-          <b><%= link_to product.requests.last&.title, edit_product_path(product) %> </b> <br>
+          <b><%= link_to product.title, product_path(product) %> </b> <br>
         </td>
         <td><%= product.barcode %></td>
         <td><%= money product.price %></td>

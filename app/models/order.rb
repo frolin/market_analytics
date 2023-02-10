@@ -15,11 +15,12 @@ class Order < ApplicationRecord
 
   scope :recent, -> { where("created_at > #{30.minutes.ago}") }
   scope :today, -> { where(date: DateTime.now.beginning_of_day..DateTime.now.end_of_day) }
-
-  scope :date_range, ->(start_date, end_date) {where(date: start_date..end_date )}
+  scope :canceled, -> { where("api_data @> ?", { "isCancel" => true }.to_json) }
+  scope :date_range, ->(start_date, end_date) { where(date: start_date..end_date) }
 
   after_create_commit :notify
   attr_accessor :skip_notify
+
   def notify
     return if skip_notify
 

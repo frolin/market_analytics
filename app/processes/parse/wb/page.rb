@@ -50,50 +50,50 @@ module Parse
       end
 
       def find_images
-        find_elemennt(type: :css, name: SEARCH_CSS[:images]) do
+        find_element(type: :css, name: SEARCH_CSS[:images]) do
           @page.find_elements(css: SEARCH_CSS[:images]).map { |image| image.attribute('src') }
         end
       end
 
       def find_questions
-        find_elemennt(type: :css, name: SEARCH_CSS[:questions_count]) do
+        find_element(type: :css, name: SEARCH_CSS[:questions_count]) do
           @page.find_element(css: SEARCH_CSS[:questions_count]).text.to_i
         end
       end
 
       def find_rating
-        find_elemennt(type: :css, name: SEARCH_CSS[:rating]) do
+        find_element(type: :css, name: SEARCH_CSS[:rating]) do
           @page.find_element(css: SEARCH_CSS[:rating]).text.to_f
         end
       end
 
       def find_title
-        find_elemennt(type: :css, name: SEARCH_CSS[:title]) do
+        find_element(type: :css, name: SEARCH_CSS[:title]) do
           @page.find_element(css: SEARCH_CSS[:title]).text
         end
       end
 
       def find_final_price
-        find_elemennt(type: :css, name: SEARCH_CSS[:final_price]) do
-          return if @page.find_element(css: '.sold-out-product').present?
+        find_element(type: :css, name: SEARCH_CSS[:final_price]) do
+          return if @page.find_elements(css: '.sold-out-product').present?
 
           @page.find_element(css: SEARCH_CSS[:final_price]).text
         end
       end
 
       def find_review_count
-        find_elemennt(type: :css, name: SEARCH_CSS[:reviews_count]) do
+        find_element(type: :css, name: SEARCH_CSS[:reviews_count]) do
           @page.find_element(css: SEARCH_CSS[:reviews_count]).text.to_i
         end
       end
 
       def find_store_url
-        find_elemennt(type: :css, name: SEARCH_CSS[:seller_url]) do
+        find_element(type: :css, name: SEARCH_CSS[:seller_url]) do
           @page.find_element(css: SEARCH_CSS[:seller_url]).attribute('href')
         end
       end
 
-      def find_elemennt(type:, name:)
+      def find_element(type:, name:)
         begin
           element_found = wait.until do
             element_is_displayed?(type: type, name: name)

@@ -41,16 +41,19 @@ $(document).ready(function () {
     //     templateResult: addUserPic,
     //     templateSelection: addUserPic
     // });
-
-    $('.date-range-picker').daterangepicker({
-        format: 'mm/dd/yyyy',
-        startDate: '-3d'
-    });
+    //
+    // $('.date-range-picker').daterangepicker({
+    //     format: 'mm/dd/yyyy',
+    //     startDate: '-3d'
+    // });
 
     $(function () {
         $('input[name="daterange"]').daterangepicker({
             opens: 'left'
         }, function (start, end, label) {
+            $('#date-picker').val(
+                $('#datepicker').datepicker('getFormattedDate')
+            );
             console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
         });
     });

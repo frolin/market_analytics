@@ -21,7 +21,7 @@ class Stock < ApplicationRecord
 
     data.each do |product, stock|
       stock.each do |s|
-        result["[#{s['supplierArticle']}] #{product.title}"] <<
+        result["[#{s['supplierArticle']}] #{product&.title}"] <<
           {
             warehouse: s['warehouseName'],
             quantity: s['quantity']

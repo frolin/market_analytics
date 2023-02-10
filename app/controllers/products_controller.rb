@@ -10,6 +10,13 @@ class ProductsController < ApplicationController
 
   # GET /products/1 or /products/1.json
   def show
+    if date_range.present?
+      @orders = @product.orders.where(date: @start_date..@end_date)
+      @sales = @product.sales.where(date: @start_date..@end_date)
+    else
+      @orders = @product.orders
+      @sales = @product.sales
+    end
   end
 
   # GET /products/new
@@ -93,6 +100,13 @@ class ProductsController < ApplicationController
 
   def set_store
     @store = Store.find_by(params[:store_id])
+  end
+
+  def date_range
+    if params[:date_range]
+      @start_date = params[:date_range].split(' - ').first.to_date
+      @end_date = params[:date_range].split(' - ').last.to_date
+    end
   end
 
   # Only allow a list of trusted parameters through.

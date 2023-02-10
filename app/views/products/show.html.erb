@@ -1,20 +1,57 @@
-<div class="card">
+<div class="content-wrapper">
+
+  <div class="card p-2">
+    <h1><%= @product.title %></h1>
+
+    <div class="image">
+      <% @product.photos.each do |photo| %>
+        <%= image_tag photo.image_url if photo.image_url.present? %>
+      <% end %>
+    </div>
+
+    <dl>
+      <dt>Sku:</dt>
+      <dd><%= @product.sku %></dd>
+      <dt>Barcode:</dt>
+      <dd><%= @product.barcode %></dd>
+    </dl>
+  </div>
+
+  <div class="row">
+    <div class='col-md-6 col-sm-6 col-12'>
+      <div class="input-group">
+        <%= form_for(product_path(@product), method: :get, id: 'date-picker') do %>
+          <%= text_field :date, :range, name: 'date_range' %>
+          <%#= submit_tag "Submit", hidden: true, :disable_with => "Submitting..." %>
+        <% end %>
+
+        <!--        <form method='get' enctype='multipart/form-data' id='date-picker'>-->
+        <!--          <input type="text" value="01/01/2018 - 01/15/2018"/>-->
+        <!--        </form>-->
+      </div>
+    </div>
+  </div>
+
+  <div class="card p-2">
+    <%= line_chart [
+                     { name: 'Заказы', data: @orders.group_by_day(:date, format: "%F").count },
+                     { name: 'Продажи', data: @sales.group_by_day(:date, format: "%F").count },
+                     { name: 'Невыкупы', data: @orders.canceled.group_by_day(:date, format: "%F").count },
+                     { name: 'Возвраты', data: @sales.canceled.group_by_day(:date, format: "%F").count },
+                   ]
+    %>
+  </div>
+
+  <br>
+
+  <div class="card p-2">
+    <h2>Часы заказов на основе: <%= @product.orders.size %> заказов</h2>
+
+    <%= line_chart @product.orders.group_by_hour_of_day(:date, format: "%H:%M").count, label: "Заказы" %>
 
 
-  <h1>Products</h1>
-
-  <dl>
-    <dt>Name:</dt>
-    <dd><%= @product.name %></dd>
-    <dt>Data:</dt>
-    <dd><%= @product.data %></dd>
-    <dt>Sku:</dt>
-    <dd><%= @product.sku %></dd>
-    <dt>Barcode:</dt>
-    <dd><%= @product.barcode %></dd>
-    <dt>Offer:</dt>
-    <dd><%= @product.offer_id %></dd>
-  </dl>
-  <%= link_to 'Edit', edit_product_path(@product) %> |
-  <%= link_to 'Back', products_path %>
+    <%= link_to 'Edit', edit_product_path(@product) %> |
+    <%= link_to 'Back', products_path %>
+  </div>
+</div>
 </div>

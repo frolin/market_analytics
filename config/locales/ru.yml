@@ -12,10 +12,10 @@ ru:
   telegram:
     notifications:
       diff_product_parsed_data:
-        final_price: "➡ Ообновилась цена"
-        rating: "➡ Обновился рейтинг"
-        reviews_count: "➡ Добавили новый отзыв"
-        questions_count: "➡ Добавили новый вопрос"
+        final_price: "➡ Обновилась цена %{before}️ → %{after}"
+        rating: "➡ Обновился рейтинг %{before}️ → %{after}"
+        reviews_count: "➡ Добавили новый отзыв %{before}️ → %{after}"
+        questions_count: "➡ Добавили новый вопрос %{before}️ → %{after}"
         diff: "Количество:  %{before}️ → %{after}"
       diff_store_parsed_data:
         name: "%{value}"
