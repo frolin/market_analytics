@@ -29,19 +29,18 @@ class OrderDecorator < ApplicationDecorator
 
   def show_link
     if object.canceled?
-      h.content_tag(:div, class: ["badge badge-danger"]) do
-        h.link_to "Отмена", h.store_order_path(object.store, object)
+      h.content_tag(:div, class: ['badge badge-danger']) do
+        h.link_to 'Отмена', h.store_order_path(object.store, object)
       end
     else
-      h.content_tag(:div, class: ["badge badge-warning"]) do
-        h.link_to "Заказ", h.store_order_path(object.store, object)
+      h.content_tag(:div, class: ['badge badge-warning']) do
+        h.link_to 'Заказ', h.store_order_path(object.store, object)
       end
     end
-
   end
 
   def full_name
-    "#{product.name} #{product.properties.dig('объем')} мл"
+    "#{product.name} #{product.properties['объем']} мл"
   end
 
   def supply_format

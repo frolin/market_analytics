@@ -4,6 +4,4 @@ class ApplicationController < ActionController::Base
   def current_user
     UserDecorator.decorate(super) if super
   end
-
-
 end

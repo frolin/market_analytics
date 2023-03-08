@@ -20,6 +20,8 @@ class Store < ApplicationRecord
   has_many :supplies, dependent: :destroy
   has_many :ads, dependent: :destroy
 
+  has_many :finance_week_reports, class_name: 'Wb::Report::FinanceWeek'
+
   has_many :images, as: :source, dependent: :destroy
   accepts_nested_attributes_for :images, allow_destroy: true
 
@@ -27,6 +29,14 @@ class Store < ApplicationRecord
                  :seller_delivered, :seller_delivery, :seller_defective, :seller_logo
 
   scope :wb, -> { where(type: 'Store::Wb') }
+
+  scope :sales_today, -> { joins(:sales).merge(Sale.today) }
+  scope :orders_today, -> { joins(:orders).merge(Order.today) }
+
+
+  scope :orders_and_sales_by_date, ->(date_range) { includes(:sales, :orders).where(sales: { date: date_range })
+                                                                             .where(orders: {date: date_range})}
+  # scope :orders_by_date, ->(date_range) { includes(:orders).where(order: { date: date_range }) }
 
   def parsed_data
     requests.last&.data

@@ -1,10 +1,11 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: %i[ show edit update destroy ]
+  before_action :set_product, only: %i[show edit update destroy]
+  before_action :set_store, only: %i[show edit update destroy]
   # before_action :set_store, only: %i[ index ]
 
   # GET /products or /products.json
   def index
-    # store = params[:store_id]
+    @store = current_user.stores.last
     @products = current_user.stores.last.products.decorate
   end
 
@@ -21,13 +22,12 @@ class ProductsController < ApplicationController
 
   # GET /products/new
   def new
-    @product = current_user.products.new
+    @product = @store.products.new
     @photos = @product.photos.new
   end
 
   # GET /products/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /products or /products.json
   def create
@@ -46,7 +46,7 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if @product.save
-        format.html { redirect_to product_url(@product), notice: "Product was successfully created." }
+        format.html { redirect_to product_url(@product), notice: 'Product was successfully created.' }
         format.json { render :show, status: :created, location: @product }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -72,7 +72,7 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if @product.update(product_params)
-        format.html { redirect_to product_url(@product), notice: "Product was successfully updated." }
+        format.html { redirect_to product_url(@product), notice: 'Product was successfully updated.' }
         format.json { render :show, status: :ok, location: @product }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -86,7 +86,7 @@ class ProductsController < ApplicationController
     @product.destroy
 
     respond_to do |format|
-      format.html { redirect_to products_url, notice: "Product was successfully destroyed." }
+      format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -103,10 +103,10 @@ class ProductsController < ApplicationController
   end
 
   def date_range
-    if params[:date_range]
-      @start_date = params[:date_range].split(' - ').first.to_date
-      @end_date = params[:date_range].split(' - ').last.to_date
-    end
+    return unless params[:date_range]
+
+    @start_date = params[:date_range].split(' - ').first.to_date
+    @end_date = params[:date_range].split(' - ').last.to_date
   end
 
   # Only allow a list of trusted parameters through.

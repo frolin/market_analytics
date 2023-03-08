@@ -26,8 +26,8 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     respond_with :message, text: 'Список магазинов:', reply_markup: {
       inline_keyboard: [
         stores,
-        [{ text: "🆕 Добавить", callback_data: "add_new_store" }]
-      ],
+        [{ text: '🆕 Добавить', callback_data: 'add_new_store' }]
+      ]
     }
   end
 
@@ -63,9 +63,9 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
         [
           { text: '🟣 Wildberries', callback_data: 'add_campaign_wb' },
           { text: '🔵 OZON', callback_data: 'add_campaign_ozon' },
-          { text: '🟠 ЯМаркет', callback_data: 'add_campaign_ya_market' },
-        ],
-      ],
+          { text: '🟠 ЯМаркет', callback_data: 'add_campaign_ya_market' }
+        ]
+      ]
     }
   end
 
@@ -75,13 +75,11 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
         [
           { text: '', callback_data: 'add_campaign_wb' },
           { text: '🔵 OZON', callback_data: 'add_campaign_ozon' },
-          { text: '🟠 ЯМаркет', callback_data: 'add_campaign_ya_market' },
-        ],
-      ],
+          { text: '🟠 ЯМаркет', callback_data: 'add_campaign_ya_market' }
+        ]
+      ]
     }
   end
-
-
 
   def campaign_list!(*)
     respond_with :message, text: Telegram::Greeting.new(from).campaign_list, parse_mode: 'HTML'
@@ -129,7 +127,6 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
       store_inline_menu!
     end
-
   ensure
     delete_message
   end
@@ -138,7 +135,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     TG_BOT.delete_message(chat_id: from['id'], message_id: payload['message_id'])
   end
 
-  def add_store_ozon!(token = nil, *)
+  def add_store_ozon!(_token = nil, *)
     respond_with :message, text: Telegram::Greeting.new(from).under_construction, parse_mode: 'HTML'
 
     # store_inline_menu! unless token.present?
@@ -155,7 +152,6 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     # end
     #
     # ensure
-
   end
 
   def add_campaign_ya_market
@@ -166,7 +162,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     data = list.map { |l| { text: l.slug, callback_data: l.slug } }
 
     respond_with :message, text: t('.prompt'), reply_markup: {
-      inline_keyboard: [data],
+      inline_keyboard: [data]
     }
   end
 
@@ -239,7 +235,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
         keyboard: [t('.buttons')],
         resize_keyboard: true,
         one_time_keyboard: true,
-        selective: true,
+        selective: true
       }
     end
   end
@@ -248,10 +244,10 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     respond_with :message, text: 'Меню', reply_markup: {
       inline_keyboard: [
         [
-          { text: 'Назад', callback_data: 'back' },
-        ],
-      # [{ text: t('.repo'), url: 'https://github.com/telegram-bot-rb/telegram-bot' }],
-      ],
+          { text: 'Назад', callback_data: 'back' }
+        ]
+        # [{ text: t('.repo'), url: 'https://github.com/telegram-bot-rb/telegram-bot' }],
+      ]
     }
   end
 
@@ -266,7 +262,6 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     # 	"мин.цена: #{product.min_price}, " +
     # 	"макс.цена: #{product.max_price}"
     # end.join("\n")
-
   end
 
   def price_check
@@ -284,8 +279,8 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
         id: "#{query}-#{i}",
         description: "#{t_description} #{i}",
         input_message_content: {
-          message_text: "#{t_content} #{i}",
-        },
+          message_text: "#{t_content} #{i}"
+        }
       }
     end
 
@@ -319,12 +314,11 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     respond_with :message, text: t('.content', text: message['text'])
   end
 
-  def action_missing(action, *_args)
+  def action_missing(_action, *_args)
+    return unless action_type == :command
 
-    if action_type == :command
-      respond_with :message,
-                   text: t('telegram_webhooks.action_missing.command', command: action_options[:command])
-    end
+    respond_with :message,
+                 text: t('telegram_webhooks.action_missing.command', command: action_options[:command])
   end
 
   private
@@ -354,5 +348,4 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   def deny_access
     respond_with :message, text: "⚠ Кто вы #{name}? \n Я вас не знаю, обратитесь к адиминстратору"
   end
-
 end

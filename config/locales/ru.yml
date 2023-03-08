@@ -9,6 +9,13 @@ ru:
       wb: Wildberries
       ozon: OZON
       ya_market: ЯМаркет
+  ad:
+    ad_type:
+      card_list: Карточка
+      search: Поиск
+    status:
+      pause: Пауза
+      show: Показывается
   telegram:
     notifications:
       diff_product_parsed_data:

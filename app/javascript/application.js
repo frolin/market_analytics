@@ -1,7 +1,6 @@
 // Entry point for the build script in your package.json
 import "@hotwired/turbo-rails"
-import {Turbo} from "@hotwired/turbo-rails"
-
+import { Turbo } from "@hotwired/turbo-rails"
 Turbo.session.drive = false
 
 import "./controllers"
@@ -16,6 +15,7 @@ import './lib/moment.min.js'
 // import './lib/daterangepicker.js'
 
 import './lib/select2.full.min.js'
+
 // import 'lib/pagination/datepicker.js'
 
 // Chart.defaults.global.defaultFontFamily = "Lato";
@@ -47,16 +47,19 @@ $(document).ready(function () {
     //     startDate: '-3d'
     // });
 
-    $(function () {
-        $('input[name="daterange"]').daterangepicker({
-            opens: 'left'
-        }, function (start, end, label) {
-            $('#date-picker').val(
-                $('#datepicker').datepicker('getFormattedDate')
-            );
-            console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-        });
-    });
+    // $(function () {
+    //     $('input[name="date_range"]').daterangepicker({
+    //         opens: 'left',
+    //         locale: {
+    //             format: 'DD-MM-YYYY'
+    //         }
+    //     }, function (start, end, label) {
+    //         $('#date-picker').val(
+    //             $('#datepicker').datepicker('getFormattedDate')
+    //         );
+    //         console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    //     });
+    // });
 
 });
 

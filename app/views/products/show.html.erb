@@ -47,7 +47,7 @@
   <div class="card p-2">
     <h2>Часы заказов на основе: <%= @product.orders.size %> заказов</h2>
 
-    <%= line_chart @product.orders.group_by_hour_of_day(:date, format: "%H:%M").count, label: "Заказы" %>
+    <%= column_chart @product.orders.group_by_hour_of_day(:date, format: "%H:%M").count, label: "Заказы" %>
 
 
     <%= link_to 'Edit', edit_product_path(@product) %> |

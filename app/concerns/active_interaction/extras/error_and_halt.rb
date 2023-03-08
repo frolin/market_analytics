@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 module ActiveInteraction
   module Extras
     module ErrorAndHalt
       extend ActiveSupport::Concern
 
       included do
-        set_callback :execute, :around, ->(_interaction, block) do
+        set_callback :execute, :around, lambda { |_interaction, block|
           catch :halt_error do
             block.call
           end
-        end
+        }
       end
 
       def error_and_halt!(key, message)

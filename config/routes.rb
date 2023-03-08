@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :source_reports
   require 'sidekiq/web'
   require 'sidekiq/cron/web'
 

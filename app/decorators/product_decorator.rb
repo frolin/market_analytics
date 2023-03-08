@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductDecorator < ApplicationDecorator
   delegate_all
   decorates_association :products
@@ -16,10 +18,14 @@ class ProductDecorator < ApplicationDecorator
   end
 
   def full_name
-    "#{product.name} #{product.properties.dig('объем')} мл"
+    "#{product.name} #{product.properties['объем']} мл"
   end
 
   def supply_format
     h.link_to "#{name} | #{barcode} ", h.product_path(self)
+  end
+
+  def stock_quantity
+    object.stock.present? && object.stock.sum { |s| s[:quantity] }.positive?
   end
 end

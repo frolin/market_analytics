@@ -1,5 +1,5 @@
 class SuppliesController < ApplicationController
-  before_action :set_supply, only: %i[ show edit update destroy]
+  before_action :set_supply, only: %i[show edit update destroy]
 
   # GET /supplies or /supplies.json
   def index
@@ -17,8 +17,7 @@ class SuppliesController < ApplicationController
   end
 
   # GET /supplies/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /supplies or /supplies.json
   def create
@@ -26,7 +25,7 @@ class SuppliesController < ApplicationController
 
     respond_to do |format|
       if new_supply.valid?
-        format.html { redirect_to supplies_path, notice: "Supply was successfully created." }
+        format.html { redirect_to supplies_path, notice: 'Supply was successfully created.' }
         format.json { render :show, status: :created, location: @supply }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -41,7 +40,7 @@ class SuppliesController < ApplicationController
 
     respond_to do |format|
       if supply_update.valid?
-        format.html { redirect_to supply_url(@supply), notice: "Supply was successfully updated." }
+        format.html { redirect_to supply_url(@supply), notice: 'Supply was successfully updated.' }
         format.json { render :show, status: :ok, location: @supply }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -53,14 +52,14 @@ class SuppliesController < ApplicationController
   def update_count
     @supply = Supply.find(params[:supply_id])
 
-    count_params[:product].values.each do |supply_product|
+    count_params[:product].each_value do |supply_product|
       sp = SupplyProduct.find(supply_product[:id])
       sp.update(count: supply_product[:count])
     end
 
     respond_to do |format|
       # if @supply.update(count_params)
-      format.html { redirect_to supply_url(@supply), notice: "Supply was successfully updated." }
+      format.html { redirect_to supply_url(@supply), notice: 'Supply was successfully updated.' }
       format.json { render :show, status: :ok, location: @supply }
       # else
       #   format.html { render :edit, status: :unprocessable_entity }
@@ -71,12 +70,11 @@ class SuppliesController < ApplicationController
 
   # DELETE /supplies/1 or /supplies/1.json
   def destroy
-
     @supply.products.destroy_all
     @supply.destroy
 
     respond_to do |format|
-      format.html { redirect_to supplies_url, notice: "Supply was successfully destroyed." }
+      format.html { redirect_to supplies_url, notice: 'Supply was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -87,7 +85,7 @@ class SuppliesController < ApplicationController
 
     respond_to do |format|
       if process.valid?
-        format.html { redirect_to supply, notice: "Supply was successfully export." }
+        format.html { redirect_to supply, notice: 'Supply was successfully export.' }
         format.json { head :no_content }
       else
         format.html { render :edit, status: :unprocessable_entity }

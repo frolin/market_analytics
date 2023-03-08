@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SaleDecorator < ApplicationDecorator
   delegate_all
   # decorates_association :products
@@ -20,17 +22,17 @@ class SaleDecorator < ApplicationDecorator
   end
 
   def full_name
-    "#{product.name} #{product.properties.dig('объем')} мл"
+    "#{product.name} #{product.properties['объем']} мл"
   end
 
   def show_link
     if object.canceled?
-      h.content_tag(:div, class: ["badge badge-danger"]) do
-        h.link_to "Отмена", h.store_sale_path(object.store, object)
+      h.content_tag(:div, class: ['badge badge-danger']) do
+        h.link_to 'Отмена', h.store_sale_path(object.store, object)
       end
     else
-      h.content_tag(:div, class: ["badge badge-info"]) do
-        h.link_to "Продажа", h.store_sale_path(object.store, object)
+      h.content_tag(:div, class: ['badge badge-info']) do
+        h.link_to 'Продажа', h.store_sale_path(object.store, object)
       end
     end
   end

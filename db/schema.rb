@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_05_123202) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_25_225713) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -237,6 +237,77 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_05_123202) do
     t.index ["store_id"], name: "index_sales_on_store_id"
   end
 
+  create_table "sales_reports", force: :cascade do |t|
+    t.bigint "store_id", null: false
+    t.string "barcode", null: false
+    t.datetime "date_from"
+    t.datetime "create_dt"
+    t.datetime "order_dt"
+    t.datetime "sale_dt"
+    t.datetime "rr_dt"
+    t.integer "quantity"
+    t.string "subject_name"
+    t.string "realizationreport_id"
+    t.string "doc_type_name"
+    t.string "srid"
+    t.string "rid"
+    t.string "nm_id"
+    t.string "gi_id"
+    t.string "rrd_id"
+    t.string "ts_name"
+    t.string "sa_name"
+    t.string "brand_name"
+    t.string "office_name"
+    t.string "supplier_oper_name"
+    t.string "suppliercontract_code"
+    t.decimal "retail_price", precision: 18, scale: 4
+    t.decimal "retail_amount", precision: 18, scale: 4
+    t.decimal "commission_percent", precision: 18, scale: 4
+    t.decimal "sale_percent", precision: 18, scale: 4
+    t.decimal "retail_price_withdisc_rub", precision: 18, scale: 4
+    t.decimal "penalty", precision: 18, scale: 4
+    t.decimal "additional_payment", precision: 18, scale: 4
+    t.decimal "acquiring_fee", precision: 18, scale: 4
+    t.decimal "acquiring_bank", precision: 18, scale: 4
+    t.decimal "product_discount_for_report", precision: 18, scale: 4
+    t.decimal "delivery_rub", precision: 18, scale: 4
+    t.decimal "return_amount", precision: 18, scale: 4
+    t.decimal "delivery_amount", precision: 18, scale: 4
+    t.integer "supplier_promo"
+    t.decimal "ppvz_spp_prc", precision: 18, scale: 4
+    t.decimal "ppvz_kvw_prc_base", precision: 18, scale: 4
+    t.decimal "ppvz_kvw_prc", precision: 18, scale: 4
+    t.decimal "ppvz_sales_commission", precision: 18, scale: 4
+    t.decimal "ppvz_for_pay", precision: 18, scale: 4
+    t.decimal "ppvz_reward", precision: 18, scale: 4
+    t.decimal "ppvz_vw", precision: 18, scale: 4
+    t.decimal "ppvz_vw_nds", precision: 18, scale: 4
+    t.string "ppvz_office_id"
+    t.string "ppvz_office_name"
+    t.string "ppvz_supplier_id"
+    t.string "ppvz_supplier_name"
+    t.string "ppvz_inn"
+    t.string "kiz"
+    t.string "shk_id"
+    t.string "bonus_type_name"
+    t.string "sticker_id"
+    t.string "gi_box_type_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["barcode"], name: "index_sales_reports_on_barcode"
+    t.index ["store_id"], name: "index_sales_reports_on_store_id"
+  end
+
+  create_table "source_reports", force: :cascade do |t|
+    t.bigint "store_id", null: false
+    t.jsonb "data", default: {}
+    t.string "report_type"
+    t.jsonb "file_data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_source_reports_on_store_id"
+  end
+
   create_table "stocks", force: :cascade do |t|
     t.integer "quantity"
     t.jsonb "api_data"
@@ -342,6 +413,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_05_123202) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "wb_report_finance_weeks", force: :cascade do |t|
+    t.bigint "store_id", null: false
+    t.jsonb "data"
+    t.string "number"
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["data"], name: "index_wb_report_finance_weeks_on_data"
+    t.index ["end_date"], name: "index_wb_report_finance_weeks_on_end_date"
+    t.index ["number"], name: "index_wb_report_finance_weeks_on_number"
+    t.index ["start_date"], name: "index_wb_report_finance_weeks_on_start_date"
+    t.index ["store_id"], name: "index_wb_report_finance_weeks_on_store_id"
+  end
+
   add_foreign_key "keyword_results", "keywords"
   add_foreign_key "order_costs", "orders"
   add_foreign_key "order_costs", "stores"
@@ -359,6 +445,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_05_123202) do
   add_foreign_key "sale_products", "products"
   add_foreign_key "sale_products", "sales"
   add_foreign_key "sales", "stores"
+  add_foreign_key "sales_reports", "stores"
+  add_foreign_key "source_reports", "stores"
   add_foreign_key "stocks", "stores"
   add_foreign_key "stores", "accounts"
   add_foreign_key "supplies", "stores"
@@ -370,4 +458,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_05_123202) do
   add_foreign_key "user_stores", "stores"
   add_foreign_key "user_stores", "users"
   add_foreign_key "users", "accounts"
+  add_foreign_key "wb_report_finance_weeks", "stores"
 end

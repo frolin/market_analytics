@@ -4,6 +4,7 @@ class Stock < ApplicationRecord
   store_accessor :api_data, :url
 
   def for_product(barcode)
+    return  if api_data != {}
     api_data.map do |stock|
       if stock['barcode'] == barcode
         { quantity: stock['quantity'],

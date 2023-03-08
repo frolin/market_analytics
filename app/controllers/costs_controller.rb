@@ -1,5 +1,5 @@
 class CostsController < ApplicationController
-  before_action :set_cost, only: %i[ show edit update destroy ]
+  before_action :set_cost, only: %i[show edit update destroy]
 
   # GET /costs or /costs.json
   def index
@@ -7,8 +7,7 @@ class CostsController < ApplicationController
   end
 
   # GET /costs/1 or /costs/1.json
-  def show
-  end
+  def show; end
 
   # GET /costs/new
   def new
@@ -16,8 +15,7 @@ class CostsController < ApplicationController
   end
 
   # GET /costs/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /costs or /costs.json
   def create
@@ -25,7 +23,7 @@ class CostsController < ApplicationController
 
     respond_to do |format|
       if @cost.save
-        format.html { redirect_to cost_url(@cost), notice: "Cost was successfully created." }
+        format.html { redirect_to cost_url(@cost), notice: 'Cost was successfully created.' }
         format.json { render :show, status: :created, location: @cost }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +36,7 @@ class CostsController < ApplicationController
   def update
     respond_to do |format|
       if @cost.update(cost_params)
-        format.html { redirect_to cost_url(@cost), notice: "Cost was successfully updated." }
+        format.html { redirect_to cost_url(@cost), notice: 'Cost was successfully updated.' }
         format.json { render :show, status: :ok, location: @cost }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -52,19 +50,20 @@ class CostsController < ApplicationController
     @cost.destroy
 
     respond_to do |format|
-      format.html { redirect_to costs_url, notice: "Cost was successfully destroyed." }
+      format.html { redirect_to costs_url, notice: 'Cost was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_cost
-      @cost = Cost.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def cost_params
-      params.require(:cost).permit(:orderd_id, :data, :date, :import_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_cost
+    @cost = Cost.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def cost_params
+    params.require(:cost).permit(:orderd_id, :data, :date, :import_id)
+  end
 end

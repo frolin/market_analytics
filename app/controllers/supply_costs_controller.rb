@@ -1,5 +1,5 @@
 class SupplyCostsController < ApplicationController
-  before_action :set_supply_cost, only: %i[ show edit update destroy ]
+  before_action :set_supply_cost, only: %i[show edit update destroy]
 
   # GET /supply_costs or /supply_costs.json
   def index
@@ -7,8 +7,7 @@ class SupplyCostsController < ApplicationController
   end
 
   # GET /supply_costs/1 or /supply_costs/1.json
-  def show
-  end
+  def show; end
 
   # GET /supply_costs/new
   def new
@@ -16,8 +15,7 @@ class SupplyCostsController < ApplicationController
   end
 
   # GET /supply_costs/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /supply_costs or /supply_costs.json
   def create
@@ -25,7 +23,7 @@ class SupplyCostsController < ApplicationController
 
     respond_to do |format|
       if @supply_cost.save
-        format.html { redirect_to supply_cost_url(@supply_cost), notice: "Supply cost was successfully created." }
+        format.html { redirect_to supply_cost_url(@supply_cost), notice: 'Supply cost was successfully created.' }
         format.json { render :show, status: :created, location: @supply_cost }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +36,7 @@ class SupplyCostsController < ApplicationController
   def update
     respond_to do |format|
       if @supply_cost.update(supply_cost_params)
-        format.html { redirect_to supply_cost_url(@supply_cost), notice: "Supply cost was successfully updated." }
+        format.html { redirect_to supply_cost_url(@supply_cost), notice: 'Supply cost was successfully updated.' }
         format.json { render :show, status: :ok, location: @supply_cost }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -53,7 +51,7 @@ class SupplyCostsController < ApplicationController
 
     respond_to do |format|
       if update_cost.valid?
-        format.html { redirect_to supply_path(supply), notice: "Supply cost was successfully updated." }
+        format.html { redirect_to supply_path(supply), notice: 'Supply cost was successfully updated.' }
         format.json { render :show, status: :ok, location: @supply }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -67,7 +65,7 @@ class SupplyCostsController < ApplicationController
     @supply_cost.destroy
 
     respond_to do |format|
-      format.html { redirect_to supply_costs_url, notice: "Supply cost was successfully destroyed." }
+      format.html { redirect_to supply_costs_url, notice: 'Supply cost was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

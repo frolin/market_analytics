@@ -1,7 +1,8 @@
 module ApplicationHelper
   # https://gist.github.com/fjahr/b3828b9f4e333e74ba1894687d65e055
   def bootstrap_class_for(flash_type)
-    { success: 'alert-success', error: 'alert-danger', alert: 'alert-warning', notice: 'alert-info' }.stringify_keys[flash_type.to_s] || flash_type.to_s
+    { success: 'alert-success', error: 'alert-danger', alert: 'alert-warning',
+      notice: 'alert-info' }.stringify_keys[flash_type.to_s] || flash_type.to_s
   end
 
   def flash_messages(_opts = [])
@@ -24,7 +25,8 @@ module ApplicationHelper
 
     content_tag(:div, class: 'card border-danger') do
       concat(content_tag(:div, class: 'card-header bg-danger text-white') do
-        concat "#{pluralize(object.errors.count, 'error')} prohibited this #{object.class.name.downcase} from being saved:"
+        concat "#{pluralize(object.errors.count,
+                            'error')} prohibited this #{object.class.name.downcase} from being saved:"
       end)
       concat(content_tag(:ul, class: 'mb-0 list-group list-group-flush') do
         object.errors.full_messages.each do |msg|
@@ -38,8 +40,10 @@ module ApplicationHelper
     content_tag(:i, '', class: "la la-#{name}")
   end
 
-  def money(int, precision: 2)
-    ActionController::Base.helpers.number_to_currency(int, unit: "₽", separator: ",", precision: precision, delimiter: "", format: "%n %u")
+  def money(int, precision: 2, round: false)
+    ActionController::Base.helpers.number_to_currency(int, unit: '₽', separator: ',',
+                                                           precision: precision, delimiter: ' ',
+                                                           format: '%n %u')
   end
 
   def market_prefix(name)
@@ -49,5 +53,4 @@ module ApplicationHelper
     when 'yandex' then 'YA'
     end
   end
-
 end

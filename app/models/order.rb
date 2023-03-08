@@ -1,4 +1,6 @@
 class Order < ApplicationRecord
+  include Groupable
+
   audited
 
   belongs_to :store
@@ -15,8 +17,9 @@ class Order < ApplicationRecord
 
   scope :recent, -> { where("created_at > #{30.minutes.ago}") }
   scope :today, -> { where(date: DateTime.now.beginning_of_day..DateTime.now.end_of_day) }
+  scope :week, -> { where(date: DateTime.now.beginning_of_week..DateTime.now) }
   scope :canceled, -> { where("api_data @> ?", { "isCancel" => true }.to_json) }
-  scope :date_range, ->(start_date, end_date) { where(date: start_date..end_date) }
+  scope :by_date, ->(date_range) { where(date: date_range) }
 
   after_create_commit :notify
   attr_accessor :skip_notify

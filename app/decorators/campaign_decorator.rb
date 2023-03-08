@@ -10,8 +10,5 @@ class CampaignDecorator < ApplicationDecorator
   #     end
   #   end
 
-
-  def campaign
-
-  end
+  def campaign; end
 end

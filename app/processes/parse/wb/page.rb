@@ -21,10 +21,12 @@ module Parse
 
         begin
           @image_urls = find_images
+          @final_price = find_final_price
           @store_url = find_store_url
           @reviews_count = find_review_count
           @title = find_title
-          @final_price = find_final_price
+
+          # @page.save_screenshot("#{Rails.public_path}/#{title}.png")
 
           # scroll page
           @page.execute_script("window.scrollTo(0, document.body.scrollHeight)")
@@ -57,6 +59,7 @@ module Parse
 
       def find_questions
         find_element(type: :css, name: SEARCH_CSS[:questions_count]) do
+
           @page.find_element(css: SEARCH_CSS[:questions_count]).text.to_i
         end
       end
@@ -74,10 +77,11 @@ module Parse
       end
 
       def find_final_price
-        find_element(type: :css, name: SEARCH_CSS[:final_price]) do
-          return if @page.find_elements(css: '.sold-out-product').present?
-
-          @page.find_element(css: SEARCH_CSS[:final_price]).text
+        # return if @page.find_elements(css: '.sold-out-product').present?
+        wait.until do
+          if @page.find_element(css: SEARCH_CSS[:final_price]).text.present?
+            @page.find_element(css: SEARCH_CSS[:final_price]).text
+          end
         end
       end
 

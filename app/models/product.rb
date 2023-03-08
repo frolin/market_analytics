@@ -14,11 +14,15 @@ class Product < ApplicationRecord
   has_many :supply_products, dependent: :destroy
   has_many :supplies, through: :supply_products
 
+  has_many :stocks, -> { store.stocks.last.api_data.select { |stock| stock['barcode'] == barcode } }
+
   has_many :product_keywords, dependent: :destroy
   has_many :keywords, through: :product_keywords
 
   has_many :photos, dependent: :destroy
   accepts_nested_attributes_for :photos, allow_destroy: true
+
+  has_many :sales_reports, foreign_key: 'barcode'
 
   has_many :requests, as: :source
 
@@ -45,9 +49,9 @@ class Product < ApplicationRecord
   end
 
   def wb_quantity
-    return if stocks.blank?
+    return if store.stocks.blank?
 
-    stocks.last.quantity
+    store.stocks.last.quantity
   end
 
   def title

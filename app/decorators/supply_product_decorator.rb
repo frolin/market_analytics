@@ -32,7 +32,6 @@ class SupplyProductDecorator < ApplicationDecorator
   def mp_logistic
     return 0 if marketplace_cost.data.nil?
 
-
     marketplace_cost.data.dig(marketplace_name, 'логистика').to_i
   end
 
@@ -54,5 +53,4 @@ class SupplyProductDecorator < ApplicationDecorator
 
     price.to_i * count
   end
-
 end

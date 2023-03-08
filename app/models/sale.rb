@@ -1,5 +1,7 @@
 class Sale < ApplicationRecord
+  include Groupable
   audited
+
 
   belongs_to :order, optional: true
   belongs_to :store
@@ -15,6 +17,9 @@ class Sale < ApplicationRecord
   scope :sold, -> { where(state: :sold) }
   scope :canceled, -> { where(state: :canceled) }
   scope :today, -> { where(date: DateTime.now.beginning_of_day..DateTime.now.end_of_day) }
+  scope :week, -> { where(date: DateTime.now.beginning_of_week..DateTime.now) }
+  scope :by_date, -> (date_range) { where(date: date_range) }
+
 
   def self.today_count
     start_first = DateTime.now.beginning_of_day
@@ -25,6 +30,16 @@ class Sale < ApplicationRecord
 
   def self.wb_find(param)
     find_by("api_data @> ?", { "#{param.keys.first}" => param.values.first }.to_json)
+  end
+
+  def self.group_by_weekday
+    # weekdays = first.date.beginning_of_week..Date.today
+    # result = {}
+    # weekdays.each do |weekday|
+    #   @sales.each do |sale|
+    #     result["#{weekday.date}"] = sale.
+    #   end
+    # end
   end
 
   def notify

@@ -9,14 +9,14 @@ class SupplyDecorator < ApplicationDecorator
 
   def products_list
     supply_products.map do |sp|
-      title = if sp.count.to_i > 0
+      title = if sp.count.to_i.positive?
                 "#{sp.product.name} | #{sp.product.barcode} - #{sp.count} штук"
               else
                 "#{sp.product.name} | #{sp.product.barcode}"
               end
 
       h.link_to title, h.product_path(sp.product)
-    end.join("<br>").html_safe
+    end.join('<br>').html_safe
   end
 
   # Define presentation-specific methods here. Helpers are accessed through
@@ -28,8 +28,5 @@ class SupplyDecorator < ApplicationDecorator
   #     end
   #   end
 
-  def prefix_name
-
-  end
-
+  def prefix_name; end
 end

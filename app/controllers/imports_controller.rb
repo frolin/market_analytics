@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class ImportsController < ApplicationController
-  before_action :set_import, only: %i[ show edit update destroy ]
+  before_action :set_import, only: %i[show edit update destroy]
   before_action :set_campaign
   # before_action :set_market
 
@@ -9,8 +11,7 @@ class ImportsController < ApplicationController
   end
 
   # GET /imports/1 or /imports/1.json
-  def show
-  end
+  def show; end
 
   # GET /imports/new
   def new
@@ -18,8 +19,7 @@ class ImportsController < ApplicationController
   end
 
   # GET /imports/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /imports or /imports.json
   def create
@@ -27,7 +27,7 @@ class ImportsController < ApplicationController
 
     respond_to do |format|
       if @import.save
-        format.html { redirect_to import_url(@import), notice: "Import was successfully created." }
+        format.html { redirect_to import_url(@import), notice: 'Import was successfully created.' }
         format.json { render :show, status: :created, location: @import }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -40,7 +40,7 @@ class ImportsController < ApplicationController
   def update
     respond_to do |format|
       if @import.update(import_params)
-        format.html { redirect_to import_url(@import), notice: "Import was successfully updated." }
+        format.html { redirect_to import_url(@import), notice: 'Import was successfully updated.' }
         format.json { render :show, status: :ok, location: @import }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -54,7 +54,7 @@ class ImportsController < ApplicationController
     @import.destroy
 
     respond_to do |format|
-      format.html { redirect_to imports_url, notice: "Import was successfully destroyed." }
+      format.html { redirect_to imports_url, notice: 'Import was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -71,8 +71,8 @@ class ImportsController < ApplicationController
   end
 
   def set_market
-		@market = Market.friendly.find(params[:id])
-	end
+    @market = Market.friendly.find(params[:id])
+  end
 
   # Only allow a list of trusted parameters through.
   def import_params

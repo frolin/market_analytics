@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class SalesController < ApplicationController
-  before_action :set_sale, only: %i[ show edit update destroy ]
+  before_action :set_sale, only: %i[show edit update destroy]
 
   # GET /orders or /orders.json
   def index
@@ -7,8 +9,7 @@ class SalesController < ApplicationController
   end
 
   # GET /orders/1 or /orders/1.json
-  def show
-  end
+  def show; end
 
   # GET /orders/new
   def new
@@ -16,8 +17,7 @@ class SalesController < ApplicationController
   end
 
   # GET /orders/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /orders or /orders.json
   def create
@@ -25,7 +25,7 @@ class SalesController < ApplicationController
 
     respond_to do |format|
       if @sale.save
-        format.html { redirect_to order_url(@sale), notice: "Sale was successfully created." }
+        format.html { redirect_to order_url(@sale), notice: 'Sale was successfully created.' }
         format.json { render :show, status: :created, location: @sale }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +38,7 @@ class SalesController < ApplicationController
   def update
     respond_to do |format|
       if @sale.update(order_params)
-        format.html { redirect_to order_url(@sale), notice: "Sale was successfully updated." }
+        format.html { redirect_to order_url(@sale), notice: 'Sale was successfully updated.' }
         format.json { render :show, status: :ok, location: @sale }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -52,19 +52,20 @@ class SalesController < ApplicationController
     @sale.destroy
 
     respond_to do |format|
-      format.html { redirect_to orders_url, notice: "Sale was successfully destroyed." }
+      format.html { redirect_to orders_url, notice: 'Sale was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_sale
-      @sale = Sale.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def order_params
-      params.require(:order).permit(:api_data, :excel_data, :date, :import_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_sale
+    @sale = Sale.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def order_params
+    params.require(:order).permit(:api_data, :excel_data, :date, :import_id)
+  end
 end

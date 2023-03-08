@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class SupplyProductsController < ApplicationController
-  before_action :set_supply_product, only: %i[ show edit update destroy ]
+  before_action :set_supply_product, only: %i[show edit update destroy]
 
   # GET /supply_products or /supply_products.json
   def index
@@ -7,8 +9,7 @@ class SupplyProductsController < ApplicationController
   end
 
   # GET /supply_products/1 or /supply_products/1.json
-  def show
-  end
+  def show; end
 
   # GET /supply_products/new
   def new
@@ -16,9 +17,7 @@ class SupplyProductsController < ApplicationController
   end
 
   # GET /supply_products/1/edit
-  def edit
-
-  end
+  def edit; end
 
   # POST /supply_products or /supply_products.json
   def create
@@ -26,7 +25,9 @@ class SupplyProductsController < ApplicationController
 
     respond_to do |format|
       if @supply_product.save
-        format.html { redirect_to supply_product_url(@supply_product), notice: "Supply product was successfully created." }
+        format.html do
+          redirect_to supply_product_url(@supply_product), notice: 'Supply product was successfully created.'
+        end
         format.json { render :show, status: :created, location: @supply_product }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -37,20 +38,20 @@ class SupplyProductsController < ApplicationController
 
   # PATCH/PUT /supply_products/1 or /supply_products/1.json
   def update
-      if @supply_product.update(supply_product_params)
-        redirect_to @supply_product.supply
-      else
-        render :edit
-      end
+    if @supply_product.update(supply_product_params)
+      redirect_to @supply_product.supply
+    else
+      render :edit
+    end
 
     # respond_to do |format|
     #   if @supply_product.update(supply_product_params)
-        # format.html { redirect_to supply_product_url(@supply_product), notice: "Supply product was successfully updated." }
-        # format.json { render :show, status: :ok, location: @supply_product }
-      # else
-      #   format.html { render :edit, status: :unprocessable_entity }
-      #   format.json { render json: @supply_product.errors, status: :unprocessable_entity }
-      # end
+    # format.html { redirect_to supply_product_url(@supply_product), notice: "Supply product was successfully updated." }
+    # format.json { render :show, status: :ok, location: @supply_product }
+    # else
+    #   format.html { render :edit, status: :unprocessable_entity }
+    #   format.json { render json: @supply_product.errors, status: :unprocessable_entity }
+    # end
     # end
   end
 
@@ -59,19 +60,20 @@ class SupplyProductsController < ApplicationController
     @supply_product.destroy
 
     respond_to do |format|
-      format.html { redirect_to supply_products_url, notice: "Supply product was successfully destroyed." }
+      format.html { redirect_to supply_products_url, notice: 'Supply product was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_supply_product
-      @supply_product = SupplyProduct.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def supply_product_params
-      params.require(:supply_product).permit(:product_id, :supply_id, :count)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_supply_product
+    @supply_product = SupplyProduct.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def supply_product_params
+    params.require(:supply_product).permit(:product_id, :supply_id, :count)
+  end
 end

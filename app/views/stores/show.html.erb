@@ -1,16 +1,240 @@
-<div class="card">
-<h1>Магазин <%= @store.requests.last.data['name'] %></h1>
+<div class="container">
+  <!--  <div class="row">-->
+  <!--    <div class="p-2 card col-xl-4 col-lg-4 col-12">-->
+  <!--      <h1>Магазин <%#= @store.requests.last.data['name'] %></h1>-->
 
-<dl>
-  <dt>Владелец</dt>
-  <dd>  <%= @store.requests.last.data['ip'] %>  </dd>
+  <!--      <dl>-->
+  <!--        <dt>Владелец</dt>-->
+  <!--        <dd>  <%#= @store.requests.last.data['ip'] %>  </dd>-->
 
-  <dt>Отзывы</dt>
-  <dd> <%= @store.requests.last.data['reviews'] %>  </dd>
-  <dt>Количество продаж</dt>
-  <dd> <%= @store.requests.last.data['sells_count'] %>  </dd>
-</dl>
+  <!--        <dt>Отзывы</dt>-->
+  <!--        <dd> <%#= @store.requests.last.data['reviews'] %>  </dd>-->
+  <!--        <dt>Количество продаж</dt>-->
+  <!--        <dd> <%#= @store.requests.last.data['sells_count'] %>  </dd>-->
+  <!--      </dl>-->
+  <!--    </div>-->
+  <!--  </div>-->
+  
 
-<%= link_to 'Edit', edit_store_path(@store) %> |
-<%= link_to 'Back', stores_path %>
+
+  <%= turbo_frame_tag @store do %>
+    <!-- Заказы-->
+    <div class="row">
+      <div class="col-xl-6 col-lg-6">
+        <div class="card">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="media-body text-left">
+                  <h6>Заказы</h6>
+                  <p class="h1"><%= money(@orders.sum { |product| product.price }, precision: 0) %></p>
+
+
+                  <%= column_chart @orders.group_by_date_with_zero(@orders.first&.date&.to_date, @orders.last&.date&.to_date),
+                                   colors: ['1e9ff2'],
+                                   legend: false,
+                                   dataset: {
+                                     # barThickness: 100,
+                                     # maxBarThickness: 31,
+                                     # labels: [@sales.group_by_date_with_zero(@start_date, @end_date)],
+                                     backgroundColor: [
+                                       'rgba(248, 142, 72, .7)',
+                                     # 'rgba(255, 159, 64, 0.2)',
+                                     # 'rgba(255, 205, 86, 0.2)',
+                                     # 'rgba(75, 192, 192, 0.2)',
+                                     # 'rgba(54, 162, 235, 0.2)',
+                                     # 'rgba(153, 102, 255, 0.2)',
+                                     # 'rgba(201, 203, 207, 0.2)'
+                                     ],
+                                     borderColor: [
+                                       'rgba(248, 142, 72, 0.9)',
+                                     # 'rgb(255, 159, 64)',
+                                     # 'rgb(255, 205, 86)',
+                                     # 'rgb(75, 192, 192)',
+                                     # 'rgb(54, 162, 235)',
+                                     # 'rgb(153, 102, 255)',
+                                     # 'rgb(201, 203, 207)'
+                                     ],
+                                     borderWidth: 1
+                                   },
+                                   library: {
+                                     # plugins: [ChartDataLabels],
+
+                                   } %>
+
+                </div>
+                <div>
+                  <i class="icon-pie-chart warning font-large-2 float-right"></i>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-12">
+        <div class="card pull-up">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="media-body text-left">
+                  <h6 class="h6">Продажи</h6>
+
+                  <p class="h1"> <%= money(@sales.sum { |product| product.price }, precision: 0) %> </p>
+                </div>
+                <div>
+                  <i class="icon-basket-loaded info font-large-2 float-right"></i>
+                </div>
+              </div>
+
+
+
+              <%= column_chart @sales.group_by_date_with_zero(@sales.first&.date&.to_date, @sales.last&.date&.to_date),
+                               colors: ['1e9ff2'],
+                               legend: false,
+                               dataset: {
+                                 # barThickness: 100,
+                                 # maxBarThickness: 31,
+                                 # labels: [@sales.group_by_date_with_zero(@start_date, @end_date)],
+                                 backgroundColor: [
+                                   'rgba(30, 159, 242, .7)',
+                                 # 'rgba(255, 159, 64, 0.2)',
+                                 # 'rgba(255, 205, 86, 0.2)',
+                                 # 'rgba(75, 192, 192, 0.2)',
+                                 # 'rgba(54, 162, 235, 0.2)',
+                                 # 'rgba(153, 102, 255, 0.2)',
+                                 # 'rgba(201, 203, 207, 0.2)'
+                                 ],
+                                 borderColor: [
+                                   'rgba(30, 159, 242, .9)',
+                                 # 'rgb(255, 159, 64)',
+                                 # 'rgb(255, 205, 86)',
+                                 # 'rgb(75, 192, 192)',
+                                 # 'rgb(54, 162, 235)',
+                                 # 'rgb(153, 102, 255)',
+                                 # 'rgb(201, 203, 207)'
+                                 ],
+                                 borderWidth: 1
+                               },
+                               library: {
+                                 # plugins: [ChartDataLabels],
+
+                               }
+              %>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/ Заказы-->
+
+    <!-- Продажи-->
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 ">
+        <div class="card">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="d-flex">
+                <div class="store-data d-flex flex-lg-column flex-sm-row ">
+                  <div class="flex-column sales">
+                    <p class="h4">Продажи</p>
+                    <small class="">количество</small>
+                    <p class="h4"> <%= @sales.count %> шт.</p>
+                    <small> сумма </small>
+                    <br>
+                    <b class="h4"> <%= money(@sales.sum { |product| product.price }, precision: 0) %> </b>
+                  </div>
+
+                  <div class="mt-2 flex-column orders">
+                    <p class="h4">Заказы</p>
+                    <small class="">количество</small>
+                    <br>
+                    <p class="h4"> <%= @orders.count %> шт.</p>
+
+                    <!--                  <small> сумма </small>-->
+                    <!--                  <br>-->
+                    <!--                  <b class="h4"> <%#= money(@orders.sum { |product| product.price }, precision: 0) %> </b>-->
+                  </div>
+                </div>
+
+                <div class="ml-1 flex-lg-grow-1 store-chart-data">
+                  <%= line_chart [{ name: 'Заказы', data: @orders.group_by_date_with_zero(@orders.first&.date&.to_date, @orders.last&.date&.to_date) },
+                                  { name: 'Продажи', data: @sales.group_by_date_with_zero(@sales.first&.date&.to_date, @sales.last&.date&.to_date) }
+                                 ], colors: ["#ff9149", "#1e9ff2"], format: "%a"
+                  %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Продажи-->
+
+
+  <% end %>
+
+  <!--Реклама-->
+  <div class="row">
+    <div class="card col-12">
+      <h2>Реклама</h2>
+      <ul class="nav nav-pills nav-fill">
+        <li class="nav-item">
+          <a class="nav-link active" data-toggle="tab" href="#active">Активная</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#paused">Остановленная</a>
+        </li>
+      </ul>
+
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead class="thead">
+          <tr>
+            <th>#</th>
+            <th>Тип</th>
+            <th>Статус</th>
+            <th>Ставка</th>
+            <th>Дневной бюджет</th>
+          </tr>
+          </thead>
+          <div class="tab-content">
+            <div class="tab-pane active " id="active">
+              <% if @ad_active.blank? %>
+                <tr>Пусто</tr>
+              <% end %>
+              <% @ad_active.each_with_index do |ad, i| %>
+                <tr>
+                  <td><input type="checkbox" name="" id="" checked="checked" disabled="true"></td>
+                  <td><%= I18n.t("ad.ad_type.#{ad.ad_type}") %></td>
+                  <td><%= I18n.t("ad.status.#{ad.status}") %></td>
+                  <td><%= ad.price %></td>
+                  <td><%= ad.daily_budget %></td>
+                </tr>
+              <% end %>
+            </div>
+
+            <!--            <div class="tab-pane " id="paused">-->
+            <%# @ad_pause.each_with_index do |ad, i| %>
+            <!--                <tr>-->
+            <%# byebug %>
+            <!--                  <td><input type="checkbox" name="" id="" value=<%#= ad.ads_status %>></td>-->
+            <!--                  <td><%#= i + 1 %></td>-->
+            <!--                  <td><%#= I18n.t("ad.ad_type.#{ad.ad_type}") %></td>-->
+            <!--                  <td><%#= I18n.t("ad.status.#{ad.status}") %></td>-->
+            <!--                  <td><%#= ad.price %></td>-->
+            <!--                  <td><%#= ad.daily_budget %></td>-->
+            <!--                </tr>-->
+            <%# end %>
+            <!--            </div>-->
+          </div>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- /Реклама-->
+
 </div>
+
