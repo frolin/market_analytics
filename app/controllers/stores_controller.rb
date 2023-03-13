@@ -10,6 +10,8 @@ class StoresController < ApplicationController
 
   # GET /store/1 or /store/1.json
   def show
+    @start_date = DateTime.now.beginning_of_week.to_date
+    @end_date = DateTime.now.end_of_week.to_date
     @orders = @store.orders.week
     @sales = @store.sales.week
     @products = @store.products.decorate
@@ -17,12 +19,13 @@ class StoresController < ApplicationController
     @ad_pause = @store.ads.pause.decorate
     @reports = @store.finance_week_reports.last(2)
 
-    return unless date_range.present?
+    if date_range.present?
+      @orders = @store.orders.by_date(date_range)
+      @sales = @store.sales.by_date(date_range)
+      @reports = SourceReportDecorator.decorate(@store.finance_week_reports.where(start_date: date_range))
+      # @reports = @store.finance_week_reports.where(date('data' ->> 'Дата начала') BETWEEN '2021-10-01' AND '2021-10-30'), )
+    end
 
-    @orders = @store.orders.by_date(date_range)
-    @sales = @store.sales.by_date(date_range)
-    @reports = SourceReportDecorator.decorate(@store.finance_week_reports.where(start_date: date_range))
-    # @reports = @store.finance_week_reports.where(date('data' ->> 'Дата начала') BETWEEN '2021-10-01' AND '2021-10-30'), )
   end
 
   # GET /store/new
@@ -93,6 +96,6 @@ class StoresController < ApplicationController
 
     date_params = permitted_params[:date_range].split(' - ')
 
-    date_params.first.to_date..date_params.last.to_date
+    date_params.first.to_datetime.beginning_of_day..date_params.last.to_datetime.end_of_day
   end
 end

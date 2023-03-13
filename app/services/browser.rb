@@ -78,5 +78,4 @@ class Browser
   def watir
     browser = Watir::Browser.new :chrome, proxy: { http: take_proxy }
   end
-
 end

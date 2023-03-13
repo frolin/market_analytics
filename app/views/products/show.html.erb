@@ -45,6 +45,25 @@
   <br>
 
   <div class="card p-2">
+    <h2>Ключевые слова</h2>
+
+    <table class="table">
+      <thea>
+        <th>Запросы</th>
+        <th>Количество</th>
+      </thea>
+
+      <% @product.keywords.each do |keyword| %>
+        <tr>
+          <td><%= keyword.name %></td>
+          <td><%= keyword.requests_count %></td>
+<!--          <td><%#= keyword.results.map(data) %></td>-->
+        </tr>
+      <% end %>
+    </table>
+  </div>
+
+  <div class="card p-2">
     <h2>Часы заказов на основе: <%= @product.orders.size %> заказов</h2>
 
     <%= column_chart @product.orders.group_by_hour_of_day(:date, format: "%H:%M").count, label: "Заказы" %>

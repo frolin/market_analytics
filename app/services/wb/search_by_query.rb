@@ -18,6 +18,10 @@ module Wb
         loop do
           puts "Start new iteration with query: \'#{q}\' for sku: \'#{sku}\'"
 
+          while @page.find_elements(css: ".product-card.j-card-item").count != 100
+            @page.execute_script("window.scrollBy(0,50)")
+          end
+
           @wait.until do
 
             if element_is_displayed?(type: :css, name: "#c#{sku}")
@@ -50,7 +54,6 @@ module Wb
       ensure
         @page.quit
       end
-
 
     end
 

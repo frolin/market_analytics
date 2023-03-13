@@ -29,9 +29,9 @@
                   <h6>Заказы</h6>
                   <p class="h1"><%= money(@orders.sum { |product| product.price }, precision: 0) %></p>
 
-
-                  <%= column_chart @orders.group_by_date_with_zero(@orders.first&.date&.to_date, @orders.last&.date&.to_date),
+                  <%= column_chart @orders.group_by_date_with_zero(@start_date, @end_date),
                                    colors: ['1e9ff2'],
+                                   max: 5,
                                    legend: false,
                                    dataset: {
                                      # barThickness: 100,
@@ -87,9 +87,7 @@
                 </div>
               </div>
 
-
-
-              <%= column_chart @sales.group_by_date_with_zero(@sales.first&.date&.to_date, @sales.last&.date&.to_date),
+              <%= column_chart @sales.group_by_date_with_zero(@start_date, @end_date),
                                colors: ['1e9ff2'],
                                legend: false,
                                dataset: {

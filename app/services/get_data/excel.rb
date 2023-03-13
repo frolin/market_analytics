@@ -4,17 +4,17 @@ module GetData
       result = {}
       workbook = Roo::Spreadsheet.open(file_path, extension: :xlsx)
 
-      sheets = sheet_name.present? ? [workbook.sheet(sheet_name)] : workbook.sheets
+      # sheets = sheet_name.present? ? [workbook.sheet(sheet_name)] : workbook.sheets
 
-      sheets.each do |sheet|
-        worksheet = workbook.sheet(sheet)
+      workbook.each_with_pagename do |name, sheet|
+        next if sheet_name.present? && sheet_name != name
+
+        worksheet = workbook.sheet(name)
         headers = worksheet.row(headers_row_num)
 
-        puts "Reading: #{sheet}"
-
+        puts "Reading: #{name}"
         @current_row = 0
-
-        result[sheet] = worksheet.map do |row|
+        result[name] = sheet.map do |row|
           @current_row += 1
 
           formatted_row = row.map(&:to_s)

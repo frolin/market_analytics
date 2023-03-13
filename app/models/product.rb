@@ -42,6 +42,10 @@ class Product < ApplicationRecord
     store.stocks.last.for_product(barcode)
   end
 
+  def price
+    requests.last.final_price
+  end
+
   def wb_sku
     return '' if data.nil?
 

@@ -1,6 +1,10 @@
 .products {
+  td:nth-child(2) {
+    padding: 0;
+  }
   td, th {
     vertical-align: middle!important;
+
   }
 
   td img { max-width: 67px;}

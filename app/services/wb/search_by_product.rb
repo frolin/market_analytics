@@ -17,6 +17,7 @@ module Wb
           puts "Start new iteration with keyword: \'#{keyword.name}\' for product: \'#{product.title}\'"
 
           while @page.find_elements(css: ".product-card.j-card-item").count != 100
+            sleep(1)
             @page.execute_script("window.scrollBy(0,50)")
           end
           # sleep 3
@@ -39,16 +40,14 @@ module Wb
               if next_page.present?
                 goto_next_page
               else
-                return "no next page, exit"
+                "no next page, exit"
               end
             end
           end
         end
-
       ensure
         @page.quit
       end
-
     end
 
     private
@@ -67,7 +66,6 @@ module Wb
       else
         raise Selenium::WebDriver::Error::NoSuchElementError
       end
-
     end
 
     def element_is_displayed?(type:, name:)

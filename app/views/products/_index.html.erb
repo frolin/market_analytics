@@ -22,21 +22,19 @@
     <% products.each do |product| %>
 
       <%# if product.stock.present? && product.stock.present? %>
-      <tr class="<%= product.stock_quantity ? '' : 'table-secondary' %>">
+      <tr class="<%= product.stock_quantity ? '' : '' %>">
         <td class="">
-          <% product.photos.each do |photo| %>
+          <% product.photos.first(1).each do |photo| %>
             <%= image_tag photo.image_url if photo.image_url.present? %>
           <% end %>
         </td>
-        <td>
-          <b><%= link_to product.title, product_path(product) %> </b> <br>
+        <td class="">
+          <%= link_to product.title, product_path(product) %>
         </td>
         <td><%= product.barcode %></td>
-        <td><%= money product.price %></td>
+        <td><%= product.price %></td>
         <!--        <td><%#= link_to, product, method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Уверены?' } %></td>-->
-        <td><%= button_to icon('trash'), product, method: :delete %></td>
-
-
+<!--        <td><%#= button_to icon('trash'), product, method: :delete %></td>-->
         <!--      <td><%#= link_to 'Show', market_campaign_product_path(product.campaign.market, product.campaign.number, product) %></td>-->
         <!--      <td><%#= link_to 'Edit', edit_market_campaign_product_path(product.campaign.market, product.campaign.number, product) %></td>-->
         <!--      <td><%#= link_to 'Destroy', market_campaign_product_path(product.campaign.market, product.campaign.number, product), method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
