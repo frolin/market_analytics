@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_25_225713) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_12_220714) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -90,7 +90,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_25_225713) do
     t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "sku"
+    t.bigint "product_id"
+    t.index ["id", "keyword_id"], name: "index_keyword_results_on_id_and_keyword_id"
     t.index ["keyword_id"], name: "index_keyword_results_on_keyword_id"
+    t.index ["product_id"], name: "index_keyword_results_on_product_id"
   end
 
   create_table "keywords", force: :cascade do |t|
@@ -98,6 +102,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_25_225713) do
     t.string "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "requests_count"
+    t.index ["name"], name: "index_keywords_on_name", unique: true
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -175,6 +181,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_25_225713) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["keyword_id"], name: "index_product_keywords_on_keyword_id"
+    t.index ["product_id", "keyword_id"], name: "index_product_keywords_on_product_id_and_keyword_id"
     t.index ["product_id"], name: "index_product_keywords_on_product_id"
   end
 
@@ -429,6 +436,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_25_225713) do
   end
 
   add_foreign_key "keyword_results", "keywords"
+  add_foreign_key "keyword_results", "products"
   add_foreign_key "order_costs", "orders"
   add_foreign_key "order_costs", "stores"
   add_foreign_key "order_products", "orders"
