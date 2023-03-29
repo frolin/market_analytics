@@ -1,0 +1,28 @@
+<h1>Source Reports</h1>
+
+<table class="table table-striped table-hover table-sm">
+  <thead>
+    <tr>
+      <th scope="col">Store</th>
+      <th scope="col">Url</th>
+      <th scope="col">Report type</th>
+      <th colspan="3" scope="col"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @source_reports.each do |source_report| %>
+      <tr>
+        <td><%= source_report.store_id %></td>
+        <td><%= source_report.url %></td>
+        <td><%= source_report.report_type %></td>
+        <td><%= link_to 'Show', source_report %></td>
+        <td><%= link_to 'Edit', edit_source_report_path(source_report) %></td>
+        <td><%= link_to 'Destroy', source_report, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= link_to 'New Source Report', new_source_report_path %>

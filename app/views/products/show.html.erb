@@ -17,27 +17,31 @@
     </dl>
   </div>
 
-  <div class="row">
-    <div class='col-md-6 col-sm-6 col-12'>
-      <div class="input-group">
-        <%= form_for(product_path(@product), method: :get, id: 'date-picker') do %>
-          <%= text_field :date, :range, name: 'date_range' %>
+<!--  <div class="row">-->
+<!--    <div class='col-md-6 col-sm-6 col-12'>-->
+<!--      <div class="input-group">-->
+        <%#= form_for(product_path(@product), method: :get, id: 'date-picker') do %>
+          <%#= text_field :date, :range, name: 'date_range' %>
           <%#= submit_tag "Submit", hidden: true, :disable_with => "Submitting..." %>
-        <% end %>
+        <%# end %>
 
         <!--        <form method='get' enctype='multipart/form-data' id='date-picker'>-->
         <!--          <input type="text" value="01/01/2018 - 01/15/2018"/>-->
         <!--        </form>-->
-      </div>
-    </div>
-  </div>
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+
+      <%#= render Chartjs::Component.new(data: @orders.group_by_date_with_zero) %>
+
 
   <div class="card p-2">
-    <%= line_chart [
-                     { name: 'Заказы', data: @orders.group_by_day(:date, format: "%F").count },
-                     { name: 'Продажи', data: @sales.group_by_day(:date, format: "%F").count },
-                     { name: 'Невыкупы', data: @orders.canceled.group_by_day(:date, format: "%F").count },
-                     { name: 'Возвраты', data: @sales.canceled.group_by_day(:date, format: "%F").count },
+    <%= column_chart [
+                     { name: 'Заказы', data: @orders.group_by_date_with_zero},
+                     { name: 'Продажи', data: @sales.group_by_date_with_zero },
+                     # { name: 'Невыкупы', data: @orders.canceled.group_by_day(:date, format: "%F").count },
+                     # { name: 'Возвраты', data: @sales.canceled.group_by_day(:date, format: "%F").count },
                    ]
     %>
   </div>

@@ -4,10 +4,14 @@ require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
+# require "view_component/engine"
+
 Bundler.require(*Rails.groups)
 
 module MarketAnalytics
   class Application < Rails::Application
+    config.autoload_paths << Rails.root.join("app", "frontend", "components")
+    config.view_component.preview_paths << Rails.root.join("app", "frontend", "components")
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 

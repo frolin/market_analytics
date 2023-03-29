@@ -91,6 +91,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_220714) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "sku"
+    t.string "page_number"
     t.bigint "product_id"
     t.index ["id", "keyword_id"], name: "index_keyword_results_on_id_and_keyword_id"
     t.index ["keyword_id"], name: "index_keyword_results_on_keyword_id"

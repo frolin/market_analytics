@@ -6,6 +6,8 @@
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
+  <!--  <meta name="turbo-cache-control" content="no-cache">-->
+
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
 
@@ -13,8 +15,8 @@
 </head>
 
 <!-- BEGIN: Content-->
-<body class="<%= "#{controller.controller_name} #{controller.action_name}" %>\
-  vertical-layout vertical-menu-modern 2-columns fixed-navbar pace-done menu-expanded">
+<body data-controller="animations" data-turbo-progres class="<%= "#{controller.controller_name} #{controller.action_name}" %>
+      vertical-layout vertical-menu-modern 2-columns fixed-navbar pace-done  animate__swing">
 
 <div class="pace  pace-inactive">
   <div class="pace-progress" data-progress-text="100%" data-progress="99" style="transform: translate3d(100%, 0px, 0px);">
@@ -39,9 +41,13 @@
     <!-- END: Main Menu-->
 
     <div class="content-body">
-      <%#= render partial: 'components/breadcrumb' %>
-      <%= yield %>
+      <div class="container">
+        <%= render partial: 'components/breadcrumb' %>
+
+        <%= yield %>
+      </div>
     </div>
+
   </div>
 </div>
 <!-- END: Content-->
@@ -51,151 +57,171 @@
 
 </body>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-touchspin/4.2.5/jquery.bootstrap-touchspin.min.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-touchspin/4.2.5/jquery.bootstrap-touchspin.min.js"></script>-->
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rubik">
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>-->
+<!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rubik">-->
 
-<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
+<!--<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>-->
+<!--<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>-->
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>-->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-trendline"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
 
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<!--<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-trendline"></script>-->
+<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/2.1.2/chartjs-plugin-annotation.min.js"></script>-->
+<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>-->
 
 <script>
 
-    //  $(function() {
-    //    var start = moment().subtract(29, 'days');
-    //    var end = moment();
-    //
-    //    function cb(start, end) {
-    //        $('#daterange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-    //    }
-    //
-    //    $('#reportrange').daterangepicker({
-    //        startDate: start,
-    //        endDate: end,
-    //        ranges: {
-    //           'Today': [moment(), moment()],
-    //           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-    //           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-    //           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-    //           'This Month': [moment().startOf('month'), moment().endOf('month')],
-    //           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-    //        }
-    //    }, cb);
-    //
-    //    cb(start, end);
-    //});
+  //  $(function() {
+  //    var start = moment().subtract(29, 'days');
+  //    var end = moment();
+  //
+  //    function cb(start, end) {
+  //        $('#daterange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+  //    }
+  //
+  //    $('#reportrange').daterangepicker({
+  //        startDate: start,
+  //        endDate: end,
+  //        ranges: {
+  //           'Today': [moment(), moment()],
+  //           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+  //           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+  //           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+  //           'This Month': [moment().startOf('month'), moment().endOf('month')],
+  //           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+  //        }
+  //    }, cb);
+  //
+  //    cb(start, end);
+  //});
 
-    // function cb(start, end) {
-    //     $('.daterange').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-    // }
-    //
-    // !function(a){a.fn.daterangepicker.dates.ru={days:["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],daysShort:["Вск","Пнд","Втр","Срд","Чтв","Птн","Суб"],daysMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],months:["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],monthsShort:["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"],today:"Сегодня",clear:"Очистить",format:"dd.mm.yyyy",weekStart:1,monthsTitle:"Месяцы"}}(jQuery);
+  // function cb(start, end) {
+  //     $('.daterange').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+  // }
+  //
+  // !function(a){a.fn.daterangepicker.dates.ru={days:["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],daysShort:["Вск","Пнд","Втр","Срд","Чтв","Птн","Суб"],daysMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],months:["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],monthsShort:["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"],today:"Сегодня",clear:"Очистить",format:"dd.mm.yyyy",weekStart:1,monthsTitle:"Месяцы"}}(jQuery);
 
-    moment.locale("ru")
-
-
-    //     $(function() {
-    //
-    //     var start = moment().subtract(29, 'days');
-    //     var end = moment();
-    //
-    //     function cb(start, end) {
-    //         $('#date-range-picker span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-    //     }
-    //
-    //     $('input[name="date_range"]').daterangepicker({
-    //         startDate: start,
-    //         endDate: end,
-    //         ranges: {
-    //            'Сегодня': [moment(), moment()],
-    //            'Вчера': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-    //            '7 дней': [moment().subtract(6, 'days'), moment()],
-    //            '30 дней': [moment().subtract(29, 'days'), moment()],
-    //            'Этот месяц': [moment().startOf('month'), moment().endOf('month')],
-    //            'Последний месяц': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-    //         }
-    //     }, cb);
-    //
-    //     cb(start, end);
-    //
-    // });
+  // moment.locale("ru")
 
 
-    $('input[name="date_range"]').daterangepicker({
-        opens: 'center',
-        alwaysShowCalendars: false,
-        autoclose: true,
-        showWeekNumbers: true,
-
-        locale: {
-            format: 'DD.MM.YYYY',
-            locale: {
-                "applyLabel": "Ок",
-                "cancelLabel": "Отмена",
-                "fromLabel": "От",
-                "toLabel": "До",
-                "customRangeLabel": "Произвольный",
-                "daysOfWeek": [
-                    "Вс",
-                    "Пн",
-                    "Вт",
-                    "Ср",
-                    "Чт",
-                    "Пт",
-                    "Сб"
-                ],
-                "monthNames": [
-                    "Январь",
-                    "Февраль",
-                    "Март",
-                    "Апрель",
-                    "Май",
-                    "Июнь",
-                    "Июль",
-                    "Август",
-                    "Сентябрь",
-                    "Октябрь",
-                    "Ноябрь",
-                    "Декабрь"
-                ],
-                firstDay: 1
-            }
-        },
-        ranges: {
-            'Сегодня': [moment(), moment()],
-            'Вчера': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            '7 дней': [moment().subtract(6, 'days'), moment()],
-            '30 дней': [moment().subtract(29, 'days'), moment()],
-            'Этот месяц': [moment().startOf('month'), moment().endOf('month')],
-            'Последний месяц': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        }
-
-    }, function (start, end, label) {
-        // console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-        // $("#date_range").val(start.format('YYYY-MM-DD')-end.format('YYYY-MM-DD'));
-        // $(input[name="date_range"]).val(start.format('YYYY-MM-DD')-end.format('YYYY-MM-DD'));
-
-        // $('#date-submit').click();
-    });
-    $('input[name="date_range"]').on('apply.daterangepicker', function (ev, picker) {
-        $(this).val(picker.chosenLabel);
-        $('#date-submit').click();
-    });
+  //     $(function() {
+  //
+  //     var start = moment().subtract(29, 'days');
+  //     var end = moment();
+  //
+  //     function cb(start, end) {
+  //         $('#date-range-picker span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+  //     }
+  //
+  //     $('input[name="date_range"]').daterangepicker({
+  //         startDate: start,
+  //         endDate: end,
+  //         ranges: {
+  //            'Сегодня': [moment(), moment()],
+  //            'Вчера': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+  //            '7 дней': [moment().subtract(6, 'days'), moment()],
+  //            '30 дней': [moment().subtract(29, 'days'), moment()],
+  //            'Этот месяц': [moment().startOf('month'), moment().endOf('month')],
+  //            'Последний месяц': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+  //         }
+  //     }, cb);
+  //
+  //     cb(start, end);
+  //
+  // });
+  // var today = new Date();
+  // var endDate = new Date();
+  // endDate.setMonth(endDate.getMonth() + 1);
+  //
+  //
+  // $('input[name="date_range"]').daterangepicker({
+  //     startDate: today, // after open picker you'll see this dates as picked
+  //     endDate: endDate,
+  //     opens: 'center',
+  //     alwaysShowCalendars: true,
+  //     autoclose: true,
+  //     showWeekNumbers: true,
+  //
+  //     locale: {
+  //         format: 'DD.MM.YYYY',
+  //         locale: {
+  //             "applyLabel": "Ок",
+  //             "cancelLabel": "Отмена",
+  //             "fromLabel": "От",
+  //             "toLabel": "До",
+  //             "customRangeLabel": "Произвольный",
+  //             "daysOfWeek": [
+  //                 "Вс",
+  //                 "Пн",
+  //                 "Вт",
+  //                 "Ср",
+  //                 "Чт",
+  //                 "Пт",
+  //                 "Сб"
+  //             ],
+  //             "monthNames": [
+  //                 "Январь",
+  //                 "Февраль",
+  //                 "Март",
+  //                 "Апрель",
+  //                 "Май",
+  //                 "Июнь",
+  //                 "Июль",
+  //                 "Август",
+  //                 "Сентябрь",
+  //                 "Октябрь",
+  //                 "Ноябрь",
+  //                 "Декабрь"
+  //             ],
+  //             firstDay: 1
+  //         }
+  //     },
+  //     ranges: {
+  //         'Сегодня': [moment(), moment()],
+  //         'Вчера': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+  //         '7 дней': [moment().subtract(6, 'days'), moment()],
+  //         '30 дней': [moment().subtract(29, 'days'), moment()],
+  //         'Этот месяц': [moment().startOf('month'), moment().endOf('month')],
+  //         'Последний месяц': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+  //     }
+  //
+  // }, function (start, end, label) {
+  //     console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+  //     $("#date_range").val(start.format('YYYY-MM-DD') - end.format('YYYY-MM-DD'));
+  //     // $(input[name = "date_range"]).val(start.format('YYYY-MM-DD') - end.format('YYYY-MM-DD'));
+  //
+  //     $('#date-submit').click();
+  //
+  //     //
+  //     // var url = window.location.href;
+  //     // if (url.indexOf('?') > -1) {
+  //     //     url += '?&start_date=' + start.format('YYYY-MM-DD') + '&end_date=' + end.format('YYYY-MM-DD');
+  //     // } else {
+  //     //     url += '?&start_date=' + start.format('YYYY-MM-DD') + '&end_date=' + end.format('YYYY-MM-DD');
+  //     // }
+  //     // window.location.href = url;
+  //
+  //
+  // });
+  // $('input[name="date_range"]').on('apply.daterangepicker', function (ev, picker) {
+  //     // $("#date_range").val(start.format('YYYY-MM-DD') - end.format('YYYY-MM-DD'));
+  //
+  //
+  //     // $(this).val(picker.chosenLabel);
+  //     $('#date-submit').click();
+  // });
 
 </script>
 
 
-<script type="text/javascript" charset="utf-8">
-    $("input.touchspin").TouchSpin({
-        min: 0,
-        max: 100,
-        step: 1,
-    });
-</script>
+<!--<script type="text/javascript" charset="utf-8">-->
+<!--    $("input.touchspin").TouchSpin({-->
+<!--        min: 0,-->
+<!--        max: 100,-->
+<!--        step: 1,-->
+<!--    });-->
+<!--</script>-->
 </html>

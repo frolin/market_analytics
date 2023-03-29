@@ -4,19 +4,24 @@ module Wb
   class MassSearchByQuery < ActiveInteraction::Base
     INPUT_FORM = '#searchInput'
     PROMO = '.product-card__tip.product-card__tip--action'
-    MAX_PAGE_NUMBER = '5'
+    MAX_PAGE_NUMBER = 5
 
     record :keyword
 
     def execute
-      ads = {}
-      data_all = {}
-      @wait = Selenium::WebDriver::Wait.new(timeout: 60)
+      ads = []
+      data_all = []
 
-      search
+      @wait = Selenium::WebDriver::Wait.new(timeout: 60)
+      # search
+      @page = Browser.new(first_page).run
+      @page_number = 1
 
       begin
         loop do
+          break "max page, exit" if @page_number == MAX_PAGE_NUMBER
+
+          @current_page_number = @page_number
           puts "Start new iteration with query: #{keyword.name}"
 
           while @page.find_elements(css: ".product-card.j-card-item").count != 100
@@ -24,34 +29,33 @@ module Wb
             @page.execute_script("window.scrollBy(0,100)")
           end
 
+
           @page.find_elements(css: ".product-card.j-card-item").each_with_index do |product, idx|
-            return if current_page_number == MAX_PAGE_NUMBER
+            if ads?(product)
+              ads << product
+              next
+            end
+
             product_data = data(product, idx + 1)
             keyword_result = KeywordResult.find_by(sku: product_data[:sku])
 
-            byebug
             if changed_position?(keyword_result, product_data)
               keyword_result.update!(data: product_data)
-
               next
             elsif keyword_result
               next
-
             else
               KeywordResult.create!(sku: product_data.delete(:sku),
+                                    page_number: product_data.delete(:page_number),
                                     keyword_id: keyword.id,
                                     data: product_data)
             end
           end
 
-          puts "goto next page num from: #{current_page_number} to: #{next_page_number} "
+          goto_next_page(@page_number)
+          @page_number += 1
 
-          if next_page.present?
-            goto_next_page
-          else
-            return "no next page, exit"
-          end
-
+          puts "goto next page num from: #{@current_page_number} to: #{@page_number} "
         end
 
       ensure
@@ -61,9 +65,11 @@ module Wb
 
     private
 
-    def search
-      @page = Browser.new('https://www.wildberries.ru/').run
+    def first_page
+      "https://www.wildberries.ru/catalog/0/search.aspx?page=#{1}&sort=popular&search=#{keyword.name}"
+    end
 
+    def search
       search = @wait.until {
         element_is_displayed?(type: :css, name: INPUT_FORM)
       }
@@ -89,21 +95,20 @@ module Wb
       @page.find_elements(type => name).present? ? true : false
     end
 
-    def next_page
-      @page.find_elements(css: 'a.pagination-item').select { |el| el.text == next_page_number }.first
+    def goto_next_page(number)
+      @page.navigate.to("https://www.wildberries.ru/catalog/0/search.aspx?page=#{number}&sort=popular&search=#{keyword.name}")
+      # @page.find_elements(css: 'a.pagination-item').select { |el| el.text == next_page_number }.first
     end
 
-    def goto_next_page
-      next_page.click
-    end
 
     def current_page_number
-      @page.find_element(css: '.pagination__item.active').text
+      @current_page_number
+      # @page.find_element(css: '.pagination__item.active').text
     end
 
-    def next_page_number
-      (current_page_number.to_i + 1).to_s
-    end
+    # def next_page_number
+    #   (current_page_number.to_i + 1).to_s
+    # end
 
     def data(product, position)
       { page_number: current_page_number.to_i,
@@ -131,6 +136,5 @@ module Wb
     rescue
       false
     end
-
   end
 end

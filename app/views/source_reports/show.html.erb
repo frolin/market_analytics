@@ -1,0 +1,12 @@
+<h1>Source Reports</h1>
+
+<dl>
+  <dt>Store:</dt>
+  <dd><%= @source_report.store %></dd>
+  <dt>Url:</dt>
+  <dd><%= @source_report.url %></dd>
+  <dt>Report type:</dt>
+  <dd><%= @source_report.report_type %></dd>
+</dl>
+<%= link_to 'Edit', edit_source_report_path(@source_report) %> |
+<%= link_to 'Back', source_reports_path %>

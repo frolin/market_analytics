@@ -18,6 +18,7 @@ class Order < ApplicationRecord
   scope :recent, -> { where("created_at > #{30.minutes.ago}") }
   scope :today, -> { where(date: DateTime.now.beginning_of_day..DateTime.now.end_of_day) }
   scope :week, -> { where(date: DateTime.now.beginning_of_week.beginning_of_day..DateTime.now.end_of_day) }
+  scope :month, -> { where(date: DateTime.now.beginning_of_month.beginning_of_day..DateTime.now.end_of_day) }
   scope :canceled, -> { where("api_data @> ?", { "isCancel" => true }.to_json) }
   scope :by_date, ->(date_range) { where(date: date_range) }
 
@@ -78,5 +79,4 @@ class Order < ApplicationRecord
   def product
     products.last
   end
-
 end

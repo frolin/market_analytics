@@ -1,236 +1,237 @@
+<% content_for :title, "Магазин #{@store.name}" %>
+
+<%= content_for :header_button do %>
+  <div class="logo" style="width: 64px">
+    <%= image_tag image_path("markets/#{@store.slug}.png"), width: '73%' %>
+    <!--                              <i class="cc BTC warning font-large-2" title="BTC"></i>-->
+  </div>
+<% end %>
+
 <div class="container">
-  <!--  <div class="row">-->
-  <!--    <div class="p-2 card col-xl-4 col-lg-4 col-12">-->
-  <!--      <h1>Магазин <%#= @store.requests.last.data['name'] %></h1>-->
+  <div class="row">
+    <!--    <div class="p-2 card col-xl-4 col-lg-4 col-12">-->
+    <!--      <h1>Магазин <%#= @store.requests.last.data['name'] %></h1>-->
 
-  <!--      <dl>-->
-  <!--        <dt>Владелец</dt>-->
-  <!--        <dd>  <%#= @store.requests.last.data['ip'] %>  </dd>-->
+    <!--      <dl>-->
+    <!--        <dt>Владелец</dt>-->
+    <!--        <dd>  <%#= @store.requests.last.data['ip'] %>  </dd>-->
 
-  <!--        <dt>Отзывы</dt>-->
-  <!--        <dd> <%#= @store.requests.last.data['reviews'] %>  </dd>-->
-  <!--        <dt>Количество продаж</dt>-->
-  <!--        <dd> <%#= @store.requests.last.data['sells_count'] %>  </dd>-->
-  <!--      </dl>-->
-  <!--    </div>-->
-  <!--  </div>-->
-  
+    <!--        <dt>Отзывы</dt>-->
+    <!--        <dd> <%#= @store.requests.last.data['reviews'] %>  </dd>-->
+    <!--        <dt>Количество продаж</dt>-->
+    <!--        <dd> <%#= @store.requests.last.data['sells_count'] %>  </dd>-->
+    <!--      </dl>-->
+    <!--    </div>-->
+  </div>
 
-
-  <%= turbo_frame_tag @store do %>
-    <!-- Заказы-->
+  <%= turbo_frame_tag dom_id(@store), 'data-turbo-permanent': true do %>
     <div class="row">
-      <div class="col-xl-6 col-lg-6">
-        <div class="card">
-          <div class="card-content">
-            <div class="card-body">
-              <div class="media d-flex">
-                <div class="media-body text-left">
-                  <h6>Заказы</h6>
-                  <p class="h1"><%= money(@orders.sum { |product| product.price }, precision: 0) %></p>
-
-                  <%= column_chart @orders.group_by_date_with_zero(@start_date, @end_date),
-                                   colors: ['1e9ff2'],
-                                   max: 5,
-                                   legend: false,
-                                   dataset: {
-                                     # barThickness: 100,
-                                     # maxBarThickness: 31,
-                                     # labels: [@sales.group_by_date_with_zero(@start_date, @end_date)],
-                                     backgroundColor: [
-                                       'rgba(248, 142, 72, .7)',
-                                     # 'rgba(255, 159, 64, 0.2)',
-                                     # 'rgba(255, 205, 86, 0.2)',
-                                     # 'rgba(75, 192, 192, 0.2)',
-                                     # 'rgba(54, 162, 235, 0.2)',
-                                     # 'rgba(153, 102, 255, 0.2)',
-                                     # 'rgba(201, 203, 207, 0.2)'
-                                     ],
-                                     borderColor: [
-                                       'rgba(248, 142, 72, 0.9)',
-                                     # 'rgb(255, 159, 64)',
-                                     # 'rgb(255, 205, 86)',
-                                     # 'rgb(75, 192, 192)',
-                                     # 'rgb(54, 162, 235)',
-                                     # 'rgb(153, 102, 255)',
-                                     # 'rgb(201, 203, 207)'
-                                     ],
-                                     borderWidth: 1
-                                   },
-                                   library: {
-                                     # plugins: [ChartDataLabels],
-
-                                   } %>
-
-                </div>
-                <div>
-                  <i class="icon-pie-chart warning font-large-2 float-right"></i>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
+      <div class="col-xl-3 col-lg-6 col-6">
+        <%= render Card::Component.new(title: 'Заказы', data: @orders.count, sum: @orders.sum { |product| product.price },
+                                       color: Chartjs::Component::COLORS[2], icon_class: ' la icon-basket-loaded') %>
       </div>
-      <div class="col-xl-6 col-lg-6 col-12">
-        <div class="card pull-up">
-          <div class="card-content">
-            <div class="card-body">
-              <div class="media d-flex">
-                <div class="media-body text-left">
-                  <h6 class="h6">Продажи</h6>
 
-                  <p class="h1"> <%= money(@sales.sum { |product| product.price }, precision: 0) %> </p>
-                </div>
-                <div>
-                  <i class="icon-basket-loaded info font-large-2 float-right"></i>
-                </div>
-              </div>
-
-              <%= column_chart @sales.group_by_date_with_zero(@start_date, @end_date),
-                               colors: ['1e9ff2'],
-                               legend: false,
-                               dataset: {
-                                 # barThickness: 100,
-                                 # maxBarThickness: 31,
-                                 # labels: [@sales.group_by_date_with_zero(@start_date, @end_date)],
-                                 backgroundColor: [
-                                   'rgba(30, 159, 242, .7)',
-                                 # 'rgba(255, 159, 64, 0.2)',
-                                 # 'rgba(255, 205, 86, 0.2)',
-                                 # 'rgba(75, 192, 192, 0.2)',
-                                 # 'rgba(54, 162, 235, 0.2)',
-                                 # 'rgba(153, 102, 255, 0.2)',
-                                 # 'rgba(201, 203, 207, 0.2)'
-                                 ],
-                                 borderColor: [
-                                   'rgba(30, 159, 242, .9)',
-                                 # 'rgb(255, 159, 64)',
-                                 # 'rgb(255, 205, 86)',
-                                 # 'rgb(75, 192, 192)',
-                                 # 'rgb(54, 162, 235)',
-                                 # 'rgb(153, 102, 255)',
-                                 # 'rgb(201, 203, 207)'
-                                 ],
-                                 borderWidth: 1
-                               },
-                               library: {
-                                 # plugins: [ChartDataLabels],
-
-                               }
-              %>
-
-            </div>
-          </div>
-        </div>
+      <div class="col-xl-3 col-lg-6 col-6">
+        <%= render Card::Component.new(title: 'Продажи', data: @sales.size, sum: @sales.sum_price,
+                                       icon_class: 'la la-money', color: 'green') %>
       </div>
+
+      <div class="col-xl-3 col-lg-6 col-6">
+        <%= render Card::Component.new(title: 'Выручка', data: money(@store.finance_week_reports.sales_sum),
+                                       icon_class: 'la la-rouble', color: '#9C27B0') %>
+      </div>
+
+      <div class="col-xl-3 col-lg-6 col-6">
+        <%= render Card::Component.new(title: 'Реклама', data: money(@sales.sum_price),
+                                       icon_class: 'la icon-pie-chart', color: 'rgba(255, 202, 58, 1)') %>
+      </div>
+
+
     </div>
-    <!--/ Заказы-->
-
-    <!-- Продажи-->
     <div class="row">
-      <div class="col-xl-12 col-lg-12 ">
-        <div class="card">
-          <div class="card-content">
-            <div class="card-body">
-              <div class="d-flex">
-                <div class="store-data d-flex flex-lg-column flex-sm-row ">
-                  <div class="flex-column sales">
-                    <p class="h4">Продажи</p>
-                    <small class="">количество</small>
-                    <p class="h4"> <%= @sales.count %> шт.</p>
-                    <small> сумма </small>
-                    <br>
-                    <b class="h4"> <%= money(@sales.sum { |product| product.price }, precision: 0) %> </b>
-                  </div>
 
-                  <div class="mt-2 flex-column orders">
-                    <p class="h4">Заказы</p>
-                    <small class="">количество</small>
-                    <br>
-                    <p class="h4"> <%= @orders.count %> шт.</p>
+      <!-- Заказы-->
+      <div class="col-xl-12 col-lg-12 col-sm-12 col-12">
+        <%= render Chartjs::Component.new(
 
-                    <!--                  <small> сумма </small>-->
-                    <!--                  <br>-->
-                    <!--                  <b class="h4"> <%#= money(@orders.sum { |product| product.price }, precision: 0) %> </b>-->
-                  </div>
-                </div>
+          # summ: @orders.sum { |product| product.price },
+          data: [
+            {
+              data: @orders_data,
+              source: 'order',
+              icon_name: 'pie-chart',
+              color: 'warning',
+              type: 'bar',
+              label: 'Заказы',
+              title: 'Заказы',
+              background_color: Chartjs::Component::COLORS[0],
+              border_color: Chartjs::Component::COLORS[0],
+            },
+            {
+              data: @sales_data,
+              source: 'order',
+              icon_name: 'pie-chart',
+              color: 'warning',
+              type: 'bar',
+              title: 'Продажи',
+              label: 'Продажи',
+              background_color: Chartjs::Component::COLORS[4],
+              border_color: Chartjs::Component::COLORS[4],
+              yAxisID: 'y1'
+              # summ: @sales.sum { |product| product.price },
+              # yAxisID: 'A'
 
-                <div class="ml-1 flex-lg-grow-1 store-chart-data">
-                  <%= line_chart [{ name: 'Заказы', data: @orders.group_by_date_with_zero(@orders.first&.date&.to_date, @orders.last&.date&.to_date) },
-                                  { name: 'Продажи', data: @sales.group_by_date_with_zero(@sales.first&.date&.to_date, @sales.last&.date&.to_date) }
-                                 ], colors: ["#ff9149", "#1e9ff2"], format: "%a"
-                  %>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+            },
+            {
+              data: @sales_data_sum,
+              # summ: @sales.sum { |product| product.price },
+              source: 'sales_sum',
+              title: 'Сумма продаж',
+              type: 'line',
+              # icon_name: 'pie-chart',
+              # color: 'warning',
+              fill: false,
+              label: 'Сумма продаж',
+              background_color: Chartjs::Component::COLORS[2],
+              border_color: Chartjs::Component::COLORS[2],
+              # border_color: '#FF5722',
+              yAxisID: 'y2',
+              tension: 0.4,
+              borderWidth: 2,
+              pointBorderWidth: 3,
+              borderDash: [10, 5]
+              # borderDashOffset: '1px',
+              # borderWidth: '2px'
+            },
+          # {
+          # data: @ads_sum,
+          # # summ: @sales.sum { |product| product.price },
+          # source: 'sales_sum',
+          # title: 'Сумма продаж',
+          # type: 'line',
+          # # icon_name: 'pie-chart',
+          # # color: 'warning',
+          # fill: false,
+          # label: 'Сумма продаж',
+          # background_color: Chartjs::Component::COLORS[3],
+          # border_color: Chartjs::Component::COLORS[3],
+          # # border_color: '#FF5722',
+          # yAxisID: 'y3',
+          # tension: 0.4,
+          # borderWidth: 2,
+          # pointBorderWidth: 3
+          # borderDashOffset: '1px',
+          # borderWidth: '2px'
+          # },
+
+          # {
+          #   data: @sales_data,
+          #   summ: @sales.sum { |product| product.price },
+          #   source: 'order',
+          #   title: 'Заказы',
+          #   icon_name: 'pie-chart',
+          #   color: 'warning',
+          #   type: 'line',
+          #   label: 'Выручка',
+          #   background_color: 'rgba(248, 142, 72, .5)',
+          #   borderColor: 'rgba(248, 142, 72, .5)',
+          # },
+
+          ]
+        )
+        %>
+      </div>
+
+      <div class="col-xl-3 col-lg-6 col-3">
+        <%= #render Chartjs::Component.new(
+            # data: @sales_data_sum,
+            # source: 'order',
+            # title: 'Заказы',
+            # icon_name: 'pie-chart',
+            # color: 'warning',
+            # type: 'line',
+            # summ: @sales_data_sum.values.sum { |price| price }
+            # )
+        %>
+      </div>
+      <!-- Заказы-->
+
+
+      <!-- Продажи-->
+      <div class="col-xl-3 col-lg-6 col-3">
+        <%= # render Chartjs::Component.new(
+            # data: @sales_data,
+            # source: 'sale',
+            # title: 'Продажи',
+            # type: 'line',
+            # color: 'info',
+            # icon_name: 'basket',
+            # summ: @sales.sum { |product| product.price }
+            # )
+        %>
       </div>
     </div>
     <!-- Продажи-->
-
-
   <% end %>
 
   <!--Реклама-->
   <div class="row">
-    <div class="card col-12">
-      <h2>Реклама</h2>
-      <ul class="nav nav-pills nav-fill">
-        <li class="nav-item">
-          <a class="nav-link active" data-toggle="tab" href="#active">Активная</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="tab" href="#paused">Остановленная</a>
-        </li>
-      </ul>
+    <!--    <div class="card col-12">-->
+    <!--      <h2>Реклама</h2>-->
+    <!--      <ul class="nav nav-pills nav-fill">-->
+    <!--        <li class="nav-item">-->
+    <!--          <a class="nav-link active" data-toggle="tab" href="#active">Активная</a>-->
+    <!--        </li>-->
+    <!--        <li class="nav-item">-->
+    <!--          <a class="nav-link" data-toggle="tab" href="#paused">Остановленная</a>-->
+    <!--        </li>-->
+    <!--      </ul>-->
 
 
-      <div class="table-responsive">
-        <table class="table">
-          <thead class="thead">
-          <tr>
-            <th>#</th>
-            <th>Тип</th>
-            <th>Статус</th>
-            <th>Ставка</th>
-            <th>Дневной бюджет</th>
-          </tr>
-          </thead>
-          <div class="tab-content">
-            <div class="tab-pane active " id="active">
-              <% if @ad_active.blank? %>
-                <tr>Пусто</tr>
-              <% end %>
-              <% @ad_active.each_with_index do |ad, i| %>
-                <tr>
-                  <td><input type="checkbox" name="" id="" checked="checked" disabled="true"></td>
-                  <td><%= I18n.t("ad.ad_type.#{ad.ad_type}") %></td>
-                  <td><%= I18n.t("ad.status.#{ad.status}") %></td>
-                  <td><%= ad.price %></td>
-                  <td><%= ad.daily_budget %></td>
-                </tr>
-              <% end %>
-            </div>
+    <!--      <div class="table-responsive">-->
+    <!--        <table class="table">-->
+    <!--          <thead class="thead">-->
+    <!--          <tr>-->
+    <!--            <th>#</th>-->
+    <!--            <th>Тип</th>-->
+    <!--            <th>Статус</th>-->
+    <!--            <th>Ставка</th>-->
+    <!--            <th>Дневной бюджет</th>-->
+    <!--          </tr>-->
+    <!--          </thead>-->
+    <!--          <div class="tab-content">-->
+    <!--            <div class="tab-pane active " id="active">-->
+    <%# if @ad_active.blank? %>
+    <!--                <tr>Пусто</tr>-->
+    <%# end %>
+    <%# @ad_active.each_with_index do |ad, i| %>
+    <!--                <tr>-->
+    <!--                  <td><input type="checkbox" name="" id="" checked="checked" disabled="true"></td>-->
+    <!--                  <td><%#= I18n.t("ad.ad_type.#{ad.ad_type}") %></td>-->
+    <!--                  <td><%#= I18n.t("ad.status.#{ad.status}") %></td>-->
+    <!--                  <td><%#= ad.price %></td>-->
+    <!--                  <td><%#= ad.daily_budget %></td>-->
+    <!--                </tr>-->
+    <%# end %>
+    <!--            </div>-->
 
-            <!--            <div class="tab-pane " id="paused">-->
-            <%# @ad_pause.each_with_index do |ad, i| %>
-            <!--                <tr>-->
-            <%# byebug %>
-            <!--                  <td><input type="checkbox" name="" id="" value=<%#= ad.ads_status %>></td>-->
-            <!--                  <td><%#= i + 1 %></td>-->
-            <!--                  <td><%#= I18n.t("ad.ad_type.#{ad.ad_type}") %></td>-->
-            <!--                  <td><%#= I18n.t("ad.status.#{ad.status}") %></td>-->
-            <!--                  <td><%#= ad.price %></td>-->
-            <!--                  <td><%#= ad.daily_budget %></td>-->
-            <!--                </tr>-->
-            <%# end %>
-            <!--            </div>-->
-          </div>
-        </table>
-      </div>
-    </div>
+    <!--                        <div class="tab-pane " id="paused">-->
+    <%# @ad_pause.each_with_index do |ad, i| %>
+    <!--                            <tr>-->
+    <%# byebug %>
+    <!--                              <td><input type="checkbox" name="" id="" value=<%#= ad.ads_status %>></td>-->
+    <!--                              <td><%#= i + 1 %></td>-->
+    <!--                              <td><%#= I18n.t("ad.ad_type.#{ad.ad_type}") %></td>-->
+    <!--                              <td><%#= I18n.t("ad.status.#{ad.status}") %></td>-->
+    <!--                              <td><%#= ad.price %></td>-->
+    <!--                              <td><%#= ad.daily_budget %></td>-->
+    <!--                            </tr>-->
+    <%# end %>
+    <!--                        </div>-->
+    <!--          </div>-->
+    <!--        </table>-->
+    <!--      </div>-->
+    <!--    </div>-->
   </div>
   <!-- /Реклама-->
 

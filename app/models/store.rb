@@ -1,6 +1,6 @@
 class Store < ApplicationRecord
   extend FriendlyId
-  friendly_id :name, use: :slugged
+  # friendly_id :name, use: :slugged
 
   belongs_to :account
 

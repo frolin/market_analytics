@@ -10,7 +10,7 @@ module Imports
 
         stock = stocks_data.result #.select { |product| product['quantity'] > 0 }
 
-        new_stock = store.stocks.create!(api_data: stock)
+        store.stocks.create!(api_data: stock)
 
         Rails.logger.info("Stock create: #{stock.size}")
 

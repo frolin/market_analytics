@@ -18,7 +18,9 @@ class Sale < ApplicationRecord
   scope :canceled, -> { where(state: :canceled) }
   scope :today, -> { where(date: DateTime.now.beginning_of_day..DateTime.now.end_of_day) }
   scope :week, -> { where(date: DateTime.now.beginning_of_week..DateTime.now) }
+  scope :month, -> { where(date: DateTime.now.beginning_of_month.beginning_of_day..DateTime.now.end_of_day) }
   scope :by_date, -> (date_range) { where(date: date_range) }
+  scope :sum_price, ->  { sum("(api_data->>'finishedPrice')::float")}
 
 
   def self.today_count

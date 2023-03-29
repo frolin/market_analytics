@@ -5,6 +5,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.0.1'
 
+
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 7.0.2', '>= 7.0.2.3'
 
@@ -124,6 +125,7 @@ gem 'chartkick'
 gem 'groupdate'
 gem 'image_processing', '~> 1.8'
 gem 'view_component'
+gem "view_component-contrib"
 
 group :production do
   gem 'sentry-rails'
@@ -133,3 +135,5 @@ group :production do
   gem 'yabeda-prometheus'
   gem 'yabeda-sidekiq'
 end
+
+gem "dry-initializer", "~> 3.1"

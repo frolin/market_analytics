@@ -20,7 +20,6 @@
           <li class="nav-item d-none d-md-block">
             <a class="nav-link nav-menu-main menu-toggle hidden-xs is-active" href="#"><i class="ft-menu"></i></a>
           </li>
-
           <li class="nav-item nav-search">
             <a class="nav-link nav-link-search" href="#"><i class="ficon ft-search"></i></a>
             <div class="search-input">
@@ -31,9 +30,10 @@
           </li>
         </ul>
 
-        <ul class="" style="width: 30%; margin: auto;">
-          <%= render partial: 'components/date_range_picker', locals: { path: store_path(@store.id), frame_name: dom_id(@store) } %>
-        </ul>
+
+        <div class="m-auto nav-item ">
+          <%= render DateRange::Component.new(path: store_path(@store.id), frame_name: dom_id(@store)) %>
+        </div>
 
         <ul class="nav navbar-nav float-right">
           <li class="dropdown dropdown-language nav-item">
@@ -46,9 +46,12 @@
               German</a></div>
           </li>
           <li class="dropdown dropdown-notification nav-item">
-            <a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i class="ficon ft-bell"></i><span class="badge badge-pill badge-danger badge-up badge-glow">
-              <%= current_user.tg_user.notifications.count if current_user.tg_user.present? %>
-            </span></a>
+            <!--            <a class="nav-link nav-link-label" href="#" data-toggle="dropdown">-->
+            <!--              <i class="ficon ft-bell"></i>-->
+            <!--              <span class="badge badge-pill badge-danger badge-up badge-glow">-->
+            <%#= current_user.tg_user.notifications.count if current_user.tg_user.present? %>
+            <!--            </span>-->
+            <!--            </a>-->
             <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
               <li class="dropdown-menu-header">
                 <h6 class="dropdown-header m-0"><span class="grey darken-2">Уведомления</span></h6>
@@ -156,7 +159,9 @@
             </ul>
           </li>
           <li class="dropdown dropdown-user nav-item">
-            <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown"><span class="mr-1 user-name text-bold-700">John Doe</span><span class="avatar avatar-online">
+            <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown"><span class="mr-1 user-name text-bold-700">
+              <%= current_user.first_name %>
+            </span><span class="avatar avatar-online">
               <img src="<%= image_path('portrait/small/avatar-s-19.png') %>" alt="avatar"><i></i></span></a>
             <div class="dropdown-menu dropdown-menu-right">
               <a class="dropdown-item" href="<%= profile_page_path %>"><i class="ft-user"></i> Настройки </a>

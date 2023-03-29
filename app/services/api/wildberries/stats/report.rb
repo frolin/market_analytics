@@ -2,7 +2,7 @@ module Api
   module Wildberries
     module Stats
       class Report < Api::WildberriesClient
-        record :user
+        record :store
         date :date_from, default: '2019-06-20'
         date :date_to, default: Date.today.strftime("%d-%m-%Y")
         integer :limit, default: 100000
@@ -14,15 +14,15 @@ module Api
         private
 
         def base_url
-          'hhttps://statistics-api.wildberries.ru'
+          'https://statistics-api.wildberries.ru'
         end
 
         def api_method
           'api/v1/supplier/reportDetailByPeriod'
         end
 
-        def key
-          user.wb.campaigns.last.token
+        def token
+          store.token
         end
 
         def type
@@ -31,8 +31,7 @@ module Api
 
         def params
           { dateFrom: date_from,
-            dateTo: date_to,
-            key: key}
+            dateTo: date_to }
         end
       end
     end

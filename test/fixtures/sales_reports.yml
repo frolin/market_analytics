@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  store: one
+  product: one
+  date_from: 2023-02-22 19:11:49
+  date_to: 2023-02-22 19:11:49
+  quantity: 1
+  srid: MyString
+  rid: MyString
+  office_name: MyString
+  commission_percent: 1.5
+
+two:
+  store: two
+  product: two
+  date_from: 2023-02-22 19:11:49
+  date_to: 2023-02-22 19:11:49
+  quantity: 1
+  srid: MyString
+  rid: MyString
+  office_name: MyString
+  commission_percent: 1.5

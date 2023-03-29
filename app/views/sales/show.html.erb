@@ -13,7 +13,6 @@
       <h3>Versions</h3>
       <% @sale.audits.each do |audit| %>
         <% hash1, hash2 = audit.audited_changes.values.flatten %>
-        <% byebug %>
         <%= (ap Tools::HashDiff.call(hash1, hash2)).html_safe %>
       <% end %>
     <% end %>

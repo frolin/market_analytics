@@ -1,17 +1,19 @@
-<div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+<div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
   <div class="main-menu-content">
-    <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+    <ul class="mt-2 navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
       <li class="nav-item has-sub menu-collapsed-open open">
-        <a href="/"><i class="la la-home"></i><span class="menu-title" data-i18n="Dashboard">Мои магазины</span>
-<!--          <span class="badge badge badge-info badge-pill float-right mr-2"><%#= current_user.stores.count %></span>-->
+        <a  href="/">
+          <i class="font-medium-4 la la-home"></i>
+          <span class="menu-title" data-i18n="Dashboard">Мои магазины</span>
+          <!--          <span class="badge badge badge-info badge-pill float-right mr-2"><%#= current_user.stores.count %></span>-->
         </a>
         <ul class="menu-content">
-<!--          <li class="active">-->
-<!--            <a class="menu-item" href="<%#= stores_path %>"><i></i><span data-i18n="eCommerce">Все</span></a>-->
-<!--          </li>-->
+          <!--          <li class="active">-->
+          <!--            <a class="menu-item" href="<%#= stores_path %>"><i></i><span data-i18n="eCommerce">Все</span></a>-->
+          <!--          </li>-->
           <% current_user.stores.each do |store| %>
-            <li>
-              <a class="menu-item" data-turbo="true" data-turbo-action="replace" href="<%= store_path(store.id) %>"><i></i><span data-i18n="Crypto"><%= store.name %></span></a>
+            <li class="<%= active_class(store_path(store.id)) %>">
+              <a class="menu-item "  href="<%= store_path(store.id) %>"><i></i><span data-i18n="Crypto"><%= store.name %></span></a>
             </li>
 
           <% end %>
@@ -20,23 +22,25 @@
         </ul>
       </li>
 
-<!--      <li class="navigation-header">-->
-<!--        <span>ТОвары</span>-->
-<!--        <i class="la la-ellipsis-h" data-toggle="tooltip" data-placement="right" data-original-title="Admin Panels"></i>-->
-<!--      </li>-->
+      <!--      <li class="navigation-header">-->
+      <!--        <span>ТОвары</span>-->
+      <!--        <i class="la la-ellipsis-h" data-toggle="tooltip" data-placement="right" data-original-title="Admin Panels"></i>-->
+      <!--      </li>-->
 
       <li class="">
         <a data-turbo="true" data-turbo-action="replace" href="<%= products_path %>">
-          <i class="la la-cube"></i>
+          <i class=" font-medium-4 la la-cube"></i>
           <span class="menu-title" data-i18n="Dashboard">Товары</span>
-          <span class="badge badge badge-info badge-pill float-right mr-2"><%= current_user.stores.last.products.count %></span></a>
+          <!--          <span class="badge badge badge-info badge-pill float-right mr-2"><%#= current_user.stores.last.products.count %></span>-->
+        </a>
       </li>
 
       <li class="">
         <a data-turbo="true" data-turbo-action="replace" href="<%= supplies_path %>">
-          <i class="la la-archive"></i>
-          <span class="menu-title" data-i18n="Dashboard">Поставки</span>
-          <span class="badge badge badge-info badge-pill float-right mr-2"><%= current_user.supplies.count %></span></a>
+          <i class="font-medium-4 la la-archive"></i>
+          <span class="menu-title " data-i18n="Dashboard">Поставки</span>
+          <!--          <span class="badge badge badge-info badge-pill float-right mr-2"><%#= current_user.supplies.count %></span>-->
+        </a>
       </li>
 
       <li class="navigation-header">

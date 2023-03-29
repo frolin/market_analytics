@@ -4,6 +4,9 @@
 @import "market";
 @import "pages";
 
+//@import 'animate.css';
+//@import '@domchristie/turn/dist/turn';
+
 //@import 'material-dashboard';
 //@import "material-dashboard/nucleo-icons";
 //@import "material-dashboard/nucleo-svg";
@@ -46,4 +49,49 @@ $font-size-base: 18px;
     font-size: 1rem;
   }
 
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.fade-in {
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+
+[data-turbo-progress]::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid #ccc;
+  border-top-color: #333;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.navbar-nav .nav-link {
+  font-family: "Open Sans";
+}
+
+.effect-flash {
+  animation: flash_white .8s cubic-bezier(.46,.03,.52,.96);
+}
+
+@keyframes flash_white {
+  0% { background-color: #ffffff; }
+  30% { background-color: #FFFF14; }
+  100% { background-color: #ffffff; }
 }

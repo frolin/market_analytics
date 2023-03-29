@@ -779,7 +779,7 @@ select.form-control {
       padding: 18px 0px;
       margin-right: 0; }
       .header-navbar .navbar-header .navbar-brand .brand-logo {
-        width: 36px; }
+        width: 100%; }
       .header-navbar .navbar-header .navbar-brand .brand-text {
         display: inline;
         padding-left: 6px;
@@ -937,7 +937,8 @@ select.form-control {
 .navbar-semi-dark {
   background: #fff; }
   .navbar-semi-dark .navbar-header {
-    background: #2c343b; }
+    /*background: #2c343b; */
+  }
     .navbar-semi-dark .navbar-header .brand-text {
       color: #fff; }
   .navbar-semi-dark .navbar-nav li {

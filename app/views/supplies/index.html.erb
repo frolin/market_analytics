@@ -6,7 +6,7 @@
       поставку
     </button>
     <div class="dropdown-menu arrow" x-placement="bottom-start" style="position: absolute; transform: translate3d(-23px, 41px, 0px); top: 0px; left: 0px; will-change: transform;">
-      <% current_user.markets.each do |market| %>
+      <% current_user.stores.each do |market| %>
         <!--        <i class="fa fa-calendar-check mr-1"></i>-->
         <%= link_to market.slug.upcase, new_supply_path(market_id: market.slug), class: "dropdown-item" %>
       <% end %>

@@ -443,6 +443,9 @@ GEM
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
+    view_component-contrib (0.1.3)
+      ruby-next-core (>= 0.12.0)
+      view_component
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.2.0)
@@ -495,6 +498,7 @@ DEPENDENCIES
   devise
   down
   draper
+  dry-initializer (~> 3.1)
   faraday
   faraday-multipart
   ffaker
@@ -534,6 +538,7 @@ DEPENDENCIES
   turbo-rails
   tzinfo-data
   view_component
+  view_component-contrib
   web-console
   webdrivers
   yabeda-prometheus

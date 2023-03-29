@@ -1,0 +1,40 @@
+<div class="card">
+  <div class="card-content">
+    <div class="card-body p-0">
+      <div class="media p-1 d-flex">
+        <div class="media-body">
+          <!--          <h6 class="font-large-2 text-bold-400"><%#= @title %></h6>-->
+
+
+          <!--          <p class="h2">-->
+          <!--            <p class="font-large-2 text-bold-400"> <%#= money(@summ)  %> </p>-->
+          <!--          </p>-->
+          <!--        </div>-->
+          <!--        <div>-->
+          <!--          <i class="icon-<%#= @icon_name %> <%#= @color %> font-large-1 float-right"></i>-->
+          <!--        </div>-->
+          <!--      </div>-->
+
+          <div class=" store-chart-data ">
+
+            <div class="<%= class_for("container") %> container" data-controller="<%= controller_name %>">
+              <!--     data-<%#= controller_name %>-target="name" -->
+              <canvas style="height:60vh; width:100vw; max-width: 100%;; display: block;"
+                      id="chartjs" data-chartjs-target="canvas"
+                      data-chart-data-value="<%= @dataset.to_json %>"
+                      data-chart-options-value="<%= @options.to_json %>"
+                      data-action="turbo:frame-load->chartjs#connect turbo:submit-end->chartjs#connect"
+              >
+              </canvas>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+

@@ -1,8 +1,17 @@
 module ApplicationHelper
+  def component(name, *args, **kwargs, &block)
+    component = name.to_s.camelize.constantize::Component
+    render(component.new(*args, **kwargs), &block)
+  end
+
   # https://gist.github.com/fjahr/b3828b9f4e333e74ba1894687d65e055
   def bootstrap_class_for(flash_type)
     { success: 'alert-success', error: 'alert-danger', alert: 'alert-warning',
       notice: 'alert-info' }.stringify_keys[flash_type.to_s] || flash_type.to_s
+  end
+
+  def active_class(link_path)
+    current_page?(link_path) ? "active" : ""
   end
 
   def flash_messages(_opts = [])
@@ -40,10 +49,10 @@ module ApplicationHelper
     content_tag(:i, '', class: "la la-#{name}")
   end
 
-  def money(int, precision: 2, round: false)
+  def money(int, precision: 0, round: false)
     ActionController::Base.helpers.number_to_currency(int, unit: '₽', separator: ',',
-                                                           precision: precision, delimiter: ' ',
-                                                           format: '%n %u')
+                                                      precision: precision, delimiter: ' ',
+                                                      format: '%n %u')
   end
 
   def market_prefix(name)
