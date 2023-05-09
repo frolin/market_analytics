@@ -11,12 +11,16 @@ class ProductsController < ApplicationController
 
   # GET /products/1 or /products/1.json
   def show
+    default_date_range = DateTime.now.advance(days: -30)..DateTime.now
+
     if date_range.present?
       @orders = @product.orders.where(date: @start_date..@end_date)
       @sales = @product.sales.where(date: @start_date..@end_date)
     else
       @orders = @product.orders
       @sales = @product.sales
+      @orders_data = @orders.group_by_date_with_zero(date_range: default_date_range)
+      @sales_data = @sales.group_by_date_with_zero(date_range: default_date_range)
     end
   end
 

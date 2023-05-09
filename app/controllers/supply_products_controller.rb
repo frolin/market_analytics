@@ -2,6 +2,7 @@
 
 class SupplyProductsController < ApplicationController
   before_action :set_supply_product, only: %i[show edit update destroy]
+  before_action :set_store, only: %i[show edit update destroy]
 
   # GET /supply_products or /supply_products.json
   def index
@@ -70,6 +71,10 @@ class SupplyProductsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_supply_product
     @supply_product = SupplyProduct.find(params[:id])
+  end
+
+  def set_store
+    @store = current_user.stores.first
   end
 
   # Only allow a list of trusted parameters through.

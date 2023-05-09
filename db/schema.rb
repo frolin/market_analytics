@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_12_220714) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_08_205600) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -211,44 +211,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_220714) do
     t.index ["user_id"], name: "index_products_on_user_id"
   end
 
-  create_table "requests", force: :cascade do |t|
-    t.string "source_type", null: false
-    t.bigint "source_id", null: false
-    t.string "type", null: false
-    t.jsonb "data", default: {}
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "notified", default: false
-    t.index ["source_type", "source_id"], name: "index_requests_on_source"
-  end
-
-  create_table "sale_products", force: :cascade do |t|
-    t.bigint "product_id", null: false
-    t.bigint "sale_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["product_id"], name: "index_sale_products_on_product_id"
-    t.index ["sale_id"], name: "index_sale_products_on_sale_id"
-  end
-
-  create_table "sales", force: :cascade do |t|
-    t.bigint "order_id"
-    t.datetime "date", precision: nil
-    t.jsonb "api_data", default: {}
-    t.jsonb "excel_data", default: {}
-    t.bigint "store_id"
-    t.boolean "notified", default: false
-    t.string "state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["order_id"], name: "index_sales_on_order_id"
-    t.index ["store_id"], name: "index_sales_on_store_id"
-  end
-
-  create_table "sales_reports", force: :cascade do |t|
+  create_table "report_sales", force: :cascade do |t|
     t.bigint "store_id", null: false
     t.string "barcode", null: false
-    t.datetime "date_from"
+    t.date "date_from"
+    t.date "date_to"
     t.datetime "create_dt"
     t.datetime "order_dt"
     t.datetime "sale_dt"
@@ -262,6 +229,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_220714) do
     t.string "nm_id"
     t.string "gi_id"
     t.string "rrd_id"
+    t.string "declaration_number"
+    t.string "site_country"
     t.string "ts_name"
     t.string "sa_name"
     t.string "brand_name"
@@ -302,8 +271,57 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_220714) do
     t.string "gi_box_type_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["barcode"], name: "index_sales_reports_on_barcode"
-    t.index ["store_id"], name: "index_sales_reports_on_store_id"
+    t.bigint "sale_report_id"
+    t.index ["barcode"], name: "index_report_sales_on_barcode"
+    t.index ["gi_id"], name: "index_report_sales_on_gi_id"
+    t.index ["sale_report_id"], name: "index_report_sales_on_sale_report_id"
+    t.index ["store_id"], name: "index_report_sales_on_store_id"
+  end
+
+  create_table "requests", force: :cascade do |t|
+    t.string "source_type", null: false
+    t.bigint "source_id", null: false
+    t.string "type", null: false
+    t.jsonb "data", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "notified", default: false
+    t.index ["source_type", "source_id"], name: "index_requests_on_source"
+  end
+
+  create_table "sale_products", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "sale_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_sale_products_on_product_id"
+    t.index ["sale_id"], name: "index_sale_products_on_sale_id"
+  end
+
+  create_table "sale_reports", force: :cascade do |t|
+    t.string "name"
+    t.bigint "store_id", null: false
+    t.date "date_from"
+    t.date "date_to"
+    t.jsonb "report_statistics", default: {}
+    t.text "realizationreport_ids", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_sale_reports_on_store_id"
+  end
+
+  create_table "sales", force: :cascade do |t|
+    t.bigint "order_id"
+    t.datetime "date", precision: nil
+    t.jsonb "api_data", default: {}
+    t.jsonb "excel_data", default: {}
+    t.bigint "store_id"
+    t.boolean "notified", default: false
+    t.string "state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_sales_on_order_id"
+    t.index ["store_id"], name: "index_sales_on_store_id"
   end
 
   create_table "source_reports", force: :cascade do |t|
@@ -322,6 +340,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_220714) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "store_id", null: false
+    t.bigint "product_id"
+    t.index ["product_id"], name: "index_stocks_on_product_id"
     t.index ["store_id"], name: "index_stocks_on_store_id"
   end
 
@@ -346,6 +366,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_220714) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "data", default: {}
     t.index ["store_id"], name: "index_supplies_on_store_id"
     t.index ["user_id"], name: "index_supplies_on_user_id"
   end
@@ -359,7 +380,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_220714) do
     t.string "type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "cost_type"
     t.index ["supply_product_id"], name: "index_supply_costs_on_supply_product_id"
+  end
+
+  create_table "supply_prices", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "supply_id", null: false
+    t.decimal "price", precision: 8, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_supply_prices_on_product_id"
+    t.index ["supply_id"], name: "index_supply_prices_on_supply_id"
   end
 
   create_table "supply_products", force: :cascade do |t|
@@ -384,6 +416,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_220714) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_tg_users_on_user_id"
+  end
+
+  create_table "unit_economics", force: :cascade do |t|
+    t.bigint "supply_id", null: false
+    t.jsonb "data"
+    t.date "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["supply_id"], name: "index_unit_economics_on_supply_id"
   end
 
   create_table "user_settings", force: :cascade do |t|
@@ -451,18 +492,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_220714) do
   add_foreign_key "product_keywords", "products"
   add_foreign_key "products", "stores"
   add_foreign_key "products", "users"
+  add_foreign_key "report_sales", "sale_reports"
+  add_foreign_key "report_sales", "stores"
   add_foreign_key "sale_products", "products"
   add_foreign_key "sale_products", "sales"
+  add_foreign_key "sale_reports", "stores"
   add_foreign_key "sales", "stores"
-  add_foreign_key "sales_reports", "stores"
   add_foreign_key "source_reports", "stores"
+  add_foreign_key "stocks", "products"
   add_foreign_key "stocks", "stores"
   add_foreign_key "stores", "accounts"
   add_foreign_key "supplies", "stores"
   add_foreign_key "supplies", "users"
   add_foreign_key "supply_costs", "supply_products"
+  add_foreign_key "supply_prices", "products"
+  add_foreign_key "supply_prices", "supplies"
   add_foreign_key "supply_products", "products"
   add_foreign_key "supply_products", "supplies"
+  add_foreign_key "unit_economics", "supplies"
   add_foreign_key "user_settings", "users"
   add_foreign_key "user_stores", "stores"
   add_foreign_key "user_stores", "users"

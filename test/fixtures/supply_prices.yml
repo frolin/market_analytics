@@ -1,0 +1,21 @@
+# == Schema Information
+#
+# Table name: supply_prices
+#
+#  id         :bigint           not null, primary key
+#  product_id :bigint           not null
+#  supply_id  :bigint           not null
+#  price      :decimal(8, 2)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+one:
+  product: one
+  supply: one
+  price: 9.99
+
+two:
+  product: two
+  supply: two
+  price: 9.99

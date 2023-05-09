@@ -1,4 +1,15 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# == Schema Information
+#
+# Table name: images
+#
+#  id          :bigint           not null, primary key
+#  name        :string
+#  source_type :string           not null
+#  source_id   :bigint           not null
+#  image_data  :jsonb
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
 
 one:
   name: MyString

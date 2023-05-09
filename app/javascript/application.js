@@ -11,38 +11,38 @@ moment.locale("ru")
 import _ from 'lodash';
 import * as bootstrap from "bootstrap"
 
-
-import "@hotwired/turbo-rails"
-
-Turbo.session.drive = true
+//
+// import "@hotwired/turbo-rails"
+//
+// Turbo.session.drive = true
 
 
 import "./controllers"
 
 
 import './utils/jquery.bootstrap-touchspin'
-// import './lib/daterangepicker.js'
+import './utils'
 
-import './lib/select2.full.min.js'
+import 'select2'
 
-import Turn from '@domchristie/turn'
-Turn.start()
+// import Turn from '@domchristie/turn'
+// Turn.start()
 
-addEventListener("turbo:load", (event) => {
-  // document.body.classList.add("animate__animated", "animate__fadeIn");
-})
+// addEventListener("turbo:load", (event) => {
+//   // document.body.classList.add("animate__animated", "animate__fadeIn");
+// })
 
-document.addEventListener("turbo:before-visit", function () {
-  console.log("BEFORE VISIT!")
-  document.querySelector("body").classList.add("fade-out");
-});
-
-document.addEventListener("turbo:load", function () {
-    console.log("LOAD TURBO!!")
-
-  document.querySelector("body").classList.remove("fade-out");
-  document.querySelector("body").classList.add("fade-in");
-});
+// document.addEventListener("turbo:before-visit", function () {
+//   console.log("BEFORE VISIT!")
+//   document.querySelector("body").classList.add("fade-out");
+// });
+//
+// document.addEventListener("turbo:load", function () {
+//     console.log("LOAD TURBO!!")
+//
+//   document.querySelector("body").classList.remove("fade-out");
+//   document.querySelector("body").classList.add("fade-in");
+// });
 
 
 // Chart.defaults.global.defaultFontFamily = "Lato";
@@ -53,20 +53,35 @@ document.addEventListener("turbo:load", function () {
 //     console.log('Chart: ', Chart)
 // })
 // $(document).ready(function () {
-// $(".select2-tags").select2({
+//   $(".select2-tags").select2({
 //     // tags: true,
 //     theme: 'bootstrap4'
 //     // tokenSeperators: [','],
 //     // theme: 'bootstrap',
 //     // placeholder: 'seperated by space'
+//   });
 // });
 
 //
-// $('.select2').select2({
+
+// export class Select2Init {
+//   start() {
+//     $(function() {
+//       $('.select2').select2()
+//     })
+//   }
+// }
+//
+// new Select2Init().start()
+
+// $(document).ready(function () {
+//   $('.select2').select2({
 //     theme: 'bootstrap4',
 //     templateResult: addUserPic,
 //     templateSelection: addUserPic
+//   });
 // });
+
 //
 // $('.date-range-picker').daterangepicker({
 //     format: 'mm/dd/yyyy',
@@ -89,27 +104,41 @@ document.addEventListener("turbo:load", function () {
 
 // });
 //
-// function addUserPic(opt) {
-//     if (!opt.id) {
-//         return opt.text;
-//     }
-//     var optimage = $(opt.element).data('image');
-//     if (!optimage) {
-//         return opt.text;
-//     } else {
-//         var $opt = $(
-//             '<span class="userName"><img width="32px" src="' + optimage + '" class="userPic" /> ' + $(opt.element).text() + '</span>'
-//         );
-//         return $opt;
-//     }
-// };
+function addUserPic(opt) {
+  if (!opt.id) {
+    return opt.text;
+  }
+  var optimage = $(opt.element).data('image');
+  if (!optimage) {
+    return opt.text;
+  } else {
+    var $opt = $(
+      '<span class="userName"><img width="32px" src="' + optimage + '" class="userPic" /> ' + $(opt.element).text() + '</span>'
+    );
+    return $opt;
+  }
+};
 //
-//
-// let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-// let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-//     return new bootstrap.Popover(popoverTriggerEl)
-// })
-//
+
+let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+  return new bootstrap.Popover(popoverTriggerEl)
+})
+
+
+$('.datepicker').daterangepicker({
+  alwaysShowCalendars: true,
+  autoApply: true,
+  singleDatePicker: true,
+
+}).on('apply.daterangepicker', function (e, picker) {
+  // if (selectedRange) {
+  //   picker.show();
+  //   selectedRange = false;
+  // }
+  // $('#date-submit').click();
+});
+
 
 // $('.dropdown-toggle').dropdown()
 

@@ -1,35 +1,44 @@
+# == Schema Information
+#
+# Table name: stocks
+#
+#  id         :bigint           not null, primary key
+#  quantity   :integer
+#  api_data   :jsonb
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  store_id   :bigint           not null
+#  product_id :bigint
+#
 class Stock < ApplicationRecord
   belongs_to :store
+  belongs_to :product
 
   store_accessor :api_data, :url
 
-  def for_product(barcode)
-    return  if api_data != {}
-    api_data.map do |stock|
-      if stock['barcode'] == barcode
-        { quantity: stock['quantity'],
-          warehouse: stock['warehouseName'] }
-      end
+  scope :with_quantity, -> { sum_of_jsonb_key_greater_than('quantity', 0) }
+
+  scope :sum_of_jsonb_key_greater_than, -> (key, value) {
+    where("(
+      SELECT SUM((api_data->>'#{key}')::int)
+      FROM stocks
+      WHERE id = stocks.id
+    ) > ?", value)
+  }
+
+  def for_product
+    api_data.map do |data|
+      next if data['quantity'] == 0
+
+      { quantity: data['quantity'],
+        warehouse: data['warehouseName'],
+        quantity_full: data['quantityFull'],
+        days_on_site: data['daysOnSite']
+      }
     end.compact
   end
 
-  def by_products
-    result = Hash.new { |h, k| h[k] = [] }
-
-    data = api_data.group_by do |stock|
-      store.products.find_by(barcode: stock['barcode'])
-    end
-
-    data.each do |product, stock|
-      stock.each do |s|
-        result["[#{s['supplierArticle']}] #{product&.title}"] <<
-          {
-            warehouse: s['warehouseName'],
-            quantity: s['quantity']
-          }
-      end
-    end
-
-    result
+  def quantity_all
+    api_data.map { |data| data['quantity'] }.sum.to_i
   end
 end

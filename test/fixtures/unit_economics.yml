@@ -1,0 +1,21 @@
+# == Schema Information
+#
+# Table name: unit_economics
+#
+#  id         :bigint           not null, primary key
+#  supply_id  :bigint           not null
+#  data       :jsonb
+#  date       :date
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+one:
+  supply: one
+  data: 
+  date: 2023-05-08
+
+two:
+  supply: two
+  data: 
+  date: 2023-05-08

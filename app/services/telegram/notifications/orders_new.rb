@@ -45,6 +45,8 @@ module Telegram
       end
 
       def diff_text
+        return unless @request
+
         @request.diff_old_new.map do |keys|
           keys.map do |key, value|
             next unless I18n.exists?("telegram.notifications.diff_store_parsed_data.#{key}")
@@ -61,7 +63,7 @@ module Telegram
         text << "💰 Цена: #{money(price)}"
         text << "💳 Скидка: #{@order.discount} % \n"
 
-        text << "Остатки: \n #{stock_count}"
+        text << "Остатки: \n #{stock_count}" if @request.present?
       end
 
       def price
@@ -72,6 +74,8 @@ module Telegram
       end
 
       def stock_count
+        return 'Нет данных' if @order.product.stock.blank?
+
         @order.product.stock.map do |stock|
           "📦️ #{stock[:warehouse]} → #{stock[:quantity]}шт. \n"
         end.join(" ")

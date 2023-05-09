@@ -3,7 +3,8 @@ class CreateSalesReports < ActiveRecord::Migration[7.0]
     create_table :sales_reports do |t|
       t.references :store, null: false, foreign_key: true
       t.string :barcode, null: false, foreign_key: true, index: true
-      t.datetime :date_from
+      t.date :date_from
+      t.date :date_to
       t.datetime :create_dt
       t.datetime :order_dt
       t.datetime :sale_dt
@@ -12,11 +13,13 @@ class CreateSalesReports < ActiveRecord::Migration[7.0]
       t.string :subject_name
       t.string :realizationreport_id
       t.string :doc_type_name
-      t.string :srid
+      t.string :srid, uniq: true
       t.string :rid
       t.string :nm_id
-      t.string :gi_id
+      t.string :gi_id, foreign_key: true, index: true
       t.string :rrd_id
+      t.string :declaration_number
+      t.string :site_country
       t.string :ts_name
       t.string :sa_name
       t.string :brand_name

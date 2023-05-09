@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: sales
+#
+#  id         :bigint           not null, primary key
+#  order_id   :bigint
+#  date       :datetime
+#  api_data   :jsonb
+#  excel_data :jsonb
+#  store_id   :bigint
+#  notified   :boolean          default(FALSE)
+#  state      :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 class Sale < ApplicationRecord
   include Groupable
   audited

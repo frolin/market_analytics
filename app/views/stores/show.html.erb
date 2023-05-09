@@ -24,7 +24,7 @@
     <!--    </div>-->
   </div>
 
-  <%= turbo_frame_tag dom_id(@store), 'data-turbo-permanent': true do %>
+  <%= turbo_frame_tag dom_id(@store) do %>
     <div class="row">
       <div class="col-xl-3 col-lg-6 col-6">
         <%= render Card::Component.new(title: 'Заказы', data: @orders.count, sum: @orders.sum { |product| product.price },
@@ -48,10 +48,11 @@
 
 
     </div>
-    <div class="row">
+
+    <div class="row mb-3 card">
 
       <!-- Заказы-->
-      <div class="col-xl-12 col-lg-12 col-sm-12 col-12">
+      <div class="p-0 col-xl-12 col-lg-12 col-sm-12 col-12">
         <%= render Chartjs::Component.new(
 
           # summ: @orders.sum { |product| product.price },
@@ -64,9 +65,17 @@
               type: 'bar',
               label: 'Заказы',
               title: 'Заказы',
+              postfix: ' шт.',
               background_color: Chartjs::Component::COLORS[0],
               border_color: Chartjs::Component::COLORS[0],
+              yAxisID: 'y',
+              yAxisMAX: @orders_data.values.max,
+              stack: 3,
+              datalabels: {
+                color: '#FFCE56'
+              }
             },
+
             {
               data: @sales_data,
               source: 'order',
@@ -75,13 +84,33 @@
               type: 'bar',
               title: 'Продажи',
               label: 'Продажи',
+              postfix: ' шт.',
               background_color: Chartjs::Component::COLORS[4],
               border_color: Chartjs::Component::COLORS[4],
-              yAxisID: 'y1'
+              # yAxisID: 'y',
+              yAxisMAX: @sales_data.values.max,
+              stack: 1,
+
               # summ: @sales.sum { |product| product.price },
               # yAxisID: 'A'
-
             },
+
+            {
+              data: @canceled_data,
+              source: 'order',
+              icon_name: 'pie-chart',
+              # color: 'warning',
+              type: 'bar',
+              label: 'Отказы',
+              title: 'Отказы',
+              postfix: ' шт.',
+              background_color: Chartjs::Component::COLORS[7],
+              border_color: Chartjs::Component::COLORS[7],
+              yAxisID: 'y2',
+              yAxisMAX: @sales_data.values.max,
+              stack: 3,
+            },
+
             {
               data: @sales_data_sum,
               # summ: @sales.sum { |product| product.price },
@@ -92,17 +121,21 @@
               # color: 'warning',
               fill: false,
               label: 'Сумма продаж',
-              background_color: Chartjs::Component::COLORS[2],
-              border_color: Chartjs::Component::COLORS[2],
+              background_color: Chartjs::Component::COLORS[8],
+              border_color: Chartjs::Component::COLORS[8],
               # border_color: '#FF5722',
-              yAxisID: 'y2',
+              yAxisID: 'y3',
               tension: 0.4,
               borderWidth: 2,
               pointBorderWidth: 3,
-              borderDash: [10, 5]
+              borderDash: [10, 5],
+              postfix: ' ₽',
+              yAxisMAX: @sales_data_sum.values.max,
+
               # borderDashOffset: '1px',
               # borderWidth: '2px'
-            },
+            }
+
           # {
           # data: @ads_sum,
           # # summ: @sales.sum { |product| product.price },
@@ -234,6 +267,97 @@
     <!--    </div>-->
   </div>
   <!-- /Реклама-->
+
+  <div class="row">
+    <div id="recent-sales" class="col-12 col-md-12 p-0">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Самые продоваемые товары</h4>
+          <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+          <div class="heading-elements">
+            <ul class="list-inline mb-0">
+              <li>
+                <a class="btn btn-sm btn-danger box-shadow-2 round btn-min-width pull-right" href="invoice-summary.html" target="_blank">View
+                  all</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-content mt-1">
+          <div class="table-responsive">
+            <table id="recent-orders" class="table table-hover table-xl mb-0">
+              <thead>
+              <tr>
+                <th class="border-top-0">#</th>
+                <th class="border-top-0">Товар</th>
+
+                <th class="border-top-0">Склады</th>
+                <th class="border-top-0">Средний оборот за неделю</th>
+                <th class="border-top-0">Популярность</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% @products.each do |product| %>
+                <% next if product.stock&.quantity_all.to_i == 0 %>
+                <tr>
+                  <td class="text-truncate">
+                    <img style=" height: 100px;" class="media-object" src="<%= product.photos.first.image_url if product.photos.first %>" alt="product photo">
+
+                  </td>
+                  <td><%= product.title %></td>
+                  <td class="text-truncate p-1">
+                    <ul class="list-unstyled users-list m-0">
+
+                      <li class="">
+
+                        <% product.stock.for_product.each do |stock| %>
+                          <p>
+                            <small>склад: <b><%= stock[:warehouse] %></b></small><br>
+                            остаток:
+
+                          <ul>
+                            <li>
+                              <small>на складе:
+                                <b><%= stock[:quantity] %></b>
+                              </small>
+                            </li>
+                            <li>
+                              <small>в пути:
+                                <b><%= stock[:quantity_full] - stock[:quantity] %></b>
+                              </small>
+                            </li>
+                          </ul>
+                          <br>
+
+                          <small>в продаже (дней): <b><%= stock[:days_on_site] %> дней </b></small>
+                          <br>
+                          <small>хватит: на 14 дней</small>
+                          </p>
+
+                          <p></p>
+
+                        <% end %>
+                      </li>
+                    </ul>
+                  </td>
+                  <td>
+                    <small>
+                      <%= product.decorate.previous_week_sum_report_view %>
+                    </small>
+                  </td>
+                  <td>
+                    <div class="progress progress-sm mt-1 mb-0 box-shadow-2">
+                      <div class="progress-bar bg-gradient-x-danger" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>
 

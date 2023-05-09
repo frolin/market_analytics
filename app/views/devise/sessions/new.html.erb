@@ -29,10 +29,12 @@
             <img src="<%= image_path('logo.png') %>" width="100%" alt="branding logo">
           </div>
         </div>
+          <p class="notice"><%= notice %></p>
+          <p class="alert"><%= alert %></p>
 
         <div class="card-body">
-          <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'form-horizontal' }) do |f| %>
 
+          <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'form-horizontal' }, data: { turbo: false }) do |f| %>
             <fieldset class="form-group position-relative has-icon-left">
               <%= f.input :email,
                           required: true,
@@ -73,12 +75,12 @@
             </div>
           <% end %>
         </div>
-        <p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1">
-          <span>Нет аккаунта?</span></p>
-        <div class="card-body">
-          <a href="register-with-bg-image.html" class="btn btn-outline-danger btn-block"><i class="la la-user"></i>
-            Зарегистрироватсья</a>
-        </div>
+        <!--        <p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1">-->
+        <!--          <span>Нет аккаунта?</span></p>-->
+        <!--        <div class="card-body">-->
+        <!--          <a href="register-with-bg-image.html" class="btn btn-outline-danger btn-block"><i class="la la-user"></i>-->
+        <!--            Зарегистрироватсья</a>-->
+        <!--        </div>-->
       </div>
     </div>
   </div>

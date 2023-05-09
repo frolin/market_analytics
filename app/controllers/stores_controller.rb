@@ -10,16 +10,20 @@ class StoresController < ApplicationController
 
   # GET /store/1 or /store/1.json
   def show
-    default_date_range = DateTime.now.advance(days: -30)..DateTime.now
+    default_date_range = DateTime.now.advance(days: -7)..DateTime.now
     @orders = @store.orders.month
     @sales = @store.sales.month
     @sales_data = @sales.group_by_date_with_zero(date_range: default_date_range, type: :by_date)
     @orders_data = @orders.group_by_date_with_zero(date_range: default_date_range, type: :by_date)
+    @canceled_data = @orders.canceled.group_by_date_with_zero(date_range: default_date_range, type: :by_date)
     @sales_data_sum = @sales.group_by_date_with_zero(date_range: default_date_range, type: :by_price)
-     # @ads_sum = @store.finance_week_reports.group_by_date_with_zero(date_range: default_date_range, type: :by_price, field_name: 'finishedPrice')
+    # @ads_sum = @store.finance_week_reports.group_by_date_with_zero(date_range: default_date_range, type: :by_price, field_name: 'finishedPrice')
+    @products = ProductDecorator.decorate(@store.products)
 
-
-    @products = @store.products.decorate
+    # .where('stocks.api_data')
+    # .group('products.id')
+    # .select('products.*, SUM((sales.api_data->>\'totalPrice\')::numeric) AS sum_column')
+    # .order('sum_column DESC')
     @ad_active = @store.ads.show.decorate
     @ad_pause = @store.ads.pause.decorate
     @reports = @store.finance_week_reports.last(2)
@@ -30,6 +34,7 @@ class StoresController < ApplicationController
 
       @sales_data = @sales.group_by_date_with_zero(date_range: date_range_params, type: :by_date)
       @orders_data = @orders.group_by_date_with_zero(date_range: date_range_params, type: :by_date)
+      @canceled_data = @orders.canceled.group_by_date_with_zero(date_range: date_range_params, type: :by_date)
       @sales_data_sum = @sales.group_by_date_with_zero(date_range: date_range_params, type: :by_price)
       # @ads_sum = @store.finance_week_reports.group_by_date_with_zero(date_range: default_date_range, type: :by_price)
       @reports = SourceReportDecorator.decorate(@store.finance_week_reports.where(start_date: date_range_params))

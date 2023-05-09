@@ -1,4 +1,9 @@
 module ApplicationHelper
+
+  def current_user
+    User.first
+  end
+
   def component(name, *args, **kwargs, &block)
     component = name.to_s.camelize.constantize::Component
     render(component.new(*args, **kwargs), &block)

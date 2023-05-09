@@ -1,0 +1,28 @@
+<h1>Unit Economics</h1>
+
+<table class="table table-striped table-hover table-sm">
+  <thead>
+    <tr>
+      <th scope="col">Supply</th>
+      <th scope="col">Data</th>
+      <th scope="col">Date</th>
+      <th colspan="3" scope="col"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @unit_economics.each do |unit_economic| %>
+      <tr>
+        <td><%= unit_economic.supply_id %></td>
+        <td><%= unit_economic.data %></td>
+        <td><%= unit_economic.date %></td>
+        <td><%= link_to 'Show', unit_economic %></td>
+        <td><%= link_to 'Edit', edit_unit_economic_path(unit_economic) %></td>
+        <td><%= link_to 'Destroy', unit_economic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= link_to 'New Unit Economic', new_unit_economic_path %>

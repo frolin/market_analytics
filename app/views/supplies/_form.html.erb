@@ -1,8 +1,8 @@
 <div class="card-body">
   <%= simple_form_for(@supply) do |f| %>
-    <%= f.error_notification %>
-    <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
-    <%= f.hidden_field :market_id, value: params[:market_id] %>
+    <%#= f.error_notification %>
+    <%#= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+    <%#= f.hidden_field :store_id, value: params[:store_id] %>
 
 
     <div class="form-body">
@@ -16,7 +16,7 @@
 
             <div class="input-group">
               <div class="input-group-prepend">
-                <span class="input-group-text"><%= market_prefix(params[:market_id]) %></span>
+                <span class="input-group-text">#<%= market_prefix(params[:store_id]) %></span>
               </div>
               <%= f.number_field :name, label: false, class: 'form-control string optional' %>
             </div>
@@ -29,13 +29,48 @@
       <!--      </div>-->
 
       <div class="form-inputs">
-        <label class="label-control" for="projectinput1">Товары</label>
-        <%= f.input :product_ids, label: false,
-                    collection: current_user.products.map { |p| ["#{p.name} | #{p.barcode}", p.id, { 'data-image' => p.photos.first&.image_url }] },
-                    input_html: { multiple: true, class: 'select2' },
-                    include_blank: false, include_hidden: false %>
-
+        <div class="col-lg-6 col-md-6 mb-3">
+          <label class="label-control" for="projectinput1">Товары</label>
+          <%= f.input :product_ids, label: false,
+                      collection: current_user.products.map { |p| ["#{p.name} | #{p.barcode}", p.id, { 'data-image' => p.photos.first&.image&.url }] },
+                      input_html: { multiple: true, class: 'select2' },
+                      include_blank: false, include_hidden: false %>
+        </div>
       </div>
+
+      <div class="form-inputs">
+        <label class="label-control" for="projectinput1"></label>
+
+        <div class="form-row">
+          <%= f.fields_for :data do |d| %>
+            <% @supply.data_defaults.each do |k, v| %>
+
+              <div class="col-lg-6 col-md-6 mb-3">
+                <% if @supply.data_defaults[k].class == Date %>
+                  <label class="label-control" for="projectinput1"><%= I18n.t("supply.#{k}") %></label>
+                  <%= d.text_field I18n.t("supply.#{k}"), class: 'form-control datepicker' %>
+
+                <% elsif supply.data_defaults[k].class == Float %>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">₽</span>
+                    </div>
+                    <%= d.input I18n.t("supply.#{k}")%>
+                  </div>
+
+                <% else %>
+                  <%= d.input I18n.t("supply.#{k}"), input_html: { value: v }, include_blank: false, include_hidden: false %>
+                <% end %>
+
+
+                <hr>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+
 
 
       <div class="form-actions">

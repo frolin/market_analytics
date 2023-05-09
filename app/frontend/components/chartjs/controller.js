@@ -14,6 +14,7 @@ import 'chartjs-adapter-moment';
 Moment.locale('ru');
 
 import ChartDataLabels from 'chartjs-plugin-datalabels'
+Chart.register(ChartDataLabels);
 
 // import {Colors} from 'chart.js';
 
@@ -30,9 +31,8 @@ export default class extends Controller {
 
   createNewChart() {
     new Chart(this.canvasContext(), {
-      // plugins: [ChartDataLabels],
+      plugins: [ChartDataLabels],
       type: 'line',
-
       data: this.chartData,
       options: this.fullOptions
     })
@@ -51,31 +51,38 @@ export default class extends Controller {
   get overrideOptions() {
     return {
       tooltips: {
-          // callbacks: {
-          //     label: function (tooltipItem, data) {
-          //         return 1321;
-          //     },
-          // },
+        // callbacks: {
+        //     label: function (tooltipItem, data) {
+        //         return 1321;
+        //     },
+        // },
       },
       scales: {
         y: {
           ticks: {
             callback: function (value, index, ticks) {
-              return value + ' шт'  ;
+              return value + ' шт.';
             }
           }
         },
         y1: {
           ticks: {
             callback: function (value, index, ticks) {
-              return value + ' шт'  ;
+              return value + ' шт.';
             }
           }
         },
         y2: {
           ticks: {
             callback: function (value, index, ticks) {
-              return value + ' ₽'  ;
+              return value + ' шт.';
+            }
+          }
+        },
+        y3: {
+          ticks: {
+            callback: function (value, index, ticks) {
+              return value + ' ₽';
             }
           }
         }

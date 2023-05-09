@@ -7,14 +7,16 @@ class Chartjs::Component < ApplicationViewComponent
   COLOR_PALLET = ["rgba(234, 85, 69, 0.7)", "rgba(244, 106, 155, 0.6)", "rgba(239, 155, 32, 0.6)",
                   "rgba(237, 191, 51, 0.6)", "rgba(237, 225, 91, 0.6", "rgba(189, 207, 50, 0.6", "rgba(135, 188, 69, 0.6", "#27aeef", "#b33dc6"]
 
-  COLORS = ['rgba(168, 186, 239, .7)', 'rgba(166, 157, 204, .7)', 'rgba(133, 158, 233, .7)', 'rgba(252, 198, 186, .7)', 'rgba(106, 76, 147, 0.6)']
+  COLORS = ['rgba(182, 197, 242, 0.6)', 'rgba(166, 157, 204, 0.6)', 'rgba(133, 158, 233, 0.6)', 'rgba(52, 168, 83, 0.6)',
+            'rgba(137, 139, 197, 0.5)', 'rgba(207, 139, 197, 0.5)', 'rgba(234, 67, 53, 0.7)', 'rgba(234,67,53, 0.7)', 'rgba(66,85,165, 0.7)']
   attr_reader :data, :options
 
   def initialize(data:, **kwargs)
     @data = data
     @dataset = collect_datasets
-    @options = options
+    @options = collect_options
     @args = kwargs
+
     @summ = kwargs[:summ]
 
     # @source_colors = self.class.const_get("#{source.upcase}_COLORS") if source
@@ -28,6 +30,10 @@ class Chartjs::Component < ApplicationViewComponent
     }
   end
 
+  def collect_options
+    options(scales_max)
+  end
+
   def dataset(params)
     {
       fill: true,
@@ -39,6 +45,7 @@ class Chartjs::Component < ApplicationViewComponent
       backgroundColor: params[:background_color],
       borderColor: params[:border_color],
       barThickness: params[:bar_thickness],
+      stack: 'Stack 0',
       **params
 
       # backgroundColor: @source_colors.to_a[0] || ORDER_COLORS[0],
@@ -46,56 +53,88 @@ class Chartjs::Component < ApplicationViewComponent
     }
   end
 
-  def options
+  def scales_max
+    data.each_with_object({}) do |d, hsh|
+      next if d[:yAxisID].blank? || d[:yAxisMAX].blank?
+
+      hsh.merge!({ d[:yAxisID].to_sym => { max: d[:yAxisMAX].to_i, postfix: d[:postfix] } })
+    end
+  end
+
+  def max(axis_value = 0)
+    return if axis_value == nil
+
+    axis_value + axis_value / 2
+  end
+
+  def options(opts = {})
     {
-      responsive: true,
-      maintainAspectRatio: true,
+      responsive: false,
+      maintainAspectRatio: false,
       animation: false,
       plugins: {
+        title: {
+          display: true,
+          text: ''
+        },
         legend: true,
-        # datalabels: {
-        #   color: '#36A2EB'
-        # },
+        datalabels: {
+          color: '#36A2EB'
+        },
       },
-      # interaction: {
-      #   mode: 'nearest',
-      #   axis: 'x',
-      #   intersect: false
-      # },
+      interaction: {
+        intersect: false,
+        mode: 'index',
+      },
       scales: {
         x: {
           # grid: { display: false }
           type: 'time',
-          position: 'left',
+          time: {
+            unit: 'day'
+          },
+          # position: 'left',
           ticks: { beginAtZero: true },
+          # stacked: 'single'
+
         },
         y: {
+          title: { text: 'Заказы, шт.', display: true },
           position: 'left',
-          display: false,
-          ticks: { stepSize: 1, beginAtZero: true, },
+          display: true,
+          ticks: { stepSize: 5, beginAtZero: true, },
           grid: { display: false },
-          max: 10,
-          stacked: true,
+          max: max(opts.dig(:y, :max)),
         },
         y1: {
-          position: 'left',
-          # type: 'linear',
-          ticks: { stepSize: 1, beginAtZero: true, },
-          grid: { display: false },
-          stacked: true,
-          max: 10
+          # display: false ,
+          position: 'right',
+          display: false,
 
+          ticks: { stepSize: 5, beginAtZero: true, },
+          grid: { display: false },
+          max: 100,
         },
         y2: {
+          position: 'left',
+          display: false,
+
+          # type: 'linear',
+          ticks: { stepSize: 5, beginAtZero: true, },
+          grid: { display: false },
+          max: max(opts.dig(:y2, :max)),
+        },
+        y3: {
+          title: { text: 'Продажи, Р.', display: true },
+
           position: 'right',
           type: 'linear',
-          ticks: { stepSize: 500, color: Chartjs::Component::COLOR_PALLET[0], beginAtZero: true, },
+          ticks: { stepSize: 2500, beginAtZero: true, },
           grid: { display: true },
-        }
+          max: max(opts.dig(:y3, :max)),
+        },
       }
-
     }
-
     # scales: {
     # y1: {
     #   # type: 'linear',

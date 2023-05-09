@@ -1,9 +1,9 @@
 module Api
   module Wildberries
     module Stats
-      class Report < Api::WildberriesClient
+      class Reports < Api::WildberriesClient
         record :store
-        date :date_from, default: '2019-06-20'
+        date :date_from, default: '2023-01-01'
         date :date_to, default: Date.today.strftime("%d-%m-%Y")
         integer :limit, default: 100000
 

@@ -32,7 +32,7 @@
 
 
         <div class="m-auto nav-item ">
-          <%= render DateRange::Component.new(path: store_path(@store.id), frame_name: dom_id(@store)) %>
+          <%= render DateRange::Component.new(path: store_path(@store.id), frame_name: dom_id(@store)) if controller_name == 'stores'%>
         </div>
 
         <ul class="nav navbar-nav float-right">

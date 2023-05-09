@@ -24,13 +24,13 @@ class SupplyProductDecorator < ApplicationDecorator
   end
 
   def mp_commission
-    return 0 if marketplace_cost.data.nil?
+    return 0 if marketplace_cost.nil? || marketplace_cost.data.nil?
 
     marketplace_cost.data.dig(marketplace_name, 'комиссия').to_i
   end
 
   def mp_logistic
-    return 0 if marketplace_cost.data.nil?
+    return 0 if marketplace_cost.nil? || marketplace_cost.data.nil?
 
     marketplace_cost.data.dig(marketplace_name, 'логистика').to_i
   end

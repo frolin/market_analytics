@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: stores
+#
+#  id         :bigint           not null, primary key
+#  name       :string
+#  slug       :string
+#  data       :jsonb
+#  url        :string
+#  type       :string
+#  number     :string
+#  token      :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  account_id :bigint           not null
+#  ads_token  :string
+#
 class Store < ApplicationRecord
   extend FriendlyId
   # friendly_id :name, use: :slugged
@@ -12,9 +29,11 @@ class Store < ApplicationRecord
   has_many :orders, dependent: :destroy
   has_many :sales, dependent: :destroy
 
-  has_many :stocks, dependent: :destroy
+  has_many :sale_reports, dependent: :destroy
+  has_many :report_sales, dependent: :destroy
 
   has_many :requests, as: :source
+  has_many :stocks, dependent: :destroy
 
   has_many :costs, class_name: 'OrderCost', dependent: :destroy
   has_many :supplies, dependent: :destroy
@@ -44,6 +63,11 @@ class Store < ApplicationRecord
 
   def title
     requests.last&.name
+  end
+
+  def last_stocks
+    latest_ids = Stock.group(:product_id).maximum(:id).values
+    stocks.where(id: latest_ids)
   end
 
   def ip

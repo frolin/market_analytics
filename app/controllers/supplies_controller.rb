@@ -1,9 +1,11 @@
 class SuppliesController < ApplicationController
   before_action :set_supply, only: %i[show edit update destroy]
+  before_action :set_store
 
   # GET /supplies or /supplies.json
   def index
     @supplies = Supply.all.decorate
+    @store = current_user.stores.first
   end
 
   # GET /supplies/1 or /supplies/1.json
@@ -13,7 +15,7 @@ class SuppliesController < ApplicationController
 
   # GET /supplies/new
   def new
-    @supply = Supply.new
+    @supply = Supply.new(store: @store)
   end
 
   # GET /supplies/1/edit
@@ -21,7 +23,7 @@ class SuppliesController < ApplicationController
 
   # POST /supplies or /supplies.json
   def create
-    new_supply = Supplies::Create.run(user: current_user, supply_params: supply_params)
+    new_supply = Supplies::Create.run(user: current_user, store_id: @store.id, supply_params: supply_params)
 
     respond_to do |format|
       if new_supply.valid?
@@ -101,9 +103,13 @@ class SuppliesController < ApplicationController
     @supply = Supply.find(params[:id])
   end
 
+  def set_store
+    @store = current_user.stores.first
+  end
+
   # Only allow a list of trusted parameters through.
   def supply_params
-    params.require(:supply).permit(:name, :user_id, :campaign_id, :market_id, product_ids: [])
+    params.require(:supply).permit(:name, :user_id, :campaign_id, data: {}, product_ids: [])
   end
 
   def count_params

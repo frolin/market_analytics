@@ -100,7 +100,6 @@ gem 'roo'
 gem 'shrine'
 
 gem 'russian', '~> 0.6.0'
-# gem 'rails-i18n', '~> 7.0.0'
 
 gem 'active_interaction', '~> 4.1'
 
@@ -126,6 +125,7 @@ gem 'groupdate'
 gem 'image_processing', '~> 1.8'
 gem 'view_component'
 gem "view_component-contrib"
+gem 'annotate'
 
 group :production do
   gem 'sentry-rails'

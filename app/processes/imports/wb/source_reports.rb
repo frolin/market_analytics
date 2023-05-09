@@ -1,8 +1,8 @@
 module Imports
   module Wb
     class SourceReports < ActiveInteraction::Base
-      # URL_PATTERN = "https://docs.google.com/spreadsheets/d/e/1BDJ6ta6ah6lUFeJGUbZOMCkC9lUhULn7z96vC7TnLUA/pub?output=csv&gid=0}"
-      # URL = '1BDJ6ta6ah6lUFeJGUbZOMCkC9lUhULn7z96vC7TnLUA'
+      # URL_PATTERN = "https://docs.google.com/spreadsheets/d/e/14Odbpz-CCw8HIqhO-A0aej8iYPq8Z6Hn60bGwdFpdYw/pub?output=csv&gid=0}"
+      # URL = '14Odbpz-CCw8HIqhO-A0aej8iYPq8Z6Hn60bGwdFpdYw'
       integer :source_report_id
       integer :store_id
 
@@ -16,6 +16,7 @@ module Imports
             next if idx == 0 # ignore headers
             report_number = data['№ отчета'].to_i
             week_report = ::Wb::Report::FinanceWeek.find_by(number: report_number)
+
             next if week_report.present?
 
             ::Wb::Report::FinanceWeek.create!(number: report_number, data: data,

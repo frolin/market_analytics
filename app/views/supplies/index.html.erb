@@ -1,26 +1,30 @@
 <% content_for(:title, 'Поставки') %>
 
 <%= content_for :header_button do %>
-  <div class="btn-group float-md-right">
-    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Создать
-      поставку
-    </button>
-    <div class="dropdown-menu arrow" x-placement="bottom-start" style="position: absolute; transform: translate3d(-23px, 41px, 0px); top: 0px; left: 0px; will-change: transform;">
-      <% current_user.stores.each do |market| %>
-        <!--        <i class="fa fa-calendar-check mr-1"></i>-->
-        <%= link_to market.slug.upcase, new_supply_path(market_id: market.slug), class: "dropdown-item" %>
-      <% end %>
+  <%#= link_to '', new_supply_path(store: @store) %>
+  <%= link_to 'Новая поставка', new_supply_path %>
+  <!--  <div class="btn-group float-md-right">-->
+  <!--    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">-->
 
-    </div>
-  </div>
+  <!--    </button>-->
+  <!--    <div class="dropdown-menu arrow" x-placement="bottom-start" style="position: absolute; transform: translate3d(-23px, 41px, 0px); top: 0px; left: 0px; will-change: transform;">-->
+  <%# current_user.stores.each do |store| %>
+  <%# end %>
+
+  <!--    </div>-->
+  <!--  </div>-->
 
 <% end %>
+
+
 
 <div class="card">
   <table class="table table-striped table-hover table-sm">
     <thead>
     <tr>
       <th scope="col">Номер</th>
+      <th scope="col">Дата заказа</th>
+      <th scope="col">Дата Прихода</th>
       <th scope="col">Товары</th>
       <th>Общее количество</th>
 
@@ -31,14 +35,19 @@
     <% @supplies.each do |supply| %>
       <tr>
         <td><%= link_to supply.name, supply_path(supply) %></td>
+        <td><%= supply.data['order_date'] %></td>
+        <td><%= supply.data['delivered_date'] %></td>
+
         <td>
-          <%= supply.products_list %>
+          <% supply.supply_products.each do |sp| %>
+            <image width="64px" class="rounded-circle" src="<%= sp.product.photos.first.image.url %>"></image>
+          <% end %>
         </td>
         <%#= link_to icon('edit'), edit_supply_path(supply) %>
         <%#= link_to icon('eye'), supply %>
         <td><%= supply.all_product_count %></td>
 
-        <td><%= button_to  icon('trash'), supply, method: :delete %></td>
+        <!--        <td><%#= button_to icon('trash'), supply, method: :delete %></td>-->
 
       </tr>
 

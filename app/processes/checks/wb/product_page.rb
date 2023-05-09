@@ -12,7 +12,7 @@ module Checks
         page_data = Parse::Wb::Page.run(sku: product.sku)
         request_data = page_data.result.compact
 
-        if first_time || request_data_diff?(request_data)
+        if product.requests.blank? || request_data_diff?(request_data)
           request = Request::Product.new(source: product)
           request.data = request_data
           request.save!

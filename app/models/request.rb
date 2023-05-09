@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: requests
+#
+#  id          :bigint           not null, primary key
+#  source_type :string           not null
+#  source_id   :bigint           not null
+#  type        :string           not null
+#  data        :jsonb
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  notified    :boolean          default(FALSE)
+#
 class Request < ApplicationRecord
   belongs_to :source, polymorphic: true
 

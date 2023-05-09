@@ -77,7 +77,8 @@ module Parse
       end
 
       def find_final_price
-        # return if @page.find_elements(css: '.sold-out-product').present?
+        return if @page.find_elements(css: '.sold-out-product').present?
+
         wait.until do
           if @page.find_element(css: SEARCH_CSS[:final_price]).text.present?
             @page.find_element(css: SEARCH_CSS[:final_price]).text

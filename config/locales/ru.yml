@@ -16,6 +16,12 @@ ru:
     status:
       pause: Пауза
       show: Показывается
+  supply:
+    order_date: 'Дата заказа'
+    delivered_date: 'Дата доставки'
+    price: 'Цена доставки'
+    exchange_rate: 'Курс'
+    cost_price: 'Цена закупки'
   telegram:
     notifications:
       diff_product_parsed_data:

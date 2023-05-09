@@ -1,3 +1,28 @@
+# == Schema Information
+#
+# Table name: products
+#
+#  id             :bigint           not null, primary key
+#  name           :string
+#  data           :jsonb
+#  sku            :string
+#  barcode        :string
+#  offer_id       :bigint
+#  price          :decimal(8, 2)
+#  purchase_price :decimal(8, 2)
+#  content        :jsonb
+#  properties     :jsonb
+#  parameters     :jsonb
+#  image_data     :jsonb
+#  jsonb          :jsonb
+#  cost           :jsonb
+#  import_id      :bigint
+#  store_id       :bigint
+#  user_id        :bigint           not null
+#  state          :string
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#
 class Product < ApplicationRecord
   include AASM
 
@@ -14,7 +39,7 @@ class Product < ApplicationRecord
   has_many :supply_products, dependent: :destroy
   has_many :supplies, through: :supply_products
 
-  has_many :stocks, -> { store.stocks.last.api_data.select { |stock| stock['barcode'] == barcode } }
+  has_many :stocks
 
   has_many :product_keywords, dependent: :destroy
   has_many :keywords, through: :product_keywords
@@ -22,7 +47,9 @@ class Product < ApplicationRecord
   has_many :photos, dependent: :destroy
   accepts_nested_attributes_for :photos, allow_destroy: true
 
-  has_many :sales_reports, foreign_key: 'barcode'
+  has_many :report_sales, primary_key: :barcode, foreign_key: :barcode
+
+  has_one :supply_price
 
   has_many :requests, as: :source
 
@@ -33,17 +60,38 @@ class Product < ApplicationRecord
   store_accessor :parameters
   store_accessor :cost
 
+  scope :with_stocks, -> { joins(:stocks).where("(
+              SELECT SUM((api_data->>'quantity')::int)
+              FROM stocks
+              WHERE product_id = stocks.product_id
+            ) > ?", 0) }
   scope :wb_barcode, -> (barcode) { find_by("data @> ?", { wb: { barcode: barcode } }.to_json) }
 
   # def self.wb_find(param)
   #   find_by("data @> ?", { "#{param.keys.first}" => param.values.first }.to_json)
   # end
   def stock
-    store.stocks.last.for_product(barcode)
+    stocks.last
   end
 
   def price
     requests.last.final_price
+  end
+
+  def last_week_sum_report
+    report_sales.last_week.sales_by_sum
+  end
+
+  def last_month_sum
+    report_sales.last_month.sales_sum
+  end
+
+  def last_month_sum_report
+    report_sales.last_month.sales_by_sum
+  end
+
+  def previous_week_sum_report
+    report_sales.previous_week.sales_by_sum
   end
 
   def wb_sku

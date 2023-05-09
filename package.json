@@ -22,6 +22,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "sass": "^1.52.1",
+    "select2": "^4.1.0-rc.0",
     "stimulus-chartjs": "^5.0.0",
     "stimulus-use": "^0.52.0"
   },

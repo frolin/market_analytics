@@ -1,11 +1,18 @@
 Rails.application.routes.draw do
+  resources :unit_economics
   resources :source_reports
   require 'sidekiq/web'
   require 'sidekiq/cron/web'
+  # Configure Sidekiq-specific session middleware
+  Sidekiq::Web.use ActionDispatch::Cookies
+  Sidekiq::Web.use ActionDispatch::Session::CookieStore, key: "_interslice_session"
 
   mount Yabeda::Prometheus::Exporter, at: "/metrics" if Rails.env.production?
 
   telegram_webhook TelegramWebhooksController, ENV['BOT_NAME'].to_sym
+
+  root to: "dashboard#index"
+  devise_for :users, controller: SessionsController
 
   authenticate :user do
     mount Sidekiq::Web => '/sidekiq'
@@ -14,14 +21,11 @@ Rails.application.routes.draw do
   resources :supply_products
   resources :supply_costs
 
-  devise_for :users
-
   get '/users/settings', to: 'user_settings#show', as: 'profile_page'
 
   get "dashboard/index"
   post "dashboard/index", to: 'dashboard#index'
 
-  root to: "dashboard#index"
   resources :products
   resources :supplies do
     post :update_count, to: 'supplies#update_count'

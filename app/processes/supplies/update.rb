@@ -1,23 +1,26 @@
 module Supplies
   class Update < ActiveInteraction::Base
+          include ActiveInteraction::Extras::ErrorAndHalt
+
     include ApplicationHelper
     record :supply
     hash :supply_params, default: {}, strip: false
-
     def execute
       Supply.transaction do
-        binding.pry
-        return if products.blank?
+        errors.add(:base, 'not product_ids') if supply_params['product_ids'].blank?
+        errors.add(:base, 'not fount products') if products.blank?
+        halt_if_errors!
 
+        byebug
         products.each do |product|
           supply.supply_products.create!(product: product, price: product.price, purchase_price: product.purchase_price)
         end
 
-        supply.supply_products.where(product_id: products.ids).each do |sp|
-          sp.create_fulfillment_cost(data: sp.product.cost['fulfillment'])
-          sp.create_marketplace_cost(data: sp.product.cost['marketplace'])
-          sp.create_logistic_cost
-        end
+        # supply.supply_products.where(product_id: products.ids).each do |sp|
+        #   sp.create_fulfillment_cost(data: sp.product.cost['fulfillment'])
+        #   sp.create_marketplace_cost(data: sp.product.cost['marketplace'])
+        #   sp.create_logistic_cost
+        # end
       end
     end
 
@@ -28,6 +31,8 @@ module Supplies
     end
 
     def new_products_ids
+      return if supply_params['product_ids'].blank?
+
       supply_params['product_ids'].map(&:to_i) - supply.products.ids
     end
 

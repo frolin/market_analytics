@@ -30,7 +30,10 @@ module Imports
 
         new_orders.each do |order|
           product = store.products.find_by(barcode: order['barcode'])
-          next if product.blank?
+
+          if product.blank?
+            product = store.products.new(sku: order['nmId'], barcode: order['barcode'], user: store.users.admin).save!
+          end
 
           order = store.orders.new(api_data: order,
                                    date: order['date'],
@@ -38,6 +41,7 @@ module Imports
                                    srid: order['srid'])
 
           order.order_products.new(product: product, store: store)
+
           order.skip_notify = true if first_time
           order.save!
         end

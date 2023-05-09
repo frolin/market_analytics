@@ -3,7 +3,7 @@
 pin "jquery", to: "https://ga.jspm.io/npm:jquery@3.6.4/dist/jquery.js"
 pin "moment" # @2.29.4
 pin "daterangepicker" # @3.1.0
-
+pin "select2"
 
 pin_all_from "app/javascript/vendor", under: "vendor"
 pin_all_from "app/javascript/lib", under: "lib"

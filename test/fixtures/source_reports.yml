@@ -1,4 +1,15 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# == Schema Information
+#
+# Table name: source_reports
+#
+#  id          :bigint           not null, primary key
+#  store_id    :bigint           not null
+#  data        :jsonb
+#  report_type :string
+#  file_data   :jsonb
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
 
 one:
   store: one
