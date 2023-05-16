@@ -3,6 +3,7 @@
 @import 'modern_admin';
 @import "market";
 @import "pages";
+@import "p_and_l/p_and_l";
 
 //@import 'animate.css';
 //@import '@domchristie/turn/dist/turn';
@@ -85,13 +86,20 @@ $font-size-base: 18px;
 .navbar-nav .nav-link {
   font-family: "Open Sans";
 }
+//
+//.effect-flash {
+//  animation: flash_white .8s cubic-bezier(.46, .03, .52, .96);
+//}
+//
+//@keyframes flash_white {
+//  0% {
+//    background-color: #ffffff;
+//  }
+//  30% {
+//    background-color: #FFFF14;
+//  }
+//  100% {
+//    background-color: #ffffff;
+//  }
+//}
 
-.effect-flash {
-  animation: flash_white .8s cubic-bezier(.46,.03,.52,.96);
-}
-
-@keyframes flash_white {
-  0% { background-color: #ffffff; }
-  30% { background-color: #FFFF14; }
-  100% { background-color: #ffffff; }
-}

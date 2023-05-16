@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :unit_economics
   resources :source_reports
   require 'sidekiq/web'
   require 'sidekiq/cron/web'
@@ -28,6 +27,7 @@ Rails.application.routes.draw do
 
   resources :products
   resources :supplies do
+    resources :unit_economics
     post :update_count, to: 'supplies#update_count'
     post :update_costs, to: 'supply_costs#supply_cost_update'
     get :google_export, to: 'supplies#google_export', as: :google_export

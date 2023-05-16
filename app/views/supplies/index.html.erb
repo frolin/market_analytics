@@ -19,39 +19,154 @@
 
 
 <div class="card">
-  <table class="table table-striped table-hover table-sm">
-    <thead>
-    <tr>
-      <th scope="col">Номер</th>
-      <th scope="col">Дата заказа</th>
-      <th scope="col">Дата Прихода</th>
-      <th scope="col">Товары</th>
-      <th>Общее количество</th>
+  <!--  <table class="table table-striped table-hover table-sm">-->
+  <!--    <thead>-->
+  <!--    <tr>-->
+  <!--      <th scope="col">Номер</th>-->
+  <!--      <th scope="col">Дата заказа</th>-->
+  <!--      <th scope="col">Дата Прихода</th>-->
+  <!--      <th scope="col">Товары</th>-->
+  <!--      <th>Общее количество</th>-->
 
-    </tr>
-    </thead>
+  <!--    </tr>-->
+  <!--    </thead>-->
 
-    <tbody>
-    <% @supplies.each do |supply| %>
-      <tr>
-        <td><%= link_to supply.name, supply_path(supply) %></td>
-        <td><%= supply.data['order_date'] %></td>
-        <td><%= supply.data['delivered_date'] %></td>
+  <!--    <tbody>-->
+  <%# @supplies.each do |supply| %>
+  <!--      <tr>-->
+  <!--        <td><%#= link_to supply.name, supply_path(supply) %></td>-->
+  <!--        <td><%#= supply.data['order_date'] %></td>-->
+  <!--        <td><%#= supply.data['delivered_date'] %></td>-->
 
-        <td>
-          <% supply.supply_products.each do |sp| %>
-            <image width="64px" class="rounded-circle" src="<%= sp.product.photos.first.image.url %>"></image>
-          <% end %>
-        </td>
-        <%#= link_to icon('edit'), edit_supply_path(supply) %>
-        <%#= link_to icon('eye'), supply %>
-        <td><%= supply.all_product_count %></td>
+  <!--        <td>-->
+  <%# supply.supply_products.each do |sp| %>
+  <!--            <image width="32px" class="rounded-circle" src="<%#= sp.product.photos.first.image.url %>"></image>-->
+  <%# end %>
+  <!--        </td>-->
+  <%#= link_to icon('edit'), edit_supply_path(supply) %>
+  <%#= link_to icon('eye'), supply %>
+  <!--        <td><%#= supply.all_product_count %></td>-->
 
-        <!--        <td><%#= button_to icon('trash'), supply, method: :delete %></td>-->
+  <!--            <td><%##= button_to icon('trash'), supply, method: :delete %></td>-->
 
-      </tr>
+  <!--      </tr>-->
 
-    <% end %>
-    </tbody>
-  </table>
+  <%# end %>
+  <!--    </tbody>-->
+  <!--  </table>-->
+</div>
+
+
+<div class="content-body">
+  <section class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-header">
+            <h4 class="card-title">Доставки</h4>
+            <a class="heading-elements-toggle"><i class="la la-ellipsis-h font-medium-3"></i></a>
+            <div class="heading-elements">
+              <a href="<%= new_supply_path %>" data-turbo="true" class="btn btn-primary btn-sm"><i class="ft-plus white"></i> Создать</a>
+                            <span class="dropdown">
+              	                        <button id="btnSearchDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="btn btn-warning btn-sm dropdown-toggle"><i class="ft-download-cloud white"></i></button>
+              	                        <span aria-labelledby="btnSearchDrop1" class="dropdown-menu mt-1 dropdown-menu-right">
+              	                            <a href="#" class="dropdown-item"><i class="la la-calendar"></i> Номер </a>
+              	                            <a href="#" class="dropdown-item"><i class="la la-random"></i> Дата закза </a>
+              	                            <a href="#" class="dropdown-item"><i class="la la-bar-chart"></i> Дата доставки</a>
+              	                            <a href="#" class="dropdown-item"><i class="la la-user"></i> Товары</a>
+              	                            <a href="#" class="dropdown-item"><i class="la la-user"></i> Общее количество </a>
+              	                        </span>
+              	                    </span>
+              <button class="btn btn-success btn-sm"><i class="ft-settings white"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="card-body">
+            <!-- Invoices List table -->
+            <div class="table-responsive">
+              <div id="invoices-list_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+
+                  <table id="invoices-list" class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle dataTable" role="grid" aria-describedby="invoices-list_info" style="width: 1194px;">
+                    <thead>
+                    <tr role="row">
+
+                      <th class="sorting" tabindex="0" aria-controls="invoices-list" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 73px;">
+                        Номер
+                      </th>
+                      <th class="sorting" tabindex="0" aria-controls="invoices-list" rowspan="1" colspan="1" aria-label="Invoice #: activate to sort column ascending" style="width: 75px;">
+                        Дата заказа
+                      </th>
+                      <th class="sorting" tabindex="0" aria-controls="invoices-list" rowspan="1" colspan="1" aria-label="Order No: activate to sort column ascending" style="width: 70px;">
+                        Дата доставки
+                      </th>
+                      <th class="sorting" tabindex="0" aria-controls="invoices-list" rowspan="1" colspan="1" aria-label="Customer Name: activate to sort column ascending" style="width: 139px;">
+                        Товары
+                      </th>
+
+                      <th class="sorting" tabindex="0" aria-controls="invoices-list" rowspan="1" colspan="1" aria-label="Balance Due: activate to sort column ascending" style="width: 87px;">
+                        Общее количество
+                      </th>
+                      <th class="sorting" tabindex="0" aria-controls="invoices-list" rowspan="1" colspan="1" aria-label="Actions: activate to sort column ascending" style="width: 72px;">Сумаа</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- PAID -->
+
+
+                    <!--                    <tr class="group">-->
+                    <!--                      <td colspan="9"><span class="badge badge-success badge-lg">Paid</span></td>-->
+                    <!--                    </tr>-->
+
+
+
+
+                    <% @supplies.each do |supply| %>
+
+                      <tr role="row" class="odd">
+
+                        <td><%= link_to supply.name, supply_path(supply) %></td>
+                        <td><%= supply.data['order_date'] %></td>
+                        <td><%= supply.data['delivered_date'] %></td>
+
+                        <td>
+                          <% supply.supply_products.each do |sp| %>
+                            <image width="32px" heigth="32px" class="rounded-circle" src="<%= sp.product.photos.first.image.url %>"></image>
+                          <% end %>
+                        </td>
+
+                        <!--                        <td><%#= button_to icon('trash'), supply, method: :delete %></td>-->
+                        <td><%= supply.all_product_count %></td>
+
+                        <td>$ 200.00</td>
+                        <td>
+				                	<span class="dropdown">
+				                        <button id="btnSearchDrop2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="btn btn-primary dropdown-toggle dropdown-menu-right"><i class="ft-settings"></i></button>
+				                        <span aria-labelledby="btnSearchDrop2" class="dropdown-menu mt-1 dropdown-menu-right">
+				                            <a href="#" class="dropdown-item"><i class="la la-eye"></i> Open Task</a>
+				                            <a href="#" class="dropdown-item"><i class="la la-pencil"></i> Edit Task</a>
+				                            <a href="#" class="dropdown-item"><i class="la la-check"></i> Complete Task</a>
+				                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
+				                            <a href="#" class="dropdown-item"><i class="la la-trash"></i> Delete Task</a>
+				                        </span>
+				                    </span>
+                        </td>
+                      </tr>
+                    <% end %>
+
+                    </tbody>
+                    <tfoot>
+
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!--/ Invoices table -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>

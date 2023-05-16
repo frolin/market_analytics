@@ -8,6 +8,7 @@ class UnitEconomicsController < ApplicationController
 
   # GET /unit_economics/1 or /unit_economics/1.json
   def show
+    @supply_costs = @unit_economic.supply.costs_by_year || 1..12
   end
 
   # GET /unit_economics/new
@@ -58,13 +59,14 @@ class UnitEconomicsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_unit_economic
-      @unit_economic = UnitEconomic.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def unit_economic_params
-      params.require(:unit_economic).permit(:supply_id, :data, :date)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_unit_economic
+    @unit_economic = UnitEconomic.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def unit_economic_params
+    params.require(:unit_economic).permit(:supply_id, :data, :date)
+  end
 end

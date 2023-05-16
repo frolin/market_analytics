@@ -13,6 +13,7 @@
 //= link moment.js
 //= link daterangepicker.js
 //= link controllers/animations.js
+//= link controllers/select2_controller.js
 
 
 

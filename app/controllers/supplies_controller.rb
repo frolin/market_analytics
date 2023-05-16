@@ -27,7 +27,7 @@ class SuppliesController < ApplicationController
 
     respond_to do |format|
       if new_supply.valid?
-        format.html { redirect_to supplies_path, notice: 'Supply was successfully created.' }
+        format.html { redirect_to supply_path(new_supply.result), notice: 'Supply was successfully created.' }
         format.json { render :show, status: :created, location: @supply }
       else
         format.html { render :new, status: :unprocessable_entity }

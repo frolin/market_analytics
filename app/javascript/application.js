@@ -1,29 +1,32 @@
 // Entry point for the build script in your package.json
 
+
 // !IMPORTANT
 import './src/jquery'
+
 
 import * as moment from 'moment';
 import 'moment/locale/ru';
 import 'daterangepicker'
-
 moment.locale("ru")
 import _ from 'lodash';
-import * as bootstrap from "bootstrap"
 
-//
-// import "@hotwired/turbo-rails"
-//
-// Turbo.session.drive = true
+import * as bootstrap from "bootstrap"
+// import 'bootstrap-select'
 
 
 import "./controllers"
 
+//
+//
+// import "@hotwired/turbo-rails"
+// Turbo.session.drive = false
 
-import './utils/jquery.bootstrap-touchspin'
-import './utils'
 
-import 'select2'
+
+
+// import './utils/jquery.bootstrap-touchspin'
+
 
 // import Turn from '@domchristie/turn'
 // Turn.start()
@@ -44,14 +47,8 @@ import 'select2'
 //   document.querySelector("body").classList.add("fade-in");
 // });
 
-
-// Chart.defaults.global.defaultFontFamily = "Lato";
-// Chart.defaults.global.defaultFontSize = 18;
-// Chart.defaults.global.defaultFontColor = 'red';
-
-// window.addEventListener('DOMContentLoaded', () => {
-//     console.log('Chart: ', Chart)
-// })
+//
+//
 // $(document).ready(function () {
 //   $(".select2-tags").select2({
 //     // tags: true,
@@ -64,23 +61,6 @@ import 'select2'
 
 //
 
-// export class Select2Init {
-//   start() {
-//     $(function() {
-//       $('.select2').select2()
-//     })
-//   }
-// }
-//
-// new Select2Init().start()
-
-// $(document).ready(function () {
-//   $('.select2').select2({
-//     theme: 'bootstrap4',
-//     templateResult: addUserPic,
-//     templateSelection: addUserPic
-//   });
-// });
 
 //
 // $('.date-range-picker').daterangepicker({
@@ -104,20 +84,7 @@ import 'select2'
 
 // });
 //
-function addUserPic(opt) {
-  if (!opt.id) {
-    return opt.text;
-  }
-  var optimage = $(opt.element).data('image');
-  if (!optimage) {
-    return opt.text;
-  } else {
-    var $opt = $(
-      '<span class="userName"><img width="32px" src="' + optimage + '" class="userPic" /> ' + $(opt.element).text() + '</span>'
-    );
-    return $opt;
-  }
-};
+
 //
 
 let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))

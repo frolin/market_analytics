@@ -25,4 +25,12 @@ class SupplyCost < ApplicationRecord
   enum :cost_type, COST_TYPES
 
   enum :cost_name, COST_NAMES
+
+  def data
+    {
+      delivery_cost: '100',
+      delivery_sum: '123',
+      product_cost: '123'
+    }
+  end
 end

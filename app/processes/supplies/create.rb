@@ -13,11 +13,21 @@ module Supplies
           supply.supply_products.create!(product: product, price: product.price, purchase_price: product.purchase_price)
         end
 
+        by_delivered_date = supply.store.supplies.with_delivered_data.group_by do |s|
+          s.data['delivered_date'].to_date.month
+        end
+
+        
+
+        # unit_economic = supply.build_unit_economic
+
         # supply.supply_products.each do |sp|
         #   sp.create_fulfillment_cost(data: sp.product.cost['fulfillment'])
         #   sp.create_marketplace_cost(data: sp.product.cost['marketplace'])
         #   sp.create_logistic_cost
         # end
+        #
+        supply
       end
 
     end

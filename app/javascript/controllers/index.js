@@ -52,5 +52,8 @@ application.register('chartjs', Chart)
 import DateRangeController from "../../frontend/components/date_range/controller";
 application.register('dateRange', DateRangeController)
 
-import ApplicationController from "./animations";
-application.register('animations', ApplicationController)
+// import ApplicationController from "./animations";
+// application.register('animations', ApplicationController)
+
+// import ApplicationController from "./select2_controller";
+// application.register('select2_controller', ApplicationController)

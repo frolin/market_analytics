@@ -5,6 +5,7 @@ module Groupable
     scope :between_range, -> (date_range) { where(date: date_range).order('DATE(date)') }
     scope :grouped_by_date, -> (date_range) { between_range(date_range).group('DATE(date)').count }
     scope :grouped_by_price, -> (date_range) { between_range(date_range).group('DATE(date)').sum("(api_data->>'finishedPrice')::float") }
+    scope :grouped_by_month, -> (date_range) { between_range(date_range).group('date_trunk(week, date)').count }
   end
 
   class_methods do
@@ -17,6 +18,8 @@ module Groupable
           grouped_by_price(date_range)
         when :by_date
           grouped_by_date(date_range)
+        when :by_month
+          grouped_by_month(date_range)
         else
           grouped_by_date(date_range)
         end

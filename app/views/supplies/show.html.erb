@@ -1,4 +1,15 @@
-v
+<% content_for :title, "Поставка #{@supply.name}" %>
+
+<%= content_for :header_button do %>
+
+  <button class="btn btn-info dropdown-toggle mb-1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <%= turbo_frame_tag SupplyProduct.new do %>
+      <%= link_to 'Добавить продукт', new_supply_product_path, class: '' %>
+    <% end %>
+  </button>
+<% end %>
+
+
 <section class="card">
   <div class="card-body p-4">
     <div id="invoice-company-details" class="row">
@@ -17,51 +28,63 @@ v
       </div>
     </div>
 
+    <div>
+      <%= link_to 'Unit Economic', supply_unit_economic_path(@supply, @supply.unit_economic) if @supply.unit_economic %>
+    </div>
 
-    <ul class="nav nav-tabs nav-underline no-hover-bg nav-justified nav-tabs-material">
-      <li class="nav-item">
-        <a class="nav-link waves-effect waves-dark active" id="active-tab" data-toggle="tab" href="#active" aria-controls="active" aria-expanded="true">Основное</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link waves-effect waves-dark" id="linkOpt-tab" data-toggle="tab" href="#linkOpt" aria-controls="linkOpt">Расходы</a>
-      </li>
-    </ul>
+
+    <!--    <ul class="nav nav-tabs nav-underline no-hover-bg nav-justified nav-tabs-material">-->
+    <!--      <li class="nav-item">-->
+    <!--        <a class="nav-link waves-effect waves-dark active" id="active-tab" data-toggle="tab" href="#active" aria-controls="active" aria-expanded="true">Основное</a>-->
+    <!--      </li>-->
+    <!--      <li class="nav-item">-->
+    <!--        <a class="nav-link waves-effect waves-dark" id="linkOpt-tab" data-toggle="tab" href="#linkOpt" aria-controls="linkOpt">Расходы</a>-->
+    <!--      </li>-->
+    <!--    </ul>-->
 
     <div class="tab-content active px-1 pt-1">
       <div role="tabpanel" class="tab-pane show active" id="active" aria-labelledby="active-tab" aria-expanded="true">
         <div id="invoice-items-details" class="pt-2">
           <div class="row">
-            <div class="table-responsive col-12">
-
-              <%= turbo_frame_tag SupplyProduct.new do %>
-                <%= link_to 'add new', new_supply_product_path %>
-              <% end %>
-
+            <div class=" table-responsive col-12">
               <table class="table">
                 <thead>
                 <tr>
-                  <th>#</th>
                   <th>Товар</th>
                   <th class="text-right">Штрих-Код</th>
                   <th class="text-right">Количество</th>
+                  <th class="text-right">Вес</th>
+                  <th class="text-right">Доставка</th>
                   <th class="text-right">Доход</th>
                 </tr>
                 </thead>
                 <tbody>
                 <% @supply_products.order(:id).each_with_index do |sp, i| %>
                   <tr>
-                    <th scope="row"><%= i + 1 %></th>
+                    <!--                    <th scope="row"><%#= i + 1 %></th>-->
                     <td>
                       <%= image_tag sp.product.photos.first.image_url, width: '100px' %>
-                      <%= link_to sp.product.name, product_path(sp.product) %>
+                      <%#= link_to sp.product.name, product_path(sp.product) %>
                     </td>
                     <td class="text-right"><%= sp.product.barcode %></td>
                     <td class="text-right">
                       <%= turbo_frame_tag sp do %>
                         <%= sp.count %>
+                        <%#= money(sp.cost) %>
                         <%= link_to icon('edit'), edit_supply_product_path(sp), class: '', data: { turbo: 'true' } %>
                       <% end %>
                     </td>
+                    <td>
+                      - гр
+                    </td>
+                    <td>
+                      <%= money(0) %>
+                    </td>
+
+                    <td>
+                      <%= money(0) %>
+                    </td>
+
 
                     <td>
                     </td>
@@ -75,11 +98,11 @@ v
         </div>
 
 
-<!--        <div class="row">-->
-<!--          <div class="col-sm-5 col-3">-->
-<!--            <input type="submit" class="btn btn-info btn-print btn-lg my-1" value="Сохранить" form="supply_update_count">-->
-<!--          </div>-->
-<!--        </div>-->
+        <!--        <div class="row">-->
+        <!--          <div class="col-sm-5 col-3">-->
+        <!--            <input type="submit" class="btn btn-info btn-print btn-lg my-1" value="Сохранить" form="supply_update_count">-->
+        <!--          </div>-->
+        <!--        </div>-->
       </div>
 
       <div class="tab-pane" id="linkOpt" role="tabpanel" aria-labelledby="linkOpt-tab" aria-expanded="false">
@@ -137,6 +160,7 @@ v
 
             <br>
 
+
             <!--            <table class="table">-->
             <!--              <thead>-->
             <!--              <tr>-->
@@ -180,6 +204,159 @@ v
 
             <%#= render partial: 'supplies/logistics_costs' %>
             <%#= render partial: 'supplies/fulfillment_costs' %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class=" col-6">
+        <table class="table-responsive table table-bordered">
+          <thead>
+          <tr>
+            <td>Название</td>
+            <td>Стоимость</td>
+          </tr>
+
+          </thead>
+          <tbody>
+
+          <tr>
+            <td><b>Доставка</b></td>
+          </tr>
+
+
+          <tr>
+            <td>Доставка Карго</td>
+            <td>100 ₽</td>
+          </tr>
+
+          <tr>
+            <td>Приемка товара</td>
+            <td>0 ₽</td>
+          </tr>
+          <!--        <tr>-->
+          <!--          <td>Затраты на доставку на шт.</td>-->
+          <!--          <td><%#= money(@supply.data['cost_price']) %></td>-->
+          <!--        </tr>-->
+
+
+          <tr>
+            <td><b>Разовые расходы на первую партию товара</b></td>
+          </tr>
+
+
+          <tr>
+            <td>Дизайнер</td>
+            <td>1000 ₽</td>
+          </tr>
+          <tr>
+            <td>Фото</td>
+            <td>1000 ₽</td>
+          </tr>
+          <tr>
+            <td>Декларация соответствия</td>
+            <td>1000 ₽</td>
+          </tr>
+
+
+          <tr>
+            <td><b>Кредит</b></td>
+          </tr>
+
+          <tr>
+            <td>Лёля:</td>
+            <td><%= money(100000) %></td>
+          </tr>
+
+          <tr>
+            <td>Лёля:</td>
+            <td><%= money(120000) %></td>
+          </tr>
+
+          <tr>
+            <td>Тётя:</td>
+            <td><%= money(115000) %></td>
+          </tr>
+
+          <tr>
+            <td>Сумма:</td>
+            <td><%= money(415000) %></td>
+          </tr>
+
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Экономика проекта:</td>
+            <td>1000 ₽</td>
+          </tr>
+          <tr>
+            <td>Вложение в товар (закуп)</td>
+            <td>1000 ₽</td>
+          </tr>
+          <tr>
+            <td>Разовые расходы на 1 партию</td>
+            <td>1000 ₽</td>
+          </tr>
+          <tr>
+            <td>Итого вложений</td>
+            <td>1000 ₽</td>
+          </tr>
+          <tr>
+            <td>Выручка (за вычетом комиссии ВБ)</td>
+            <td>1000 ₽</td>
+          </tr>
+          <tr>
+            <td>Налог</td>
+            <td>1000 ₽</td>
+          </tr>
+          <tr>
+            <td>Вложения</td>
+            <td>1000 ₽</td>
+          </tr>
+          <tr>
+            <td>Брак</td>
+            <td>1000 ₽</td>
+          </tr>
+          <tr>
+            <td>Итоговая прибыль</td>
+            <td>1000 ₽</td>
+          </tr>
+          <tr>
+            <td>Рентабельность проекта (1 партия)</td>
+            <td>1000 ₽</td>
+          </tr>
+          <tr>
+            <td>Рентабельность проекта (2 партия)</td>
+            <td>1000 ₽</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-6">
+        <div class="sum">
+          <div class="card text-center">
+            <p>Общая сумма</p>
+            <h2 class=" mt-1"><%= money(100000) %></h2>
+          </div>
+
+          <div class="card text-center">
+            <p>Заёмные деньги</p>
+            <h2 class=" mt-1"><%= money(100000) %></h2>
+          </div>
+
+          <div class="card text-center">
+            <p>Прибыль</p>
+            <h2 class=" mt-1"><%= money(100000) %></h2>
+          </div>
+
+          <div class="card text-center">
+            <p>Рентабельность</p>
+            <h2 class=" mt-1"><%= '99%' %></h2>
           </div>
         </div>
 

@@ -1,89 +1,200 @@
 <div class="card-body">
-  <%= simple_form_for(@supply) do |f| %>
-    <%#= f.error_notification %>
-    <%#= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
-    <%#= f.hidden_field :store_id, value: params[:store_id] %>
 
 
+  <div class="card-text">
+    <!--    <p>Необходимо максимально детально заплнить поставку</p>-->
+  </div>
+
+  <form class="form">
     <div class="form-body">
-      <h4 class="form-section"><i class="ft-user"></i>Основные данные</h4>
-
-
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label class="label-control" for="projectinput1">Номер</label>
-
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text">#<%= market_prefix(params[:store_id]) %></span>
-              </div>
-              <%= f.number_field :name, label: false, class: 'form-control string optional' %>
-            </div>
+            <label for="issueinput3">Дата заказа</label>
+            <input type="date" id="issueinput3" class="form-control" name="dateopened" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Opened" data-original-title="" title="">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="issueinput4">Дата доставки</label>
+            <input type="date" id="issueinput4" class="form-control" name="datefixed" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Fixed" data-original-title="" title="">
           </div>
         </div>
       </div>
 
-      <!--      <div class="form-inputs">-->
-      <%#= f.association :campaign, input_html: {  class: 'select2' } %>
-      <!--      </div>-->
+      <div class="row">
+        <%= simple_form_for(@supply) do |f| %>
+          <%#= f.error_notification %>
+          <%#= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+          <%#= f.hidden_field :store_id, value: params[:store_id] %>
+          <div class="col-lg-6 col-md-6 mb-3">
+            <label class="label-control" for="projectinput1">Товары</label>
+            <%= f.input :product_ids, label: false,
+                        collection: current_user.products.map { |p| ["#{p.name} | #{p.sku}", p.id, { 'data-image' => p.photos.first&.image&.url }] },
+                        input_html: { multiple: true, class: 'select2' },
+                        include_blank: false, include_hidden: false %>
+          </div>
 
-      <div class="form-inputs">
-        <div class="col-lg-6 col-md-6 mb-3">
-          <label class="label-control" for="projectinput1">Товары</label>
-          <%= f.input :product_ids, label: false,
-                      collection: current_user.products.map { |p| ["#{p.name} | #{p.barcode}", p.id, { 'data-image' => p.photos.first&.image&.url }] },
-                      input_html: { multiple: true, class: 'select2' },
-                      include_blank: false, include_hidden: false %>
-        </div>
-      </div>
-
-      <div class="form-inputs">
-        <label class="label-control" for="projectinput1"></label>
-
-        <div class="form-row">
-          <%= f.fields_for :data do |d| %>
-            <% @supply.data_defaults.each do |k, v| %>
-
-              <div class="col-lg-6 col-md-6 mb-3">
-                <% if @supply.data_defaults[k].class == Date %>
-                  <label class="label-control" for="projectinput1"><%= I18n.t("supply.#{k}") %></label>
-                  <%= d.text_field I18n.t("supply.#{k}"), class: 'form-control datepicker' %>
-
-                <% elsif supply.data_defaults[k].class == Float %>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">₽</span>
-                    </div>
-                    <%= d.input I18n.t("supply.#{k}")%>
-                  </div>
-
-                <% else %>
-                  <%= d.input I18n.t("supply.#{k}"), input_html: { value: v }, include_blank: false, include_hidden: false %>
-                <% end %>
-
-
-                <hr>
-              </div>
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-
-
-
-
-      <div class="form-actions">
-        <button type="button" class="btn btn-warning mr-1">
-          <i class="ft-x"></i> Назад
-        </button>
-
-        <%= f.button :submit, class: "btn btn-primary" do %>
-          <i class="la la-check-square-o"></i>
         <% end %>
 
       </div>
 
+      <div class="form-group">
+
+        <fieldset>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">#</span>
+            </div>
+            <input type="text" class="form-control" placeholder="Номер поставки" aria-describedby="basic-addon1">
+          </div>
+        </fieldset>
+      </div>
+
+
+      <div class="row">
+        <div class="input-group col-md-6 mb-2">
+          <!--          <label class="" for="projectinput1">Комиссия</label>-->
+
+          <div class="input-group-prepend">
+            <span class="input-group-text">¥</span>
+          </div>
+          <input type="text" id="projectinput1" class="form-control" placeholder="Курс юаня" name="fname">
+
+
+        </div>
+
+        <div class="input-group col-md-6 mb-2">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
+
+          <!--          <label class="" for="projectinput1">Комиссия</label>-->
+          <input type="text" id="projectinput1" class="form-control" placeholder="Доставка за 1 кг." name="fname">
+
+
+        </div>
+      </div>
+
+
+      <h4 class="form-section"><i class="ft-user"></i> Данные, WB</h4>
+
+      <div class="row">
+        <div class="input-group col-md-6 mb-2">
+          <!--          <label class="" for="projectinput1">Комиссия</label>-->
+          <input type="text" id="projectinput1" class="form-control" placeholder="Комиссия" name="fname">
+
+          <div class="input-group-append">
+            <span class="input-group-text">%</span>
+          </div>
+
+        </div>
+        <div class="form-group col-md-6 mb-2">
+          <!--          <label class="sr-only" for="projectinput2">Логистика</label>-->
+          <fieldset>
+            <div class="input-group">
+              <!--							<div class="input-group-prepend">-->
+              <!--								<span class="input-group-text">₽</span>-->
+              <!--							</div>-->
+              <input type="text" class="form-control" placeholder="Стоимость доставки" aria-label="Amount (to the nearest dollar)">
+              <div class="input-group-append">
+                <span class="input-group-text">₽</span>
+              </div>
+            </div>
+          </fieldset>
+          <!--          <input type="text" id="projectinput2" class="form-control" placeholder="Логистика" name="lname">-->
+        </div>
+
+
+        <div class="input-group col-md-6 mb-2">
+          <!--          <label class="" for="projectinput1">Процент возвратоа, %</label>-->
+          <input type="text" id="projectinput1" class="form-control" placeholder="Процент возврата" name="fname">
+
+          <div class="input-group-append">
+            <span class="input-group-text">%</span>
+          </div>
+
+        </div>
+        <div class="input-group col-md-6 mb-2">
+          <label class="sr-only" for="projectinput1">Процент брака, %</label>
+          <input type="text" id="projectinput1" class="form-control" placeholder="Процент брака, %" name="fname">
+
+          <div class="input-group-append">
+            <span class="input-group-text">%</span>
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+      <div class="row">
+        <div class="input-group col-md-4 mb-2">
+          <label class="sr-only" for="projectinput1">Скидка</label>
+          <input type="text" id="sales" class="form-control" placeholder="Скидка" name="fname">
+          <div class="input-group-append">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+        <div class="input-group col-md-4 mb-2">
+          <label class="sr-only" for="price">Цена</label>
+          <input type="text" id="price" class="form-control" placeholder="Цена" name="fname">
+          <div class="input-group-append">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+        <div class="input-group col-md-4 mb-2">
+          <!--                    <label class="" for="projectinput2">СПП, %</label>-->
+
+          <input type="text" id="projectinput2" class="form-control" placeholder="СПП, %" name="lname">
+          <div class="input-group-append">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+
+      </div>
+
+      <h4 class="form-section"><i class="ft-user"></i> Общее </h4>
+
+      <div class="form-group">
+        <label for="issueinput2">Opened By</label>
+        <input type="text" id="issueinput2" class="form-control" placeholder="opened by" name="openedby" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Opened By" data-original-title="" title="">
+      </div>
+
+
+      <div class="form-group">
+        <label for="issueinput5">Priority</label>
+        <select id="issueinput5" name="priority" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority" data-original-title="" title="">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="issueinput6">Status</label>
+        <select id="issueinput6" name="status" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Status" data-original-title="" title="">
+          <option value="not started">Not Started</option>
+          <option value="started">Started</option>
+          <option value="fixed">Fixed</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="issueinput8">Comments</label>
+        <textarea id="issueinput8" rows="5" class="form-control" name="comments" placeholder="comments" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Comments" data-original-title="" title=""></textarea>
+      </div>
+
     </div>
-  <% end %>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-warning mr-1">
+        <i class="ft-x"></i> Cancel
+      </button>
+      <button type="submit" class="btn btn-primary">
+        <i class="la la-check-square-o"></i> Save
+      </button>
+    </div>
+  </form>
 </div>

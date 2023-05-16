@@ -28,5 +28,9 @@ module SupplyCosts
       size
     end
 
+    def default_tariff
+      4
+    end
+
   end
 end

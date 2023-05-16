@@ -52,9 +52,8 @@ class Store < ApplicationRecord
   scope :sales_today, -> { joins(:sales).merge(Sale.today) }
   scope :orders_today, -> { joins(:orders).merge(Order.today) }
 
-
   scope :orders_and_sales_by_date, ->(date_range) { includes(:sales, :orders).where(sales: { date: date_range })
-                                                                             .where(orders: {date: date_range})}
+                                                                             .where(orders: { date: date_range }) }
   # scope :orders_by_date, ->(date_range) { includes(:orders).where(order: { date: date_range }) }
 
   def parsed_data
@@ -68,6 +67,10 @@ class Store < ApplicationRecord
   def last_stocks
     latest_ids = Stock.group(:product_id).maximum(:id).values
     stocks.where(id: latest_ids)
+  end
+
+  def active_supplies
+
   end
 
   def ip

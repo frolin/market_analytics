@@ -11,10 +11,10 @@ module Supplies
         errors.add(:base, 'not fount products') if products.blank?
         halt_if_errors!
 
-        byebug
         products.each do |product|
           supply.supply_products.create!(product: product, price: product.price, purchase_price: product.purchase_price)
         end
+
 
         # supply.supply_products.where(product_id: products.ids).each do |sp|
         #   sp.create_fulfillment_cost(data: sp.product.cost['fulfillment'])

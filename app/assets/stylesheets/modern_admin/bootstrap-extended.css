@@ -497,13 +497,14 @@ select.form-control {
   border: 1px solid #e4e5ec;
   border-radius: 0.35rem;
   transform-origin: top;
-  animation-fill-mode: forwards;
+  /*animation-fill-mode: forwards;*/
   transform: scale(1, 0);
-  transition: all 0.2s linear;
+  /*transition: all 0.2s linear;*/
   margin: -0.1rem 0 0;
   box-shadow: 0px 5px 75px 2px rgba(64, 70, 74, 0.2);
   min-width: 11rem;
-  animation: 0.25s cubic-bezier(0.25, 0.8, 0.25, 1) 0s normal forwards 1 fadein; }
+  /*animation: 0.25s cubic-bezier(0.25, 0.8, 0.25, 1) 0s normal forwards 1 fadein; */
+}
   .dropdown .dropdown-menu .dropdown-header {
     padding: 10px 20px;
     margin-top: 10px;

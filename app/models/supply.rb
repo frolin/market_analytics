@@ -11,6 +11,8 @@
 #  data       :jsonb
 #
 class Supply < ApplicationRecord
+  include Groupable
+
   belongs_to :store
   belongs_to :user
   has_one :unit_economic
@@ -21,19 +23,51 @@ class Supply < ApplicationRecord
   has_many :supply_products, dependent: :destroy
   has_many :products, through: :supply_products
 
-  after_initialize :data_defaults, :if => :new_record?
+  after_initialize :data_defaults, :if => :new_record? || date.blank?
   # store_accessor :data
 
+  scope :with_delivered_data, -> { where("data -> 'delivered_date' is not null") }
+
+  def costs_by_year
+
+    return if supply_costs.blank?
+
+    supply_costs.group_by_date_with_zero(Date.today.beginning_of_year..Date.today.end_of_year, type: :by_month)
+  end
+
   def data_defaults
+    # Доставка Карго
+    # Приемка товара
+    # Затраты на доставку на шт.
+    #
+    # Разовые расходы на первую партию товара:
+    # Дизайнер
+    # Фото
+    # Декларация соответствия
+    # Сумма:
+    #
+    # Экономика проекта:
+    # Вложение в товар (закуп)
+    #
+    # Разовые расходы на 1 партию
+    # Итого вложений
+    #
+    # Выручка (за вычетом комиссии ВБ)
+    # Налог
+    # Вложения
+    # Брак
+    # Итоговая прибыль
+
     self.data = {
       order_date: Date.today,
       delivered_date: Date.today,
       price: 0,
       exchange_rate: 12,
-      cost_price: 100.00
+      cost_price: 100.00,
+      delivery_cost: '',
     }
-  end
 
+  end
 
   def cost_price
 

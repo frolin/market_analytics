@@ -16,5 +16,13 @@
 module SupplyCosts
   class MarketPlace < SupplyCost
 
+    def default_data
+      {
+        wb: {},
+        ozon: {}
+      }
+
+    end
+
   end
 end

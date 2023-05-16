@@ -1,12 +1,157 @@
-<h1>Unit Economics</h1>
+<h1 class="mb-3">Юнит Экономика</h1>
 
-<dl>
-  <dt>Supply:</dt>
-  <dd><%= @unit_economic.supply %></dd>
-  <dt>Data:</dt>
-  <dd><%= @unit_economic.data %></dd>
-  <dt>Date:</dt>
-  <dd><%= @unit_economic.date %></dd>
-</dl>
-<%= link_to 'Edit', edit_unit_economic_path(@unit_economic) %> |
-<%= link_to 'Back', unit_economics_path %>
+
+<%# @unit_economic.data.each_key do |key| %>
+<%# byebug %>
+<%#= @unit_economic.data[key] %>
+<%# end %>
+
+<!--<div class="">-->
+<!--  <table class="table-responsive table-bordered">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--      <td>Название</td>-->
+<!--      <td>Стоимость</td>-->
+<!--    </tr>-->
+
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr>-->
+<!--      <td>Доставка Карго</td>-->
+<!--      <td>100</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Приемка товара</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Затраты на доставку на шт.</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Разовые расходы на первую партию товара:</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Дизайнер</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Фото</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Декларация соответствия</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Сумма:</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Экономика проекта:</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Вложение в товар (закуп)</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Разовые расходы на 1 партию</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Итого вложений</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Выручка (за вычетом комиссии ВБ)</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Налог</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Вложения</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Брак</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Итоговая прибыль</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Рентабельность проекта (1 партия)</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <td>Рентабельность проекта (2 партия)</td>-->
+<!--      <td>1000</td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--  </table>-->
+<!--</div>-->
+
+
+
+
+<div class="p-and-l-table">
+
+  <div class="table100 ver1 m-b-110">
+    <table class="table-responsive" data-vertable="ver1">
+      <thead>
+      <tr class="row100 head">
+        <th class="column100 column1" data-column="column1"></th>
+
+<% Date::MONTHNAMES.compact.each_with_index do |month, num| %>
+          <th class="column100 column1" data-column="column1">
+<%= I18n.t("date.month_list")[num] %>
+          </th>
+<% end %>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr class="row100 profit">
+        <td class="column100 column1" data-column="column1"><b> Доходы </b></td>
+<% @supply_costs.each_with_index do |cost| %>
+          <td class="column100 column2" data-column="column6">--</td>
+<% end %>
+
+      </tr>
+      <tr class="row100 cost">
+        <td class="column100 column1" data-column="column5"><b>Расходы</b></td>
+        <td class="column100 column2" data-column="column6">--</td>
+        <td class="column100 column2" data-column="column6">--</td>
+        <td class="column100 column2" data-column="column6">--</td>
+        <td class="column100 column2" data-column="column6">--</td>
+        <td class="column100 column2" data-column="column6">--</td>
+        <td class="column100 column2" data-column="column6">--</td>
+        <td class="column100 column2" data-column="column6">--</td>
+        <td class="column100 column2" data-column="column6">--</td>
+        <td class="column100 column2" data-column="column6">--</td>
+        <td class="column100 column2" data-column="column6">--</td>
+        <td class="column100 column2" data-column="column6">--</td>
+        <td class="column100 column2" data-column="column6">--</td>
+      </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!--<dl>-->
+<!--  <dt>Supply:</dt>-->
+<!--  <dd><%#= @unit_economic.supply %></dd>-->
+<!--  <dt>Data:</dt>-->
+<!--  <dd><%#= @unit_economic.data %></dd>-->
+<!--  <dt>Date:</dt>-->
+<!--  <dd><%#= @unit_economic.date %></dd>-->
+<!--</dl>-->
+<!--<%#= link_to 'Edit', edit_unit_economic_path(@unit_economic) %> |-->
+<%#= link_to 'Back', unit_economics_path %>
